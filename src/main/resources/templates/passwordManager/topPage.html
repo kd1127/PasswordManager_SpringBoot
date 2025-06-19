@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta charset="UTF-8">
+		<title>トップページ</title>
+		<script type="text/javascript" th:src="@{../js/PasswordManager.js}"></script>
+	</head>
+	<body>
+		<h1>トップページ</h1>
+		
+		<div th:if="${infoMessage} != null">
+			<span th:text="${infoMessage}"></span><br><br>
+		</div>
+		
+		<form th:action="@{/login}" method="get" id="form" th:object="${accountInfoEntity}">
+			<label>ランダムパスワード</label>
+			<input type="radio" name="method" id="situation" checked/>
+			<label>シーザー暗号</label>
+			<input type="radio" name="method" id="situation2"/><br>
+			<label>暗号方式</label>
+			<input type="text" maxlength="50" id="cryptography"/><br>
+			<label>パスワード</label>
+			<input type="text" maxlength="50" id="create" th:field="*{passWd}"/><br>			
+			<label>ユーザーID</label>
+			<input type="text" maxlength="50" id="userId" th:field="*{userId}"/><br>
+			<label>サイト名</label>
+			<input type="text" maxlength="20" id="siteName" th:field="*{siteName}"/><br>			
+			<input type="button" value="暗号方式決定" onclick="Choice();"/>
+			<input type="button" value="パスワード生成" onclick="Generate();"/>
+			<input type="submit" value="登録" onclick="dataRegister();"/>
+			<input type="submit" value="登録データ表示" formaction="/registerDataShow"/><br>
+			<input type="submit" value="ログアウト"/>
+			<input type="submit" value="ログインパスワード変更画面へ" formaction="/loginAccountEdit"/>
+			<input type="submit" value="パスキー変更" formaction="/passKeyEdit"/>
+			<input type="submit" value="マニュアル"/>
+		</form>
+	</body>
+</html>

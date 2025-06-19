@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta charset="UTF-8">
+		<title>データ更新完了</title>
+		<script type="text/javascript" th:src="@{../js/PasswordManager.js}"></script>
+	</head>
+	<body>
+		<h1>データ更新完了</h1>
+		
+		<h4>データ更新完了しました。</h4>
+		
+		<form th:action="@{registerDataShow}" method="get">
+			<input type="submit" value="登録データ表示へ"/>
+		</form>
+	</body>
+</html>

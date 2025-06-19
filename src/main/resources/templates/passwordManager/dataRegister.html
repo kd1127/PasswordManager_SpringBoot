@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta charset="UTF-8">
+		<title>データ登録</title>
+	</head>
+	<body>
+		<h1>データ登録</h1>
+		<p>以下データで登録しました。</p>
+		
+		<form th:action="@{/topPage}" method="post" th:object="${aiEntity}">
+			<label>パスワード:</label>
+			<span th:text="*{passWd}">パスワード</span><br>
+			<label>ユーザーID:</label>
+			<span th:text="*{userId}">ユーザーID</span><br>
+			<label>サイト名:</label>
+			<span th:text="*{siteName}">サイト名</span><br>
+			
+			<input type="submit" value="トップページへ"/>
+		</form>
+	</body>
+</html>

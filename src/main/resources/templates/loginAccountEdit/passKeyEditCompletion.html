@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta charset="UTF-8">
+		<title>パスキー変更完了画面</title>
+	</head>
+	<body>
+		<h1>パスキー変更完了</h1>
+		
+		<form th:action="@{/topPage}" method="post" th:object="${uieEntity}">
+			<label>新パスキー</label>
+			<span th:text="*{passKey}">パスワード</span><br>
+			
+			<input type="submit" value="トップページに戻る"/>
+		</form>
+	</body>
+</html>

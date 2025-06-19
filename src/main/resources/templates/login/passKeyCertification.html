@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta charset="UTF-8">
+		<title>パスキー認証</title>
+	</head>
+	<body>
+		<h1>パスキー認証</h1>
+		
+		<div th:if="${errorMessage}">
+			<span th:each="message : ${errorMessage}">
+				<div th:text="${message}"></div>
+			</span>
+		</div>
+			
+		
+		<form th:action="@{/topPage}" method="post" th:object="${userInfoEntity}">
+			<label>パスキー</label>
+			<input type="text" th:field="*{passKey}"/><br>	
+			<input type="submit" value="戻る" formaction="/login" formmethod="get"/>
+			<input type="submit" value="ログイン"/>
+		</form>
+	</body>
+</html>

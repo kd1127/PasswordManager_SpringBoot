@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>登録データ表示</title>
+    <script type="text/javascript" th:src="@{../js/PasswordManager.js}"></script>
+</head>
+<body>
+    <h1>登録データ表示</h1>
+    
+    <th:block th:if="${maxList.size() == 0}">
+    	<p>表示できるデータがありません。</p>
+    	
+    	<div th:if="${errorMsg} != null">
+    		<span th:text="${errorMsg}"></span>
+    	</div>
+    </th:block>
+    <div th:unless="${maxList.size() == 0}">    
+	    <table border="1" style="border-collapse: collapse">
+	        <thead>
+	            <tr>
+	            	<th>No.</th>
+	                <th>ユーザーID</th>
+	                <th>パスワード</th>
+	                <th>サイト名</th>
+	                <th>登録日時</th>
+	                <th>更新日時</th>
+	            </tr>
+	        </thead>
+	        <tbody th:object="${accountInfoEntity}">
+	            <tr th:each="i : ${maxList}">
+	            	<td th:text="${maxList.get(i)+1}"></td>	
+	                <td th:text="${accountInfoEntity.get(i).getUserId()}"></td>
+	                <td th:text="${accountInfoEntity.get(i).getPassWd()}"></td>
+	                <td th:text="${accountInfoEntity.get(i).getSiteName()}"></td>
+	                <td th:text="${accountInfoEntity.get(i).getInp_date()}"></td>
+	                <td th:text="${accountInfoEntity.get(i).getUpd_date()}"></td>
+	                <td>
+	                    <!-- 削除フォーム -->
+	                    <form th:action="@{registerDataDel}" method="post" id="form3" onsubmit="return registerDataDelete();">
+	                        <label for="delete">
+	                            <input type="submit" value="消去" />
+	                        </label>
+	                        	<input type="hidden" name="dataDelete" th:value="${accountInfoEntity.get(i).getId()}"/>
+	                        <!--  <input type="hidden" name="dataDelete" th:value="${i}"/> -->
+	                    </form>
+	                    
+	                    <!-- 更新フォーム -->
+	                    <form th:action="@{registerDataUpd}" method="get">
+	                        <input type="submit" value="更新"/>
+	                        <input type="hidden" name="index" th:value="${accountInfoEntity.get(i).getId()}"/>
+	                    </form>
+	                </td>
+	            </tr>
+	        </tbody>
+	    </table>
+    </div>
+    <form th:action="@{/topPage}" method="get">
+        <input type="submit" value="トップページへ"/>
+    </form>
+    
+    <script>
+        function registerDataDelete(){
+            if(confirm('削除してもよろしいですか？')){
+                return true; // 削除確認がOKの場合、フォームを送信する
+            } else {
+                return false; // キャンセルの場合はフォーム送信をキャンセル
+            }
+        }
+    </script>
+</body>
+</html>

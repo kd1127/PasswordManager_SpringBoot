@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta charset="UTF-8">
+		<title>ユーザー登録確認</title>
+	</head>
+	<body>
+		<h1>ユーザー登録確認</h1>
+		
+		<div th:if="${errorMsg} != null">
+			<span th:text="${errorMsg}"></span>
+		</div>
+		
+		<form th:action="@{/userRegisterCompletion}" method="get" th:object="${userInfoEntity}">
+			<label>ユーザーID</label>
+			<span th:text="*{userId}">ユーザーID</span><br>
+			<label>パスワード</label>
+			<span th:text="*{passWd}">パスワード</span><br>
+			<label>パスワード（確認用）</label>
+			<span th:text="*{re_PassWd}">パスワード（確認用）</span><br>
+			<label>パスキー</label>
+			<span th:text="*{passKey}">パスキー</span><br>
+			<input type="submit" value="ユーザー登録完了画面へ"/>
+			<input type="submit" value="戻る" formaction="/passKeyGet" formmethod="post"/>
+		</form>		
+	</body>
+</html>

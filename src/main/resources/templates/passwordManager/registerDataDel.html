@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.or.jp">
+	<head>
+		<meta charset="UTF-8">
+		<title>データ削除完了</title>
+	</head>
+	<body>
+		<h1>データ削除完了</h1>
+		<p>データ削除完了しました。</p>
+		<span th:text="${dataDelete}"></span>
+		
+		<form th:action="@{/topPage}" method="GET">
+			<input type="submit" value="トップページへ"/>
+		</form>
+	</body>
+</html>

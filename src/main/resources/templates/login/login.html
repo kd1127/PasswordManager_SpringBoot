@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta charset="UTF-8">
+		<title>パスワードマネージャーログイン</title>
+		<script type="text/javascript" th:src="@{../js/PasswordManager.js}"></script>
+	</head>
+	<body>
+		<h1>パスワードマネージャーログイン</h1>
+		
+		<form th:action="@{/passKeyCertification}" method="post" th:object="${userInfoEntity}" id="form">
+			<label>ユーザーID</label>
+			<input type="text" th:field="*{userId}" th:value="*{userId}"/><br>
+			
+			<label>パスワード</label>
+			<input type="password" th:field="*{passWd}" th:value="*{passWd}"/><br>
+			
+			<input type="submit" value="パスキー認証"/>
+			<input type="submit" value="ユーザー登録" formaction="/userRegister"><br>
+			<a rel="#" href="http://localhost:8080/inputMailAddress" onclick="inputMailAdress();">パスワードを忘れた方</a>
+		</form>
+	</body>
+</html>

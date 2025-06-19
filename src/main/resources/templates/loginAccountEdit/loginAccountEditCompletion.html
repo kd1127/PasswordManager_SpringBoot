@@ -1,0 +1,17 @@
+<!DOCTYPE html>	
+<html xmlns:th="http://www.thymeleaf.org" lang="ja">
+	<head>
+		<meta charset="UTF-8">
+		<title>ログインアカウント変更完了画面</title>
+	</head>
+	<body>
+		<h1>ログインアカウント変更完了</h1>
+		
+		<form th:action="@{/topPage}" method="post" th:object="${uieEntity}">
+			<label>新パスワード</label>
+			<span th:text="*{passWd}">パスワード</span><br>
+			
+			<input type="submit" value="トップページに戻る"/>
+		</form>
+	</body>
+</html>

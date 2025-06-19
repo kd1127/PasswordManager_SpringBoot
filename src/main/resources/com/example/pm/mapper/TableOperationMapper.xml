@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ <mapper namespace="com.example.pm.mapper.TableOperationMapper">
+ 	<!-- Insert -->
+    <insert id="userInfoInsert" parameterType="com.example.pm.entity.UserInfoEntity">
+    	INSERT INTO userinfo 
+    	(userId, passWd, passKey, inp_date) 
+    	VALUES 
+    	(#{userId}, #{passWd}, #{passKey}, #{inp_date});
+    </insert>
+    <insert id="accountDataRegisterInsert" parameterType="com.example.pm.entity.AccountInfoEntity">
+    	INSERT INTO accountdata(id_user, userId, passWd, siteName, inp_date, upd_date) 
+    	VALUES(#{id_user}, #{userId}, #{passWd}, #{siteName}, #{inp_date}, #{inp_date});
+    </insert>
+    <!-- Update Query -->
+    <update id="passWdUpdate" parameterType="String">
+    	UPDATE userinfo SET passWd = #{passWd}, upd_date = now() WHERE userId = #{userId};
+    </update>
+    <update id="passKeyUpdate" parameterType="String">
+    	UPDATE userinfo SET passKey = #{passKey}, upd_date = now() WHERE userId = #{userId};
+    </update>
+    <!-- 使用中止  -1する必要があったがMyBatis自体がDDL非推奨なのと、他のデータが次々と登録している場合は不要な処理で他のidを
+    前倒しにする手間と影響を懸念している -->
+    <!--  <update id="autoIncrementSubtractByMinus1" parameterType="String">
+    	ALTER TABLE accountdata auto_increment = -1;
+    </update>  -->
+    <update id="updateAccountDataOneARow">
+    	UPDATE 
+    		accountdata 
+    	SET 
+    		userId = #{userId}, 
+    		passWd = #{passWd}, 
+    		siteName = #{siteName}, 
+    		upd_date = NOW() 
+    	WHERE 
+    		id = #{id};    	
+    </update>
+    <!-- Select Query -->
+    <select id="userIdAllGet">
+    	SELECT userId FROM userinfo;
+    </select>
+    <select id="passWdAllGet">
+    	SELECT passWd FROM userinfo;
+    </select>
+    <select id="passKeyAllGet">
+    	SELECT passKey FROM userinfo;
+    </select>
+    <select id="idOneGet" parameterType="String" resultType="Integer">
+    	SELECT id FROM userinfo WHERE userId = #{userId}
+    </select>
+    <select id="passWdOneGet" parameterType="String" resultType="String">
+   		SELECT passWd FROM userinfo WHERE userId = #{userId};
+    </select>
+    <select id="passKeyOneGet" parameterType="String" resultType="String">
+    	SELECT passKey FROM userinfo WHERE userId = #{userId};
+    </select>
+    <select id="userInfoIdOneGet" parameterType="String" resultType="Integer">
+    	SELECT id FROM userinfo WHERE userId = #{userId};
+    </select>
+    <select id="findAllAccountData" parameterType="int">
+    	SELECT userId, passWd, siteName, inp_date FROM accountdata WHERE id = #{id} AND id_user = #{id_user};
+    </select>
+    <select id="specifyConditionsToGetAllUserId" parameterType="int">
+    	SELECT userId FROM accountdata ad WHERE ad.id_user = #{userId};
+    </select>
+    <select id="specifyConditionsToGetAllPassWd" parameterType="int">
+    	SELECT passWd FROM accountdata ad WHERE ad.id_user = #{userId};
+    </select>
+    <select id="specifyConditionsToGetAllSiteName" parameterType="int">
+    	SELECT siteName FROM accountdata ad WHERE ad.id_user = #{userId};
+    </select>
+    <select id="specifyConditionsToGetAllInpDate" parameterType="int">
+    	SELECT inp_date FROM accountdata ad WHERE ad.id_user = #{userId};
+    </select>
+    <select id="specifyConditionsToGetAllUpdDate" parameterType="int">
+    	SELECT upd_date FROM accountdata ad WHERE ad.id_user = #{userId};
+    </select>
+    <select id="selectOneData" resultType="com.example.pm.entity.AccountInfoEntity">
+    	SELECT id, userId, passWd, siteName FROM accountdata WHERE id = #{id}
+    </select>
+    <select id="selectAllData" resultType="com.example.pm.entity.AccountInfoEntity">
+    	SELECT 
+    		Id, id_user, userId, passWd, siteName, inp_date, upd_date
+    	FROM 
+    		accountdata
+    	WHERE 
+    		id_user = #{id} and 
+    		delete_flag = false
+    </select>
+    <select id="userIdOneVerify" resultType="String" parameterType="String">
+    	SELECT userId FROM userinfo WHERE 1=1 and userId = #{userId}
+    </select>
+    <select id="passWdOneVerify" resultType="String" parameterType="String">
+    	SELECT passWd FROM userinfo WHERE 1=1 and passWd = #{passWd}
+    </select>
+    <select id="passKeyOneVerify" resultType="String" parameterType="String">
+    	SELECT passKey FROM userinfo WHERE 1=1 and passKey = #{passKey}
+    </select>
+    <!-- Delete Query 論理削除-->
+    <delete id="deleteARowOfData" parameterType="Integer">
+    	UPDATE accountdata SET Delete_flag = true where id = #{id};
+    </delete>
+</mapper>

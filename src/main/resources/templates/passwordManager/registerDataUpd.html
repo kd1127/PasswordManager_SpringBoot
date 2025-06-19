@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta charset="UTF-8">
+		<title>データ編集</title>
+		<script type="text/javascript" th:src="@{../js/PasswordManager.js}"></script>
+	</head>
+	<body>
+		<div th:if="${errorMsg != null}">
+			<span th:text="${errorMsg}"></span>
+		</div>
+		
+		<h1>データ編集</h1>
+		<form th:action="@{/dataUpdComplete}" method="get" th:object="${accountInfoEntity}" id="form1">
+			<label>ユーザーID</label>
+			<input type="text" th:value="*{userId}" th:field="*{userId}" id="userId"/><br>
+			
+			<label>パスワード</label>
+			<input type="text" th:value="*{passWd}" th:field="*{passWd}" id="passWd"/><br>
+			
+			<label>サイト名</label>
+			<input type="text" th:value="*{siteName}" th:field="*{siteName}" id="siteName"/><br>
+			
+			<input type="submit" value="トップページへ" formaction="topPage"/>
+			<input type="submit" value="更新完了画面へ" onclick="save();"/>
+			<input type="hidden" th:value="*{id}" th:field="*{id}"/>
+		</form>
+	</body>
+</html>

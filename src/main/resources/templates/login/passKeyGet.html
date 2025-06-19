@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta charset="UTF-8">
+		<title>パスキー取得</title>
+	</head>
+	<body>
+		<h1>パスキー取得</h1>
+		
+		<form th:action="@{/userRegisterCheck}" method="post" th:object="${userInfoEntity}">
+			<label>パスキー<br>大文字小文字で2文字入力してください。</label><br>
+			<input type="text" th:field="*{passKey}" maxlength="2"/><br>
+			<input type="submit" value="ユーザー登録確認画面へ"/>
+			<input type="submit" value="戻る" formaction="/userRegister"/>
+		</form>
+	</body>
+</html>

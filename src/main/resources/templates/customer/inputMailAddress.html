@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta charset="UTF-8">
+		<title>ユーザーID入力</title>
+		<link rel="stylesheet" th:src="@{../customer/inputMailAddress.css}"></link>
+	</head>
+	<body>
+		<h1>ユーザーID入力</h1>
+		
+		<div th:if="${errorMessage} != null">
+			<span th:text="${errorMessage}"></span>
+		</div>
+		
+		<p>サイトのユーザーID（メールアドレス）を入力してください。</p>
+		<form th:action="@{/mailSend}" method="get" th:object="${userInfoEntity}">
+			<input type="text" th:field="*{userId}"/><br>
+			<input type="submit" value="メール送信画面へ"/>
+			<input type="submit" value="ログインへ" formaction="/login"/>
+		</form>
+		
+	</body>
+</html>

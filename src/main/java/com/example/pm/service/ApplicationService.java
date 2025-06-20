@@ -1,6 +1,7 @@
 package com.example.pm.service;
 
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 import com.example.pm.entity.UserInfoEditEntity;
@@ -14,4 +15,5 @@ public interface ApplicationService {
 	String passWdMatchCheckProcess(UserInfoEntity userInfoEntity, UserInfoEditEntity userInfoEditEntity);
 	String userInfoInsertOperation(UserInfoEntity userInfoEntity);
 	String passWdUpdateDbOperation(String userId, String passWd);
+	void lastLoginDateUpdate(String userId, LocalDate lastLoginDate);
 }

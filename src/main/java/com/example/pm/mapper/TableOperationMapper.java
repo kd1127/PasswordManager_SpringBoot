@@ -1,5 +1,6 @@
 package com.example.pm.mapper;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
@@ -22,6 +23,8 @@ public interface TableOperationMapper {
 	public int passWdUpdate(String userId, String passWd);
 	//	ログインアカウント変更（パスキー更新）
 	public void passKeyUpdate(String userId, String passKey);
+	//	最終ログイン日を更新
+	public void lastLoginDateUpdate(String userId, LocalDate lastLoginDate);
 	//	一つのパスワードを取得
 	public String passWdOneGet(String userId);	
 	//	一つのパスキーを取得

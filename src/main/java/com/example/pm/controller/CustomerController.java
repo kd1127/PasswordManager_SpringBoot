@@ -39,7 +39,6 @@ public class CustomerController {
 
 	@GetMapping("/inputMailAddress")
 	public String inputMailAddress(Model model) {
-		session.removeAttribute("userInfoEntity");
 		model.addAttribute("userInfoEntity", userInfoEntity);
 		return "customer/inputMailAddress";
 	}
@@ -56,6 +55,7 @@ public class CustomerController {
 		this.userInfoEntity = userInfoEntity;
 		String message = customerService.mailSend(userInfoEntity.getUserId());
 		model.addAttribute("message", message);
+		session.removeAttribute("userInfoEntity");
 		return "customer/mailSend";
 	}
 	
@@ -84,7 +84,9 @@ public class CustomerController {
 	
 	@GetMapping("/passwordReConfigureCompletion")
 	public String passwordReConfigureCompletion(Model model) {
-		String message = applicationService.passWdUpdateDbOperation(this.userInfoEntity.getUserId(), this.userInfoEntity.getPassWd());
+		UserInfoEntity userInfoEntity = new UserInfoEntity(null, userInfoEditEntity.getPassWd(), null, null, null, null);
+		userInfoEditEntity.setPassWd(String.valueOf(userInfoEntity.hashCode()));
+		String message = applicationService.passWdUpdateDbOperation(this.userInfoEntity.getUserId(), this.userInfoEditEntity.getPassWd());
 		
 		if(!message.equals("")) {
 			model.addAttribute("message", message);

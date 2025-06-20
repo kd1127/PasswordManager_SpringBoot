@@ -71,13 +71,13 @@ public class ApplicationServiceImpl implements ApplicationService {
 			}
 		}
 		
-		//	パスワードの検証
+		//	パスワードの検証、入力値有りの場合、パスワードをハッシュ化してテーブルから取得したデータと突き合わせ
 		if(StringUtils.isEmpty(passWd)) {
 			errorMessage.add("パスワードを入力してください。");
 		}
 		else {
 			if (!StringUtils.equals(passWd, "ADMIN")) {
-				UserInfoEntity userInfoEntity = new UserInfoEntity(null, passWd, null, null, null);
+				UserInfoEntity userInfoEntity = new UserInfoEntity(null, passWd, null, null, null, null);
 				passWd = String.valueOf(userInfoEntity.hashCode());
 			}
 			String passWdVerify = tableOperationMapper.passWdOneVerify(passWd);
@@ -139,5 +139,10 @@ public class ApplicationServiceImpl implements ApplicationService {
 			message = "何らかの理由により、パスワード更新に失敗しました。";
 		}		
 		return message;
+	}
+	
+	@Override
+	public void lastLoginDateUpdate(String userId, LocalDate lastLoginDate) {
+		tableOperationMapper.lastLoginDateUpdate(userId, lastLoginDate);
 	}
 }

@@ -15,46 +15,49 @@ import com.example.pm.service.ApplicationService;
 
 @Controller
 public class LoginAccountEditController {
-	@Autowired private TableOperationMapper mapper;
-	@Autowired private LoginController controller;
-	@Autowired private ApplicationService service;
-	@Autowired private UserInfoEntity uiEntity;
+	@Autowired private TableOperationMapper talbeOperationMapper;
+	@Autowired private LoginController loginController;
+	@Autowired private ApplicationService applicationService;
+	@Autowired private UserInfoEntity userInfoEntity;
 
 	@GetMapping("/loginAccountEdit")
-	public String loginAccountEdit(@ModelAttribute UserInfoEditEntity uieEntity, Model model) {
-		uieEntity.setUserId(controller.userInfoEntity.getUserId());
-		uieEntity.setPassWd(controller.userInfoEntity.getPassWd());
-		model.addAttribute("uieEntity", uieEntity);
+	public String loginAccountEdit(@ModelAttribute UserInfoEditEntity userInfoEditEntity, Model model) {
+		userInfoEditEntity.setUserId(loginController.userInfoEntity.getUserId());
+		userInfoEditEntity.setPassWd(loginController.userInfoEntity.getPassWd());
+		model.addAttribute("userInfoEditEntity", userInfoEditEntity);
 		return "loginAccountEdit/loginAccountEdit";
 	}
 	
 	@PostMapping("/loginAccountEditCompletion")
-	public String loginAccountEditCompletion(@ModelAttribute UserInfoEditEntity uieEntity, Model model) {
+	public String loginAccountEditCompletion(@ModelAttribute UserInfoEditEntity userInfoEditEntity, Model model) {
 		String errorMsg = "";
-		errorMsg = service.passWdMatchCheckProcess(null, uieEntity);
-		uieEntity.setUserId(controller.userInfoEntity.getUserId());
-		mapper.passWdUpdate(uieEntity.getUserId(), uieEntity.getPassWd());
-		model.addAttribute("uieEntity", uieEntity);
+		String password = userInfoEditEntity.getPassWd();
+		errorMsg = applicationService.passWdMatchCheckProcess(null, userInfoEditEntity);
+		userInfoEditEntity.setUserId(loginController.userInfoEntity.getUserId());
+		UserInfoEntity userInfoEntity = new UserInfoEntity(null, userInfoEditEntity.getPassWd(), null, null, null, null);
+		userInfoEditEntity.setPassWd(String.valueOf(userInfoEntity.hashCode()));
+		talbeOperationMapper.passWdUpdate(userInfoEditEntity.getUserId(), userInfoEditEntity.getPassWd());
+		model.addAttribute("password", password);
 		return "loginAccountEdit/loginAccountEditCompletion";
 	}
 	
 	@GetMapping("/passKeyEdit")
-	public String passKeyEdit(@ModelAttribute UserInfoEditEntity uieEntity, Model model){
+	public String passKeyEdit(@ModelAttribute UserInfoEditEntity userInfoEditEntity, Model model){
 		//	グローバル変数からpassKeyの数値を取得する
-		uieEntity.setPassKey(controller.userInfoEntity.getPassKey());
-		model.addAttribute("uieEntity", uieEntity);
+		userInfoEditEntity.setPassKey(loginController.userInfoEntity.getPassKey());
+		model.addAttribute("userInfoEditEntity", userInfoEditEntity);
 		return "loginAccountEdit/passKeyEdit";
 	}
 	
 	@PostMapping("/passKeyEditCompletion")
-	public String passKeyEditCompletion(@ModelAttribute UserInfoEditEntity uieEntity, Model model) {
+	public String passKeyEditCompletion(@ModelAttribute UserInfoEditEntity userInfoEditEntity, Model model) {
 		//	グローバル変数からuserId, passKeyの数値を取得する
-		uieEntity.setUserId(controller.userInfoEntity.getUserId());
-		uiEntity.setPassKey(uieEntity.getPassKey());
+		userInfoEditEntity.setUserId(loginController.userInfoEntity.getUserId());
+		userInfoEntity.setPassKey(userInfoEditEntity.getPassKey());
 		//	passKeyの数字部分をサービスクラスのメソッドから取得する
-		uieEntity.setPassKey(service.passKeyNumberRandomGet(uiEntity));
-		mapper.passKeyUpdate(uieEntity.getUserId(), uieEntity.getPassKey());
-		model.addAttribute("uieEntity", uieEntity);
+		userInfoEditEntity.setPassKey(applicationService.passKeyNumberRandomGet(userInfoEntity));
+		talbeOperationMapper.passKeyUpdate(userInfoEditEntity.getUserId(), userInfoEditEntity.getPassKey());
+		model.addAttribute("userInfoEditEntity", userInfoEditEntity);
 		return "loginAccountEdit/passKeyEditCompletion";
 	}
 }

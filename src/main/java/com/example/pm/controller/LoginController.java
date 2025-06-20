@@ -1,5 +1,6 @@
 package com.example.pm.controller;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,6 +33,8 @@ public class LoginController {
 	//	値保持用 LoginAccountEditControllerクラスなどが使用
 	public UserInfoEntity userInfoEntity;
 	
+	private boolean loginFlag;
+	
 	//	セッション
 	@ModelAttribute
 	UserInfoEntity registrySessionUserInfoEntity() {
@@ -40,14 +43,24 @@ public class LoginController {
 	
 	//	コンストラクタインジェクション
 	@Autowired
-	public LoginController(ApplicationService applicationService, HttpSession session) {
+	public LoginController(ApplicationService applicationService, HttpSession session, UserInfoEntity userInfoEntity) {
+		if(applicationService == null) {
+			throw new NullPointerException("何らかの理由によりエラーが発生しました。");
+		}
+		if(session == null) {
+			throw new NullPointerException("何らかの理由によりエラーが発生しました。");
+		}
+		if(userInfoEntity == null) {
+			throw new NullPointerException("何らかの理由によりエラーが発生しました。");
+		}		
 		this.applicationService = applicationService;
 		this.session = session;
+		this.userInfoEntity = userInfoEntity;
 	}
 	
 	@GetMapping("/login")
 	public String loginController(@ModelAttribute UserInfoEntity userInfoEntity, Model model) {
-		this.userInfoEntity = new UserInfoEntity();
+		this.loginFlag = false;
 		model.addAttribute("userInfoEntity", userInfoEntity);
 		return "login/login";
 	}
@@ -62,27 +75,37 @@ public class LoginController {
 	@RequestMapping(value="/topPage", method= {RequestMethod.GET, RequestMethod.POST})
 	public String topPage(@ModelAttribute UserInfoEntity userInfoEntity, Model model) {
 		session.removeAttribute("userInfoEntity");
-		//	バリデーションチェック
-		if(userInfoEntity.getUserId() == null) {
-			userInfoEntity.setUserId("");
-		}
-		if(userInfoEntity.getPassWd() == null) {
-			userInfoEntity.setPassWd("");
-		}
-		if(userInfoEntity.getPassKey() == null) {
-			userInfoEntity.setPassKey("");
-		}
-		
 		List<String> errorMessage = new ArrayList<>();
 		
-		//	エラーがあるか検証する
-		if(userInfoEntity.getUserId() != null && userInfoEntity.getPassWd() != null && userInfoEntity.getPassKey() != null) {
-			errorMessage = applicationService.loginDataCheck(userInfoEntity.getUserId(), userInfoEntity.getPassWd(), userInfoEntity.getPassKey());
+		//	ログイン未完了の時のみ、バリデーションチェックを行う
+		if(this.loginFlag == false) {
+			//	バリデーションチェック
+			if(userInfoEntity.getUserId() == null) {
+				userInfoEntity.setUserId("");
+			}
+			if(userInfoEntity.getPassWd() == null) {
+				userInfoEntity.setPassWd("");
+			}
+			if(userInfoEntity.getPassKey() == null) {
+				userInfoEntity.setPassKey("");
+			}
+						
+			//	エラーがあるか検証する
+			if(userInfoEntity.getUserId() != null && userInfoEntity.getPassWd() != null && userInfoEntity.getPassKey() != null) {
+				errorMessage = applicationService.loginDataCheck(userInfoEntity.getUserId(), userInfoEntity.getPassWd(), userInfoEntity.getPassKey());
+			}
 		}
-		
 		if(errorMessage.isEmpty()) {
-			AccountInfoEntity accountInfoEntity = new AccountInfoEntity();
+			if(this.loginFlag == false) {
+				this.loginFlag = true;
+				this.userInfoEntity = userInfoEntity;
+				userInfoEntity.setLastLoginDate(LocalDate.now());
+				applicationService.lastLoginDateUpdate(this.userInfoEntity.getUserId(), this.userInfoEntity.getLastLoginDate());
+			}
+			LocalDate lastLoginDate = userInfoEntity.getLastLoginDate();
+			AccountInfoEntity accountInfoEntity = new AccountInfoEntity();			
 			model.addAttribute("accountInfoEntity", accountInfoEntity);
+			model.addAttribute("lastLoginDate", lastLoginDate);
 			return "passwordManager/topPage";
 		}
 		else {

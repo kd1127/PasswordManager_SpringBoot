@@ -54,7 +54,7 @@ public class TableOperationMapperTest {
 			LocalDate nowTime = LocalDate.now();
 			String bufferDate = String.valueOf(nowTime);
 			java.sql.Date nowDate = java.sql.Date.valueOf(bufferDate);
-			UserInfoEntity userInfoEntity = new UserInfoEntity(registerUseId.get(i), registerPassWd.get(i), "null", registerPassKey.get(i), nowDate);
+			UserInfoEntity userInfoEntity = new UserInfoEntity(registerUseId.get(i), registerPassWd.get(i), "null", registerPassKey.get(i), nowDate, null);
 			userInfoEntityMap.put(i, userInfoEntity);
 		}
 		userInfoEntityList.add(userInfoEntityMap);

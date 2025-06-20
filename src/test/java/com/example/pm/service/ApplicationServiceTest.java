@@ -76,7 +76,7 @@ public class ApplicationServiceTest {
 	@Test
 	@DisplayName("パスワードとパスワード（確認）が一致した場合のテスト")
 	public void passWdMatchCheckProcessTest() {
-		UserInfoEntity userInfoEntity = new UserInfoEntity(null, "ADMIN", "ADMIN", null, null);
+		UserInfoEntity userInfoEntity = new UserInfoEntity(null, "ADMIN", "ADMIN", null, null, null);
 		String errorMsgExpected = "";
 		String errorMsgActual = spyApplicationService.passWdMatchCheckProcess(userInfoEntity, null);
 		System.out.println(errorMsgActual);
@@ -86,7 +86,7 @@ public class ApplicationServiceTest {
 	@Test
 	@DisplayName("パスワードとパスワード（確認）が一致しない場合のテスト")
 	public void passWdMatchCheckProcessTest2() {
-		UserInfoEntity userInfoEntity = new UserInfoEntity(null, "eiichi", "sadao", null, null);
+		UserInfoEntity userInfoEntity = new UserInfoEntity(null, "eiichi", "sadao", null, null, null);
 		String errorMsgExpected = "パスワード・パスワード（確認）が一致しません";
 		String errorMsgActual = spyApplicationService.passWdMatchCheckProcess(userInfoEntity, null);
 		assertEquals(errorMsgExpected, errorMsgActual);
@@ -95,7 +95,7 @@ public class ApplicationServiceTest {
 	@Test
 	@DisplayName("ユーザー登録メソッドで正しく登録ができた際のテスト")
 	public void userInfoInsertOperationTest() {
-		UserInfoEntity userInfoEntity = new UserInfoEntity("dohentai_eiichi@samie.com", "rorikon0216", "rorikon0216", "EI19490216", Date.valueOf(LocalDate.now()));
+		UserInfoEntity userInfoEntity = new UserInfoEntity("dohentai_eiichi@samie.com", "rorikon0216", "rorikon0216", "EI19490216", Date.valueOf(LocalDate.now()), null);
 		String errorMsgExpected = "";
 		String errorMsgActual = "";
 		lenient().when(applicationService.userInfoInsertOperation(userInfoEntity)).thenReturn("");

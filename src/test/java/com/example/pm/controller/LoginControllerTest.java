@@ -58,7 +58,7 @@ public class LoginControllerTest {
 	@Test
 	@DisplayName("loginControllerメソッドのテスト")
 	public void loginControllerTest() throws Exception {
-		userInfoEntity = new UserInfoEntity(null, null, null, null, null);
+		userInfoEntity = new UserInfoEntity(null, null, null, null, null, null);
 		mockMvc.perform(get("/login"))
 			.andExpect(status().isOk())
 			.andExpect(view().name("login/login"))
@@ -79,7 +79,7 @@ public class LoginControllerTest {
 	@DisplayName("topPageメソッド:次画面遷移する場合のテスト")
 	public void topPageTest() throws Exception {
 		loginController.applicationService = applicationService;
-		userInfoEntity = new UserInfoEntity("ADMIN", "ADMIN", null, "AD999", null);
+		userInfoEntity = new UserInfoEntity("ADMIN", "ADMIN", null, "AD999", null, null);
 		lenient().when(applicationService.loginDataCheck(any(), any(), any())).thenReturn(new ArrayList<>());
 		
 		MockHttpServletRequestBuilder request = 
@@ -101,7 +101,7 @@ public class LoginControllerTest {
 	@DisplayName("topPageメソッド:自画面遷移場合のテスト")
 	public void topPageTest2() throws Exception {
 		loginController.applicationService = applicationService;
-		userInfoEntity = new UserInfoEntity("ADMIN", "ADMIN", null, "AD999", null);
+		userInfoEntity = new UserInfoEntity("ADMIN", "ADMIN", null, "AD999", null, null);
 		List<String> errorMsg = List.of("ユーザーIDを入力してください。", "パスワードを入力してください。", "パスキーを入力してください。");
 		lenient().when(applicationService.loginDataCheck(any(), any(), any())).thenReturn(errorMsg);
 		errorMsg = applicationService.loginDataCheck(userInfoEntity.getUserId(), userInfoEntity.getPassWd(), userInfoEntity.getPassKey());
@@ -127,7 +127,7 @@ public class LoginControllerTest {
 	@Test
 	@DisplayName("passKeyGetメソッドのテスト")
 	public void passKeyGetTest() throws Exception{
-		userInfoEntity = new UserInfoEntity("ADMIN", "ADMIN", null, "AD999", null);
+		userInfoEntity = new UserInfoEntity("ADMIN", "ADMIN", null, "AD999", null, null);
 		loginController.applicationService = this.applicationService;
 		String errorMsg = "";
 		lenient().when(applicationService.passWdMatchCheckProcess(userInfoEntity, null)).thenReturn(errorMsg);
@@ -150,7 +150,7 @@ public class LoginControllerTest {
 	@Test
 	@DisplayName("userRegisterCheckメソッドのテスト")
 	public void userRegisterCheckTest()throws Exception {
-		userInfoEntity = new UserInfoEntity("ADMIN", "ADMIN", null, "AD999", null);
+		userInfoEntity = new UserInfoEntity("ADMIN", "ADMIN", null, "AD999", null, null);
 		loginController.userInfoEntity = userInfoEntity;
 		
 		MockHttpServletRequestBuilder request = MockMvcRequestBuilders

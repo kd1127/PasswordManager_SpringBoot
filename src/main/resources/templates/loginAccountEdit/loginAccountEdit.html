@@ -8,7 +8,7 @@
 	<body>
 		<h1>ログインアカウント編集</h1>
 		
-		<form th:action="@{/loginAccountEditCompletion}" method="post" th:object="${uieEntity}" id="form1">
+		<form th:action="@{/loginAccountEditCompletion}" method="post" th:object="${userInfoEditEntity}" id="form1">
 			<label>ユーザーID</label>
 			<span th:text="*{userId}"></span><br>
 			<label>パスワード</label>

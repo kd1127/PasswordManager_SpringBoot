@@ -8,7 +8,7 @@
 	<body>
 		<h1>パスキー変更</h1>
 		
-		<form th:action="@{/passKeyEditCompletion}" method="post" th:object="${uieEntity}" id="form2">
+		<form th:action="@{/passKeyEditCompletion}" method="post" th:object="${userInfoEditEntity}" id="form2">
 			<label>パスキー ※ 先頭2文字のみ入力</label>	
 			<input type="text" th:field="*{passKey}" th:value="*{passKey}" maxlength="30" id="passWd"/><br>
 			

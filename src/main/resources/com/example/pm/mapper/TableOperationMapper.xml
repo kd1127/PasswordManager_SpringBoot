@@ -21,6 +21,9 @@
     </update>
     <update id="passKeyUpdate" parameterType="String">
     	UPDATE userinfo SET passKey = #{passKey}, upd_date = now() WHERE userId = #{userId};
+    </update >
+    <update id="lastLoginDateUpdate">
+    	UPDATE userinfo SET lastLoginDate = #{lastLoginDate} WHERE userId = #{userId};
     </update>
     <!-- 使用中止  -1する必要があったがMyBatis自体がDDL非推奨なのと、他のデータが次々と登録している場合は不要な処理で他のidを
     前倒しにする手間と影響を懸念している -->

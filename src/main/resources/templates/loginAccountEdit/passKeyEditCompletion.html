@@ -7,7 +7,7 @@
 	<body>
 		<h1>パスキー変更完了</h1>
 		
-		<form th:action="@{/topPage}" method="post" th:object="${uieEntity}">
+		<form th:action="@{/topPage}" method="post" th:object="${userInfoEditEntity}">
 			<label>新パスキー</label>
 			<span th:text="*{passKey}">パスワード</span><br>
 			

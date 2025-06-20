@@ -7,9 +7,9 @@
 	<body>
 		<h1>ログインアカウント変更完了</h1>
 		
-		<form th:action="@{/topPage}" method="post" th:object="${uieEntity}">
+		<form th:action="@{/topPage}" method="post">
 			<label>新パスワード</label>
-			<span th:text="*{passWd}">パスワード</span><br>
+			<span th:text="${password}">パスワード</span><br>
 			
 			<input type="submit" value="トップページに戻る"/>
 		</form>

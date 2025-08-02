@@ -30,6 +30,21 @@ public class CustomerController {
 	@Autowired 
 	public CustomerController(HttpSession session, UserInfoEntity userInfoEntity, CustomerService customerService, 
 			UserInfoEditEntity userInfoEditEntity, ApplicationService applicationService) {
+		if(applicationService == null) {
+			throw new NullPointerException("何らかの理由によりエラーが発生しました。");
+		}
+		if(session == null) {
+			throw new NullPointerException("何らかの理由によりエラーが発生しました。");
+		}
+		if(userInfoEntity == null) {
+			throw new NullPointerException("何らかの理由によりエラーが発生しました。");
+		}
+		if(userInfoEditEntity == null) {
+			throw new NullPointerException("何らかの理由によりエラーが発生しました。");
+		}
+		if(customerService == null) {
+			throw new NullPointerException("何らかの理由によりエラーが発生しました。");
+		}
 		this.session = session;
 		this.userInfoEntity = userInfoEntity;
 		this.customerService = customerService;
@@ -84,6 +99,10 @@ public class CustomerController {
 	
 	@GetMapping("/passwordReConfigureCompletion")
 	public String passwordReConfigureCompletion(Model model) {
+		if(transitionFromFlag == false) {
+			model.addAttribute("userInfoEntity", userInfoEntity);
+			return "login/login";
+		}
 		UserInfoEntity userInfoEntity = new UserInfoEntity(null, userInfoEditEntity.getPassWd(), null, null, null, null);
 		userInfoEditEntity.setPassWd(String.valueOf(userInfoEntity.hashCode()));
 		String message = applicationService.passWdUpdateDbOperation(this.userInfoEntity.getUserId(), this.userInfoEditEntity.getPassWd());

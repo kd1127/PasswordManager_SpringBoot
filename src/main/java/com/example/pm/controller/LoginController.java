@@ -33,7 +33,8 @@ public class LoginController {
 	//	値保持用 LoginAccountEditControllerクラスなどが使用
 	public UserInfoEntity userInfoEntity;
 	
-	private boolean loginFlag;
+	//	ログイン処理がすべて完了するとtrueになる
+	public boolean loginFlag = false;
 	
 	//	セッション
 	@ModelAttribute

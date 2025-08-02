@@ -8,5 +8,9 @@
 		<img th:src="@{../images/404.png}" alt="Not Found">
 	
 		<h1>404 Not Found</h1>
+		
+		<form th:action="@{/login}" method="get">
+			<input type="submit" value="ログインへ"/>
+		</form>
 	</body>
 </html>

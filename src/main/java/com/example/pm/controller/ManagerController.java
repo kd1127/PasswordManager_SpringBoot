@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -24,14 +25,14 @@ import com.example.pm.entity.AccountInfoEntity;
 public class ManagerController {
 	@Autowired private ApplicationService service;
 	@Autowired private TableOperationMapper mapper;
-	@Autowired private LoginController controller;
+	@Autowired private LoginController loginController;
 	
 	private List<AccountInfoEntity> accountInfoEntityList = new ArrayList<>();;
 	
 	@PostMapping("/dataRegister")
 	public String dataRegister(@ModelAttribute AccountInfoEntity aiEntity, Model model) {
 		aiEntity.setInp_date(service.tableInsertpreparation());
-		aiEntity.setId_user(mapper.userInfoIdOneGet(controller.userInfoEntity.getUserId()));
+		aiEntity.setId_user(mapper.userInfoIdOneGet(loginController.userInfoEntity.getUserId()));
 		mapper.accountDataRegisterInsert(aiEntity);
 		model.addAttribute("aiEntity", aiEntity);
 		return "passwordManager/dataRegister";
@@ -39,21 +40,26 @@ public class ManagerController {
 	
 	@GetMapping("/registerDataShow")
 	public String registerDataShow(Model model) {
-		//	ログイン時に入力したユーザーIDをコントローラークラスから取得する。
-		int id = mapper.idOneGet(controller.userInfoEntity.getUserId());
-		//	userinfoテーブルのidをキーに、accountdataテーブルからid_userと一致するデータを取得		
-		accountInfoEntityList = mapper.selectAllData(id);
-		List<Integer> maxList = new ArrayList<>();
-		
-		//	画面側で取得したデータ数分だけ表示させるため、最大数までの数字をリストに格納
-		for(int i=0; i<accountInfoEntityList.size(); i++) {
-			maxList.add(i);
+		if(loginController.loginFlag) {
+			//	ログイン時に入力したユーザーIDをコントローラークラスから取得する。
+			int id = mapper.idOneGet(loginController.userInfoEntity.getUserId());
+			//	userinfoテーブルのidをキーに、accountdataテーブルからid_userと一致するデータを取得		
+			accountInfoEntityList = mapper.selectAllData(id);
+			List<Integer> maxList = new ArrayList<>();
+			
+			//	画面側で取得したデータ数分だけ表示させるため、最大数までの数字をリストに格納
+			for(int i=0; i<accountInfoEntityList.size(); i++) {
+				maxList.add(i);
+			}
+			
+			//	画面に表示させるため、アトリビュート
+			model.addAttribute("maxList", maxList);
+			model.addAttribute("accountInfoEntity", accountInfoEntityList);
+			return "passwordManager/registerDataShow";
 		}
-		
-		//	画面に表示させるため、アトリビュート
-		model.addAttribute("maxList", maxList);
-		model.addAttribute("accountInfoEntity", accountInfoEntityList);
-		return "passwordManager/registerDataShow";
+		else {
+			return "passwordManager/login";
+		}
 	}
 	
 	@PostMapping(value="/registerDataDel")
@@ -75,43 +81,53 @@ public class ManagerController {
 	
 	@RequestMapping(value="/registerDataUpd", method=RequestMethod.GET)
 	public String registerDataUpd(Model model, @RequestParam String index) {
-		try {
-			//	indexfをキーにDBから取得してaccountInfoEntityに格納する
-			AccountInfoEntity accountInfoEntity = mapper.selectOneData(Integer.parseInt(index));
-			model.addAttribute("accountInfoEntity", accountInfoEntity);
-		} catch (NumberFormatException e) {
-			// TODO 自動生成された catch ブロック
-			String errorMsg = "エラーが発生しました。数値には変換できない値が渡されました。";
-			model.addAttribute("errorMsg", errorMsg);
-			return "passwordManager/registerDataShow";
+		if(loginController.loginFlag) {
+			try {
+				//	indexfをキーにDBから取得してaccountInfoEntityに格納する
+				AccountInfoEntity accountInfoEntity = mapper.selectOneData(Integer.parseInt(index));
+				model.addAttribute("accountInfoEntity", accountInfoEntity);
+			} catch (NumberFormatException e) {
+				// TODO 自動生成された catch ブロック
+				String errorMsg = "エラーが発生しました。数値には変換できない値が渡されました。";
+				model.addAttribute("errorMsg", errorMsg);
+				return "passwordManager/registerDataShow";
+			}
+			return "passwordManager/registerDataUpd";
 		}
-		return "passwordManager/registerDataUpd";
+		else {
+			return "passwordManager/login";
+		}
 	}
 	
 	@RequestMapping(value="/dataUpdComplete", method=RequestMethod.GET)
 	public String dataUpdComplete(@ModelAttribute AccountInfoEntity aiEntity, Model model) {
-		try {
-			int updateRows = mapper.updateAccountDataOneARow(aiEntity.getId(), aiEntity.getUserId(), aiEntity.getPassWd(), 
-					aiEntity.getSiteName());
-			
-			if(updateRows < 1) {
-				String errorMsg = "何らかの原因により、更新に失敗しました。";
+		if(loginController.loginFlag) {
+			try {
+				int updateRows = mapper.updateAccountDataOneARow(aiEntity.getId(), aiEntity.getUserId(), aiEntity.getPassWd(), 
+						aiEntity.getSiteName());
+				
+				if(updateRows < 1) {
+					String errorMsg = "何らかの原因により、更新に失敗しました。";
+					model.addAttribute("errorMsg", errorMsg);
+					return "passwordManager/registerDataUpd";
+				}
+			} catch (DataAccessException ex) {
+				String errorMsg = "データアクセスエラーが発生しました。";
+				model.addAttribute("errorMsg", errorMsg);
+				ex.printStackTrace();
+				return "passwordManager/registerDataUpd";
+			} catch (Exception e) {
+				// TODO 自動生成された catch ブロック
+				String errorMsg = "予期しないエラーが発生しました。";
+				e.printStackTrace();
 				model.addAttribute("errorMsg", errorMsg);
 				return "passwordManager/registerDataUpd";
 			}
-		} catch (DataAccessException ex) {
-			String errorMsg = "データアクセスエラーが発生しました。";
-			model.addAttribute("errorMsg", errorMsg);
-			ex.printStackTrace();
-			return "passwordManager/registerDataUpd";
-		} catch (Exception e) {
-			// TODO 自動生成された catch ブロック
-			String errorMsg = "予期しないエラーが発生しました。";
-			e.printStackTrace();
-			model.addAttribute("errorMsg", errorMsg);
-			return "passwordManager/registerDataUpd";
+			return "passwordManager/dataUpdComplete";
 		}
-		return "passwordManager/dataUpdComplete";
+		else {
+			return "passwordManager/login";
+		}
 	}
 }
 

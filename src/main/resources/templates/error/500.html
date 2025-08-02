@@ -2,12 +2,12 @@
 <html lang="ja" xmlns:th="http://www.thymeleaf.org">
 	<head>
 		<meta charset="UTF-8">
-		<title>405エラー</title>
+		<title>500エラー</title>
 	</head>
 	<body>
-		<img th:src="@{../images/405.png}" alt="Method Not Allowed">
+		<img th:src="@{../images/500.png}" alt="500エラー">
 	
-		<h1>405エラー</h1>
+		<h1>500エラー</h1>
 		
 		<form th:action="@{/login}" method="get">
 			<input type="submit" value="ログインへ"/>

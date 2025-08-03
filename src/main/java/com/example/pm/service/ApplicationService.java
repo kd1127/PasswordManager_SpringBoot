@@ -15,5 +15,4 @@ public interface ApplicationService {
 	String passWdMatchCheckProcess(UserInfoEntity userInfoEntity, UserInfoEditEntity userInfoEditEntity);
 	String userInfoInsertOperation(UserInfoEntity userInfoEntity);
 	String passWdUpdateDbOperation(String userId, String passWd);
-	void lastLoginDateUpdate(String userId, LocalDate lastLoginDate);
 }

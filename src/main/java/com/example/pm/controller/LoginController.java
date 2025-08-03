@@ -18,6 +18,7 @@ import com.example.pm.entity.AccountInfoEntity;
 import com.example.pm.entity.UserInfoEntity;
 import com.example.pm.mapper.TableOperationMapper;
 import com.example.pm.service.ApplicationService;
+import com.example.pm.service.LoginService;
 
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -27,7 +28,9 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class LoginController {
 	
-	public ApplicationService applicationService;
+	@Autowired private ApplicationService applicationService;
+	@Autowired private LoginService loginService;
+	
 	private HttpSession session;
 	
 	//	値保持用 LoginAccountEditControllerクラスなどが使用
@@ -79,29 +82,15 @@ public class LoginController {
 		List<String> errorMessage = new ArrayList<>();
 		
 		//	ログイン未完了の時のみ、バリデーションチェックを行う
-		if(this.loginFlag == false) {
-			//	バリデーションチェック
-			if(userInfoEntity.getUserId() == null) {
-				userInfoEntity.setUserId("");
-			}
-			if(userInfoEntity.getPassWd() == null) {
-				userInfoEntity.setPassWd("");
-			}
-			if(userInfoEntity.getPassKey() == null) {
-				userInfoEntity.setPassKey("");
-			}
-						
-			//	エラーがあるか検証する
-			if(userInfoEntity.getUserId() != null && userInfoEntity.getPassWd() != null && userInfoEntity.getPassKey() != null) {
-				errorMessage = applicationService.loginDataCheck(userInfoEntity.getUserId(), userInfoEntity.getPassWd(), userInfoEntity.getPassKey());
-			}
+		if(!this.loginFlag) {
+			errorMessage = loginService.validationCheck(userInfoEntity);
 		}
 		if(errorMessage.isEmpty()) {
-			if(this.loginFlag == false) {
+			if(!this.loginFlag) {
 				this.loginFlag = true;
 				this.userInfoEntity = userInfoEntity;
 				userInfoEntity.setLastLoginDate(LocalDate.now());
-				applicationService.lastLoginDateUpdate(this.userInfoEntity.getUserId(), this.userInfoEntity.getLastLoginDate());
+				loginService.lastLoginDateUpdate(this.userInfoEntity.getUserId(), this.userInfoEntity.getLastLoginDate());
 			}
 			LocalDate lastLoginDate = userInfoEntity.getLastLoginDate();
 			AccountInfoEntity accountInfoEntity = new AccountInfoEntity();			

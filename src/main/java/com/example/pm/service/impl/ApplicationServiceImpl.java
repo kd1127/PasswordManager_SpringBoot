@@ -140,9 +140,4 @@ public class ApplicationServiceImpl implements ApplicationService {
 		}		
 		return message;
 	}
-	
-	@Override
-	public void lastLoginDateUpdate(String userId, LocalDate lastLoginDate) {
-		tableOperationMapper.lastLoginDateUpdate(userId, lastLoginDate);
-	}
 }

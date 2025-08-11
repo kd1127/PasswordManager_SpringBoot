@@ -1,7 +1,7 @@
 package com.example.pm.entity;
 
 import java.sql.Date;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 import org.springframework.stereotype.Component;
@@ -35,7 +35,7 @@ public class UserInfoEntity {
 	
 	private Date inp_date;
 	
-	private LocalDate lastLoginDate;
+	private LocalDateTime lastLoginDate;
 	
 	@Override
 	public int hashCode() {
@@ -44,6 +44,12 @@ public class UserInfoEntity {
 	
 	@Override
 	public boolean equals(Object object) {
+		if(object == null) {
+			return false;
+		}
+		if(this instanceof Object) {
+			return true;
+		}
 		if(this != object) {
 			return false;
 		}

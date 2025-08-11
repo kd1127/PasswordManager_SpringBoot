@@ -1,6 +1,7 @@
 package com.example.pm.controller;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,8 +29,9 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class LoginController {
 	
-	@Autowired private ApplicationService applicationService;
+	@Autowired public ApplicationService applicationService;
 	@Autowired private LoginService loginService;
+	@Autowired private TableOperationMapper tableOperationMapper;
 	
 	private HttpSession session;
 	
@@ -66,6 +68,9 @@ public class LoginController {
 	public String loginController(@ModelAttribute UserInfoEntity userInfoEntity, Model model) {
 		this.loginFlag = false;
 		model.addAttribute("userInfoEntity", userInfoEntity);
+		session.removeAttribute("userInfoEntity");
+		session.removeAttribute("userInfoEditEntity");
+		session.removeAttribute("AccountInfoEntity");
 		return "login/login";
 	}
 	
@@ -89,13 +94,15 @@ public class LoginController {
 			if(!this.loginFlag) {
 				this.loginFlag = true;
 				this.userInfoEntity = userInfoEntity;
-				userInfoEntity.setLastLoginDate(LocalDate.now());
+				LocalDateTime oldLastLoginDate = tableOperationMapper.lastLoginDateSelect(userInfoEntity.getUserId());
+				String lastLoginDate = String.valueOf(oldLastLoginDate);
+				lastLoginDate = lastLoginDate.replace('T', ' ');
+				model.addAttribute("lastLoginDate", lastLoginDate);
+				userInfoEntity.setLastLoginDate(LocalDateTime.now());
 				loginService.lastLoginDateUpdate(this.userInfoEntity.getUserId(), this.userInfoEntity.getLastLoginDate());
 			}
-			LocalDate lastLoginDate = userInfoEntity.getLastLoginDate();
 			AccountInfoEntity accountInfoEntity = new AccountInfoEntity();			
 			model.addAttribute("accountInfoEntity", accountInfoEntity);
-			model.addAttribute("lastLoginDate", lastLoginDate);
 			return "passwordManager/topPage";
 		}
 		else {
@@ -113,21 +120,24 @@ public class LoginController {
 	
 	@PostMapping("/passKeyGet")
 	public String passKeyGet(@ModelAttribute UserInfoEntity userInfoEntity, Model model) {
-		String errorMsg = applicationService.passWdMatchCheckProcess(userInfoEntity, null);
+		List<String> errorMsgList = new ArrayList<>();
+		errorMsgList.add(applicationService.passWdMatchCheckProcess(userInfoEntity, null));
+		errorMsgList.add(applicationService.userIdDuplicateCheck(userInfoEntity.getUserId()));
+		
 		model.addAttribute("userInfoEntity", userInfoEntity);
 		this.userInfoEntity = userInfoEntity;
 		
 		try {
-			if(!errorMsg.equals("")) {
-				model.addAttribute("errorMsg", errorMsg);
+			if(!errorMsgList.equals("")) {
+				model.addAttribute("errorMsgList", errorMsgList);
 				return "login/userRegister";
 			}
 			else{
 				return "login/passKeyGet";
 			}
 		}catch(NullPointerException e) {
-			errorMsg = "何らかの理由によりエラーが発生しました。";
-			model.addAttribute("errorMsg", errorMsg);
+			errorMsgList.add("何らかの理由によりエラーが発生しました。");
+			model.addAttribute("errorMsg", errorMsgList);
 			return "login/userRegister";
 		}
 	}

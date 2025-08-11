@@ -1,6 +1,6 @@
 package com.example.pm.service.impl;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,7 +39,7 @@ public class LoginServiceImpl implements LoginService{
 	}
 	
 	@Override
-	public void lastLoginDateUpdate(String userId, LocalDate lastLoginDate) {
+	public void lastLoginDateUpdate(String userId, LocalDateTime lastLoginDate) {
 		tableOperationMapper.lastLoginDateUpdate(userId, lastLoginDate);
 	}
 }

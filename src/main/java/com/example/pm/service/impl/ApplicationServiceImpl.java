@@ -108,7 +108,7 @@ public class ApplicationServiceImpl implements ApplicationService {
 		String errorMsg = "";
 		if(userInfoEntity != null) {
 			if(!userInfoEntity.getPassWd().equals(userInfoEntity.getRe_PassWd())) {
-				errorMsg = "パスワード・パスワード（確認）が一致しません";
+				errorMsg = "・パスワード・パスワード（確認）が一致しません";
 			}
 		}
 		if(userInfoEditEntity != null) {
@@ -139,5 +139,19 @@ public class ApplicationServiceImpl implements ApplicationService {
 			message = "何らかの理由により、パスワード更新に失敗しました。";
 		}		
 		return message;
+	}
+	
+	@Override
+	public String userIdDuplicateCheck(String userId) {
+		String errorMessage = "";
+		if(userId == null) {
+			errorMessage = "・不正なユーザーIDです。";
+		}
+		
+		List<String> userIdList = tableOperationMapper.userIdAllGet();
+		if(userIdList.contains(userId)) {
+			errorMessage = "・他のユーザーが登録しているユーザーIDです。別のユーザーIDを登録してください。";
+		}		
+		return errorMessage;
 	}
 }

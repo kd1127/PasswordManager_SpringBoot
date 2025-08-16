@@ -102,6 +102,9 @@
     <select id="passKeyOneVerify" resultType="String" parameterType="String">
     	SELECT passKey FROM userinfo WHERE 1=1 and passKey = #{passKey}
     </select>
+    <select id="lastLoginDateSelect">
+    	SELECT lastLoginDate FROM userinfo WHERE userId = #{userId}
+    </select>
     <!-- Delete Query 論理削除-->
     <delete id="deleteARowOfData" parameterType="Integer">
     	UPDATE accountdata SET Delete_flag = true where id = #{id};

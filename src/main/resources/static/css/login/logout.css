@@ -1,0 +1,22 @@
+@charset "UTF-8";
+
+.title{
+	font-size: 30px;
+	font-weight: bold;
+	text-align: center;
+}
+
+body{
+	 background-image: url(/images/BGImage.jpg);
+	 background-repeat: repeat;
+     background-size: cover; /* 画面全体にフィット */
+     background-position: center;
+     width: 1000px;
+     height: 500px;
+     margin-left: 100px;
+}
+
+.explanation{
+	margin-left: 430px;
+	font-weight: bold
+}

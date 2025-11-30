@@ -3,22 +3,25 @@
 	<head>
 		<meta charset="UTF-8">
 		<title>パスキー認証</title>
+		<link rel="stylesheet" th:href="@{../css/login/passKeyCertification.css}">
 	</head>
 	<body>
-		<h1>パスキー認証</h1>
+		<h1 class="title">パスキー認証</h1>
 		
 		<div th:if="${errorMessage}">
-			<span th:each="message : ${errorMessage}">
-				<div th:text="${message}"></div>
-			</span>
+			<div th:each="message : ${errorMessage}">
+				<ul class="errorMessage">
+					<li><span th:text="${message}"></span>
+				</ul>
+			</div>
 		</div>
 			
 		
 		<form th:action="@{/topPage}" method="post" th:object="${userInfoEntity}">
-			<label>パスキー</label>
-			<input type="text" th:field="*{passKey}"/><br>	
-			<input type="submit" value="戻る" formaction="/login" formmethod="get"/>
-			<input type="submit" value="ログイン"/>
+			<label class="label">パスキー</label>
+			<input type="text" th:field="*{passKey}" class="textbox"/><br>
+			<input type="submit" value="ログイン" class="submitLogin"/>
+			<input type="submit" value="戻る" formaction="/login" formmethod="get" class="submitBack"/>
 		</form>
 	</body>
 </html>

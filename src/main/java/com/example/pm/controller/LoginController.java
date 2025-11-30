@@ -64,6 +64,15 @@ public class LoginController {
 		this.userInfoEntity = userInfoEntity;
 	}
 	
+	@PostMapping("/logout")
+	public String logoutController() {
+		this.loginFlag = false;
+		session.removeAttribute("userInfoEntity");
+		session.removeAttribute("userInfoEditEntity");
+		session.removeAttribute("AccountInfoEntity");
+		return "login/logout";
+	}
+	
 	@GetMapping("/login")
 	public String loginController(@ModelAttribute UserInfoEntity userInfoEntity, Model model) {
 		this.loginFlag = false;

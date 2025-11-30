@@ -16,12 +16,12 @@ body{
      margin-left: 100px;
 }
 
-.explanation{
-	margin-left: 430px;
-	font-weight: bold
+p{
+	margin-left: 400px;
+	font-weight: bold;
 }
 
-.toLogin{
+.submit-style{
 	display: block;
     width: 30%;
     margin: 8px 0;
@@ -32,5 +32,5 @@ body{
     font-weight: bold;
     cursor: pointer;
     border-radius: 5px;
-    margin-left: 360px;
+    margin-left: 350px;
 }

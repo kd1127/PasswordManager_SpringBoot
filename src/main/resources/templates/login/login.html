@@ -4,20 +4,22 @@
 		<meta charset="UTF-8">
 		<title>パスワードマネージャーログイン</title>
 		<script type="text/javascript" th:src="@{../js/PasswordManager.js}"></script>
+		<link rel="stylesheet" th:href="@{../css/login/login.css}">
 	</head>
 	<body>
-		<h1>パスワードマネージャーログイン</h1>
+		<h1 class="title">パスワードマネージャーログイン</h1>
 		
 		<form th:action="@{/passKeyCertification}" method="post" th:object="${userInfoEntity}" id="form">
-			<label>ユーザーID</label>
-			<input type="text" th:field="*{userId}" th:value="*{userId}"/><br>
+			<label class="labelA">ユーザーID</label>
+			<input type="text" th:field="*{userId}" th:value="*{userId}" class="textboxA"/><br>
 			
-			<label>パスワード</label>
-			<input type="password" th:field="*{passWd}" th:value="*{passWd}"/><br>
+			<label class="labelA">パスワード</label>
+			<input type="password" th:field="*{passWd}" th:value="*{passWd}" class="textboxB"/><br>
 			
-			<input type="submit" value="パスキー認証"/>
-			<input type="submit" value="ユーザー登録" formaction="/userRegister"><br>
-			<a rel="#" href="http://localhost:8080/inputMailAddress" onclick="inputMailAdress();">パスワードを忘れた方</a>
+			<input type="submit" value="パスキー認証" class="submitX"/>
+			<input type="submit" value="ユーザー登録" formaction="/userRegister" class="submitX"><br>
+			<a rel="#" href="http://localhost:8080/inputMailAddress" onclick="inputMailAdress();" 
+				class="forgotPassword">パスワードを忘れた方</a>
 		</form>
 	</body>
 </html>

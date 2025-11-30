@@ -1,41 +1,80 @@
 <!DOCTYPE html>
 <html lang="ja" xmlns:th="http://www.thymeleaf.org">
-	<head>
-		<meta charset="UTF-8">
-		<title>トップページ</title>
-		<script type="text/javascript" th:src="@{../js/PasswordManager.js}"></script>
-	</head>
-	<body>
-		<h1>トップページ</h1>
-		
-		<div th:if="${infoMessage} != null">
-			<span th:text="${infoMessage}"></span><br><br>
-		</div>
-		
-		<form th:action="@{/login}" method="get" id="form" th:object="${accountInfoEntity}">
-			<label>ランダムパスワード</label>
-			<input type="radio" name="method" id="situation" checked/>
-			<label>シーザー暗号</label>
-			<input type="radio" name="method" id="situation2"/><br>
-			<label>暗号方式</label>
-			<input type="text" maxlength="50" id="cryptography"/><br>
-			<label>パスワード</label>
-			<input type="text" maxlength="50" id="create" th:field="*{passWd}"/><br>			
-			<label>ユーザーID</label>
-			<input type="text" maxlength="50" id="userId" th:field="*{userId}"/><br>
-			<label>サイト名</label>
-			<input type="text" maxlength="20" id="siteName" th:field="*{siteName}"/><br>			
-			<input type="button" value="暗号方式決定" onclick="Choice();"/>
-			<input type="button" value="パスワード生成" onclick="Generate();"/>
-			<input type="submit" value="登録" onclick="dataRegister();"/>
-			<input type="submit" value="登録データ表示" formaction="/registerDataShow"/><br>
-			<input type="submit" value="ログアウト"/>
-			<input type="submit" value="ログインパスワード変更画面へ" formaction="/loginAccountEdit"/>
-			<input type="submit" value="パスキー変更" formaction="/passKeyEdit"/>
-			<input type="submit" value="マニュアル"/>
-		</form>
-		
-		<p>最終ログイン日: 
-		<span th:text="${lastLoginDate}"></span></p>
-	</body>
+<head>
+    <meta charset="UTF-8">
+    <title>トップページ</title>
+    <script type="text/javascript" th:src="@{../js/PasswordManager.js}"></script>
+    <link rel="stylesheet" th:href="@{../css/passwordManager/topPage.css}">
+</head>
+<body>
+    <!-- 左側固定メニュー -->
+    <div class="sidebar">
+        <h2>メニュー</h2>
+        <!-- GET送信（画面遷移用） -->
+        <form method="get" action="/registerDataShow">
+            <input type="submit" value="登録データ表示"/>
+        </form>
+        <form method="get" action="/loginAccountEdit">
+            <input type="submit" value="ログインパスワード変更"/>
+        </form>
+        <form method="get" action="/passKeyEdit">
+            <input type="submit" value="パスキー変更"/>
+        </form>
+        <form method="get" action="/manual">
+            <input type="submit" value="マニュアル"/>
+        </form>
+        <form method="post" action="/logout">
+            <input type="submit" value="ログアウト"/>
+        </form>
+    </div>
+
+    <!-- メインコンテンツ -->
+    <div class="content">
+        <h1 class="title">トップページ</h1>
+
+        <div th:if="${infoMessage} != null">
+            <span th:text="${infoMessage}"></span><br><br>
+        </div>
+
+        <!-- 登録フォーム（POST送信） -->
+        <form th:action="@{/login}" method="post" id="form" th:object="${accountInfoEntity}">
+        	<div class="choice">
+        		<span>暗号方式選択</span>
+	            <label class="choice-body">ランダムパスワード</label>
+	            <input type="radio" name="method" id="situation" checked/>
+	            <label>シーザー暗号</label>
+	            <input type="radio" name="method" id="situation2"/><br>
+			</div>
+            <div class="encrypt-method">
+            	<label>暗号方式</label>
+            	<input type="text" maxlength="50" id="cryptography" class="encrypt-method-body"/><br>
+            </div>
+            <div class="password-line">
+	            <label>パスワード</label>
+	            <input type="text" maxlength="50" id="create" th:field="*{passWd}" class="password-line-body"/><br>
+	        </div>		
+            <div class="userId-line">
+            	<label>ユーザーID</label>
+            	<input type="text" maxlength="50" id="userId" th:field="*{userId}" class="userId-line-body"/><br>
+            </div>
+            <div class="siteName-line">
+            	<label>サイト名</label>
+            	<input type="text" maxlength="20" id="siteName" th:field="*{siteName}" class="siteName-line-body"/><br>			
+			</div>
+			<div>
+				<input type="button" value="暗号方式決定" onclick="Choice();" class="submitX"/>
+			</div>
+			<div>
+           		<input type="button" value="パスワード生成" onclick="Generate();" class="submitY"/>
+           	</div>
+            <!-- 登録だけPOST送信 -->
+            <div>
+            	<input type="submit" value="登録" onclick="dataRegister();" class="submitZ"/>
+            </div>
+        </form>
+
+        <p class="loginDay">前回ログイン日: 
+        <span th:text="${lastLoginDate}"></span></p>
+    </div>
+</body>
 </html>

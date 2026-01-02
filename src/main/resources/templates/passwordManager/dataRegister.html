@@ -3,9 +3,31 @@
 	<head>
 		<meta charset="UTF-8">
 		<title>データ登録</title>
+		<link rel="stylesheet" th:href="@{../css/passwordManager/dataRegister.css}">
 	</head>
 	<body>
-		<h1>データ登録</h1>
+		<!-- 左側固定メニュー -->
+	    <div class="sidebar">
+	        <h2>メニュー</h2>
+	        <!-- GET送信（画面遷移用） -->
+	        <form method="get" action="/registerDataShow">
+	            <input type="submit" value="登録データ表示"/>
+	        </form>
+	        <form method="get" action="/loginAccountEdit">
+	            <input type="submit" value="ログインパスワード変更"/>
+	        </form>
+	        <form method="get" action="/passKeyEdit">
+	            <input type="submit" value="パスキー変更"/>
+	        </form>
+	        <form method="get" action="/siteMap">
+	            <input type="submit" value="サイトマップ"/>
+	        </form>
+	        <form method="post" action="/logout">
+	            <input type="submit" value="ログアウト"/>
+	        </form>
+	    </div>
+	
+		<h1 class="title">データ登録</h1>
 		<p>以下データで登録しました。</p>
 		
 		<form th:action="@{/topPage}" method="post" th:object="${aiEntity}">
@@ -16,7 +38,7 @@
 			<label>サイト名:</label>
 			<span th:text="*{siteName}">サイト名</span><br>
 			
-			<input type="submit" value="トップページへ"/>
+			<input type="submit" value="トップページへ" class="toTopPage"/>
 		</form>
 	</body>
 </html>

@@ -43,21 +43,59 @@
 	font-size: 30px;
 	font-weight: bold;
 	text-align: center;
+	margin-right: 300px;
 }
 
 body{
 	 background-image: url(/images/BGImage.jpg);
+	 margin-left: 300px;
 }
 
-.error-message{
-	text-align: center;
-	color: red;
+.data-field{
+	margin-left: 200px;
 }
 
-.table-style{
-	margin-left: 250px;
+.text-field1{
+	margin-left: 50px;
+	padding-right: 30px;
 }
 
-.table-one-row-style{
-	background-color: #afeeee;
-} 
+.text-field2{
+	margin-left: 53px;
+	padding-right: 30px;
+}
+
+.text-field3{
+	margin-left: 69px;
+	padding-right: 30px;
+}
+
+.toTopPage{
+	display: block;
+    width: 15%;
+    margin: 8px 0;
+    padding: 10px;
+    border: none;
+    background: #007BFF;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 5px;
+    margin-left: 20px;
+    margin-top: 30px;
+}
+
+.toUpdateConpletion{
+	display: block;
+    width: 15%;
+    margin: 8px 0;
+    padding: 10px;
+    border: none;
+    background: #007BFF;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 5px;
+    margin-left: 150px;
+    margin-top: -48px;
+}

@@ -14,17 +14,14 @@
         <form th:action="@{/topPage}" method="get">
         	<input type="submit" value="トップページへ"/>
     	</form>
-        <form method="get" action="/registerDataShow">
-            <input type="submit" value="登録データ表示"/>
-        </form>
         <form method="get" action="/loginAccountEdit">
             <input type="submit" value="ログインパスワード変更"/>
         </form>
         <form method="get" action="/passKeyEdit">
             <input type="submit" value="パスキー変更"/>
         </form>
-        <form method="get" action="/manual">
-            <input type="submit" value="マニュアル"/>
+        <form method="get" action="/siteMap">
+            <input type="submit" value="サイトマップ"/>
         </form>
         <form method="post" action="/logout">
             <input type="submit" value="ログアウト"/>
@@ -40,9 +37,9 @@
     		<span th:text="${errorMsg}" class="error-message"></span>
     	</div>
     </th:block>
-    <div th:unless="${maxList.size() == 0}">    
+    <div th:unless="${maxList.size() == 0}" class="table-style">    
 	    <table border="1" style="border-collapse: collapse">
-	        <thead>
+	        <thead class="table-one-row-style">
 	            <tr>
 	            	<th>No.</th>
 	                <th>ユーザーID</th>
@@ -50,6 +47,7 @@
 	                <th>サイト名</th>
 	                <th>登録日時</th>
 	                <th>更新日時</th>
+	                <th></th>
 	            </tr>
 	        </thead>
 	        <tbody th:object="${accountInfoEntity}">

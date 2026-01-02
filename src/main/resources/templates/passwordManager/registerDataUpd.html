@@ -4,26 +4,50 @@
 		<meta charset="UTF-8">
 		<title>データ編集</title>
 		<script type="text/javascript" th:src="@{../js/PasswordManager.js}"></script>
+		<link rel="stylesheet" th:href="@{../css/passwordManager/registerDataUpd.css}">
 	</head>
 	<body>
+		<!-- 左側固定メニュー -->
+	    <div class="sidebar">
+	        <h2>メニュー</h2>
+	        <!-- GET送信（画面遷移用） -->
+	        <form th:action="@{/topPage}" method="get">
+	        	<input type="submit" value="トップページへ"/>
+	    	</form>
+	        <form method="get" action="/loginAccountEdit">
+	            <input type="submit" value="ログインパスワード変更"/>
+	        </form>
+	        <form method="get" action="/passKeyEdit">
+	            <input type="submit" value="パスキー変更"/>
+	        </form>
+	        <form method="get" action="/siteMap">
+	            <input type="submit" value="サイトマップ"/>
+	        </form>
+	        <form method="post" action="/logout">
+	            <input type="submit" value="ログアウト"/>
+	        </form>
+	    </div>
+	
 		<div th:if="${errorMsg != null}">
 			<span th:text="${errorMsg}"></span>
 		</div>
 		
-		<h1>データ編集</h1>
-		<form th:action="@{/dataUpdComplete}" method="get" th:object="${accountInfoEntity}" id="form1">
-			<label>ユーザーID</label>
-			<input type="text" th:value="*{userId}" th:field="*{userId}" id="userId"/><br>
-			
-			<label>パスワード</label>
-			<input type="text" th:value="*{passWd}" th:field="*{passWd}" id="passWd"/><br>
-			
-			<label>サイト名</label>
-			<input type="text" th:value="*{siteName}" th:field="*{siteName}" id="siteName"/><br>
-			
-			<input type="submit" value="トップページへ" formaction="topPage"/>
-			<input type="submit" value="更新完了画面へ" onclick="save();"/>
-			<input type="hidden" th:value="*{id}" th:field="*{id}"/>
-		</form>
+		<h1 class="title">データ編集</h1>
+		<div class="data-field">
+			<form th:action="@{/dataUpdComplete}" method="get" th:object="${accountInfoEntity}" id="form1">
+				<label>ユーザーID</label>
+				<input type="text" th:value="*{userId}" th:field="*{userId}" id="userId" size="25" class="text-field1"/><br>
+				
+				<label>パスワード</label>
+				<input type="text" th:value="*{passWd}" th:field="*{passWd}" id="passWd" size="25" class="text-field2"/><br>
+				
+				<label>サイト名</label>
+				<input type="text" th:value="*{siteName}" th:field="*{siteName}" id="siteName" size="25" class="text-field3"/><br>
+				
+				<input type="submit" value="トップページへ" formaction="topPage" class="toTopPage"/>
+				<input type="submit" value="更新完了画面へ" onclick="save();" class="toUpdateConpletion"/>
+				<input type="hidden" th:value="*{id}" th:field="*{id}"/>
+			</form>
+		</div>
 	</body>
 </html>

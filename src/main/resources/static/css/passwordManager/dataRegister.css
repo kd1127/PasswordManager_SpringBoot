@@ -43,21 +43,25 @@
 	font-size: 30px;
 	font-weight: bold;
 	text-align: center;
+	margin-left: -500px;
 }
 
 body{
 	 background-image: url(/images/BGImage.jpg);
+	 margin-left: 500px;
 }
 
-.error-message{
-	text-align: center;
-	color: red;
+.toTopPage{
+	display: block;
+    width: 15%;
+    margin: 8px 0;
+    padding: 10px;
+    border: none;
+    background: #007BFF;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 5px;
+    margin-left: 80px;
+    margin-top: 50px;
 }
-
-.table-style{
-	margin-left: 250px;
-}
-
-.table-one-row-style{
-	background-color: #afeeee;
-} 

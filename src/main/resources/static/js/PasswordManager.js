@@ -235,6 +235,15 @@ function inputMailAdress(){
 	document.getElementById('form').action = url;
 }
 
+function repasswordOnchange(){
+	let create = document.getElementById('create');
+	let create2 = document.getElementById('create2');
+	
+	if(create != null && create != ''){
+		create2 = create.value;
+	}
+}
+
 /* 
 let button = document.getElementById("button");
 	

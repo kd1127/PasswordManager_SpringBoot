@@ -3,6 +3,7 @@
 	<head>
 		<meta charset="UTF-8">
 		<title>ユーザー登録</title>
+		<script type="text/javascript" th:src="@{../js/PasswordManager.js}"></script>
 	</head>
 	<body>
 		<h1>ユーザー登録</h1>
@@ -14,14 +15,30 @@
 		</div>
 		
 		<form th:action="@{/passKeyGet}" method="post" th:object="${userInfoEntity}">
+			<span>暗号方式選択</span>
+            <label class="choice-body">ランダムパスワード</label>
+            <input type="radio" name="method" id="situation" checked/>
+            <label>シーザー暗号</label>
+            <input type="radio" name="method" id="situation2"/><br>
+			
+			<label>暗号方式</label>
+            <input type="text" maxlength="50" id="cryptography" class="encrypt-method-body"/><br>
+		
 			<label>ユーザーID</label>
 			<input type="text" th:field="*{userId}" maxlength="30"><br>
 			
 			<label>パスワード</label>
-			<input type="password" th:field="*{passWd}" maxlength="30"><br>
+			<input type="password" th:field="*{passWd}" maxlength="30" id="create" onchange="passwordOnchange();"><br>
 			
 			<label>パスワード（確認）</label>
-			<input type="password" th:field="*{re_PassWd}" maxlength="30"><br>
+			<input type="password" th:field="*{re_PassWd}" maxlength="30" id="create2"><br>
+			
+			<div>
+				<input type="button" value="暗号方式決定" onclick="Choice();" class="submitX"/>
+			</div>
+			<div>
+           		<input type="button" value="パスワード生成" onclick="Generate();" class="submitY"/>
+           	</div>
 			
 			<input type="submit" value="パスキー取得画面へ"/>
 			<input type="submit" value="戻る" formaction="/login" formmethod="get"/>

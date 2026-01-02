@@ -6,6 +6,14 @@ function confirmLogic(){
 	let actionUrl = "http://localhost:8080/loginAccountEdit";
 	//	入力フォームの値を取得			 
 	 let passWd = document.getElementById('passWd');
+	 let rePassWd = document.getElementById('re_PassWd');
+	 
+	 if(passWd.value != rePassWd.value){
+		 alert('パスワードとパスワード（確認）が異なります。');
+		 document.getElementById("form1").method = 'GET';
+	 	 document.getElementById("form1").action = actionUrl;
+	 	 return;
+	 }
 	 
 	 if(confirm('登録してもよろしいですか？\n新パスワード：' + passWd.value)){ 
 		 console.log(passWd.value);

@@ -4,21 +4,41 @@
 		<meta charset="UTF-8">
 		<title>ログインアカウント編集画面</title>
 		<script type="text/javascript" th:src="@{../js/PasswordManager.js}"></script>
+		<link rel="stylesheet" th:href="@{../css/loginAccountEdit/loginAccountEdit.css}">
 	</head>
 	<body>
-		<h1>ログインアカウント編集</h1>
+		<!-- 左側固定メニュー -->
+	    <div class="sidebar">
+	        <h2>メニュー</h2>
+	        <!-- GET送信（画面遷移用） -->
+	        <form th:action="@{/topPage}" method="get">
+	        	<input type="submit" value="トップページへ"/>
+	    	</form>
+	        <form method="get" action="/passKeyEdit">
+	            <input type="submit" value="パスキー変更"/>
+	        </form>
+	        <form method="get" action="/siteMap">
+	            <input type="submit" value="サイトマップ"/>
+	        </form>
+	        <form method="post" action="/logout">
+	            <input type="submit" value="ログアウト"/>
+	        </form>
+	    </div>
+		<h1 class="title">ログインアカウント編集</h1>
 		
 		<form th:action="@{/loginAccountEditCompletion}" method="post" th:object="${userInfoEditEntity}" id="form1">
-			<label>ユーザーID</label>
-			<span th:text="*{userId}"></span><br>
-			<label>パスワード</label>
-			<input type="text" th:field="*{passWd}" th:value="*{passWd}" maxlength="30" onload="passWd"/><br>
-			
-			<label>パスワード（確認）</label>
-			<input type="text" th:field="*{re_PassWd}" maxlength="30"/><br>
-			
-			<input type="submit" value="ログインアカウント情報編集完了画面へ" onclick="confirmLogic();"/>
-			<input type="submit" value="トップページへ" formaction="/topPage"/>
+			<div class="data-field">
+				<label>ユーザーID</label>
+				<span th:text="*{userId}" class="text-field1"></span><br>
+				<label>パスワード</label>
+				<input type="text" th:field="*{passWd}" th:value="*{passWd}" maxlength="30" onload="passWd" class="text-field2"/><br>
+				
+				<label>パスワード（確認）</label>
+				<input type="text" th:field="*{re_PassWd}" maxlength="30" class="text-field3"/><br>
+				
+				<input type="submit" value="編集完了画面へ" onclick="confirmLogic();" class="toEditConpletion"/>
+				<input type="submit" value="トップページへ" formaction="/topPage" class="toTopPage"/>
+			</div>
 		</form>
 	</body>
 </html>

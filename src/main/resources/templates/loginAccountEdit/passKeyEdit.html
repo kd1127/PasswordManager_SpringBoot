@@ -4,16 +4,36 @@
 		<meta charset="UTF-8">
 		<title>パスキー変更画面</title>
 		<script type="text/javascript" th:src="@{../js/PasswordManager.js}"></script>
+		<link rel="stylesheet" th:href="@{../css/loginAccountEdit/passKeyEdit.css}">
 	</head>
 	<body>
-		<h1>パスキー変更</h1>
+		<!-- 左側固定メニュー -->
+	    <div class="sidebar">
+	        <h2>メニュー</h2>
+	        <!-- GET送信（画面遷移用） -->
+	        <form method="get" action="/registerDataShow">
+	            <input type="submit" value="登録データ表示"/>
+	        </form>
+	        <form method="get" action="/loginAccountEdit">
+	            <input type="submit" value="ログインパスワード変更"/>
+	        </form>
+	        <form method="get" action="/siteMap	">
+	            <input type="submit" value="サイトマップ"/>
+	        </form>
+	        <form method="post" action="/logout">
+	            <input type="submit" value="ログアウト"/>
+	        </form>
+	    </div>
+		
+		<h1 class="title">パスキー変更</h1>
 		
 		<form th:action="@{/passKeyEditCompletion}" method="post" th:object="${userInfoEditEntity}" id="form2">
-			<label>パスキー ※ 先頭2文字のみ入力</label>	
-			<input type="text" th:field="*{passKey}" th:value="*{passKey}" maxlength="30" id="passWd"/><br>
-			
-			<input type="submit" value="パスキー編集完了画面へ" onclick="confirmLogic2();"/>
-			<input type="submit" value="トップページへ" formaction="/topPage"/>
+			<div class="data-field">
+				<label>パスキー ※ 先頭2文字のみ入力</label>	
+				<input type="text" th:field="*{passKey}" th:value="*{passKey}" maxlength="30" id="passKey" class="text-field"/><br>
+			</div>
+			<input type="submit" value="パスキー編集完了画面へ" onclick="confirmLogic2();" class="toTopPage"/>
+			<input type="submit" value="トップページへ" formaction="/topPage" class="toEditConpletion"/>
 		</form>
 	</body>
 </html>

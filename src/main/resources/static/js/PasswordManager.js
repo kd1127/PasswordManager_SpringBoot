@@ -26,19 +26,31 @@ function confirmLogic(){
 }
 
 //	パスキー編集画面で使用
-function confirmLogic2(){
+async function confirmLogic2(){
 	//	書き換えURL
 	let actionUrl = "http://localhost:8080/passKeyEdit";
+	document.getElementById("form2").method = 'GET';
 	//	入力フォームの値を取得			 
-	 let passWd = document.getElementById('passWd');
+	 let passKey = document.getElementById('passKey');
 	 
-	 if(confirm('登録してもよろしいですか？\n新パスワード：' + passWd.value)){ 
-		 console.log(passWd.value);
+	 if(passKey == null || passKey.value == ""){
+		 if(passKey.value.length != 2){
+			 alert('パスキー（先頭2文字）を入力してください。');
+			 document.getElementById("form2").action = actionUrl;
+		 }
 	 }
-	 else{
-		//	confirmでキャンセルを押下
-		document.getElementById("form2").method = 'GET';
-	 	document.getElementById("form2").action = actionUrl;
+	 else if(passKey.value != null){
+		 alert('先頭2文字のみ入力してください。');
+		 document.getElementById("form2").action = actionUrl;
+	 }
+	 else{ 
+		 if(confirm('登録してもよろしいですか？\n新パスワード：' + passKey.value)){ 
+			 console.log(passKey.value);
+		 }
+		 else{
+			//	confirmでキャンセルを押下
+		 	document.getElementById("form2").action = actionUrl;
+		 }
 	 }
 }
 
@@ -125,6 +137,7 @@ function isHiragana(str){
 function Generate(){
 	let cryptography = document.getElementById('cryptography');
 	let create = document.getElementById('create');
+	let create2 = document.getElementById('create2');
 	
 	if(cryptography.value === ""){
 		alert("暗号方式を入力してください。");
@@ -164,6 +177,9 @@ function Generate(){
 			}
 		}
 		create.value=randomPassWd;
+		if(create2 != null){
+			create2.value=randomPassWd;
+		}
 	}
 	else{			//	シーザー暗号方式
 		let base = Array.from(cryptography.value);
@@ -216,6 +232,9 @@ function Generate(){
 			}
 		}
 		create.value=caesarPassWd;
+		if(create2 != null){
+			create2.value=caesarPassWd;
+		}
 	}
 }
 
@@ -243,58 +262,11 @@ function inputMailAdress(){
 	document.getElementById('form').action = url;
 }
 
-function repasswordOnchange(){
+function passwordOnchange(){
 	let create = document.getElementById('create');
 	let create2 = document.getElementById('create2');
 	
 	if(create != null && create != ''){
-		create2 = create.value;
+		create2.value = create.value;
 	}
 }
-
-/* 
-let button = document.getElementById("button");
-	
-	 if(confirm('登録してもよろしいですか？')){
-		 console.log('true');
-		 window.location.href = 'http://localhost:8080/loginAccountEditCompletion';
-	 }
-	 else{
-		 window.location.href = 'http://localhost:8080/loginAccountEdit';
-		 	const passWd = /*[[${passWd}]]*//*passWd*/;	 /*
-	 }
-	 }
-	 //	サーバーとの通信を開始
-	 let request = new XMLHttpRequest();
-	 console.log(document.forms['controll']);
-	 request.open("Get", "http://localhost:8080/loginAccountEdit");
-	 request.send();
-	 request.responseType="text";
-	 request.onload = () => {
-		 if(request.status == 200){
-			 const data = request.response;	
-			 console.log('request.readystate: ' + request.readystate);
-			 console.log('request.status: ' + request.status);
-			 
-			 let passWd = document.getElementById('passWd');
-			 
-			 if(confirm('登録してもよろしいですか？\n新パスワード：' + passWd.value)){ 
-				 console.log(passWd.value);
-			 }
-			 else{
-				console.log(actionUrl);
-			 	document.getrelgetElementById("form1").action = actionUrl;
-			 }
-		 }
-		 else{
-			 console.log(`Error: ${request.status}`);
-		 }
-	}
-	
-	//	デバッグツール
-	console.log('caesarPassWd: ' + caesarPassWd);
-	console.log('j: ' + j);
-	console.log('base[i]: ' + base[i]);
-	console.log('alphabet_list[j]: ' + alphabet_list[j]);
-	console.log('i: ' + i + 'true');
-*/

@@ -29,29 +29,29 @@ function confirmLogic(){
 async function confirmLogic2(){
 	//	書き換えURL
 	let actionUrl = "http://localhost:8080/passKeyEdit";
-	document.getElementById("form2").method = 'GET';
 	//	入力フォームの値を取得			 
 	 let passKey = document.getElementById('passKey');
 	 
-	 if(passKey == null || passKey.value == ""){
-		 if(passKey.value.length != 2){
-			 alert('パスキー（先頭2文字）を入力してください。');
-			 document.getElementById("form2").action = actionUrl;
-		 }
-	 }
-	 else if(passKey.value != null){
-		 alert('先頭2文字のみ入力してください。');
+	if(passKey == null || passKey.value == ""){
+		alert('パスキーを入力してください。');
+		document.getElementById("form2").method = 'GET';
+		document.getElementById("form2").action = actionUrl;
+	}
+	else if(passKey.value.length != 2){
+		 alert('2文字のみを入力してください。');
+		 document.getElementById("form2").method = 'GET';
 		 document.getElementById("form2").action = actionUrl;
-	 }
-	 else{ 
+	}
+	else{ 
 		 if(confirm('登録してもよろしいですか？\n新パスワード：' + passKey.value)){ 
 			 console.log(passKey.value);
 		 }
 		 else{
 			//	confirmでキャンセルを押下
+			document.getElementById("form2").method = 'GET';
 		 	document.getElementById("form2").action = actionUrl;
 		 }
-	 }
+	}
 }
 
 //	registerDataShow.htmlでデータ消去の際に、呼び出す関数

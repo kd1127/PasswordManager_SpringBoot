@@ -4,9 +4,10 @@
 		<meta charset="UTF-8">
 		<title>ユーザー登録</title>
 		<script type="text/javascript" th:src="@{../js/PasswordManager.js}"></script>
+		<link rel="stylesheet" th:href="@{../css/login/userRegister.css}">
 	</head>
 	<body>
-		<h1>ユーザー登録</h1>
+		<h1 class="title">ユーザー登録</h1>
 		
 		<div th:if="${errorMsgList}">
 			<div th:each="errorMsg : ${errorMsgList}">
@@ -15,33 +16,42 @@
 		</div>
 		
 		<form th:action="@{/passKeyGet}" method="post" th:object="${userInfoEntity}">
-			<span>暗号方式選択</span>
-            <label class="choice-body">ランダムパスワード</label>
-            <input type="radio" name="method" id="situation" checked/>
-            <label>シーザー暗号</label>
-            <input type="radio" name="method" id="situation2"/><br>
+			<div class="choice">
+				<span>暗号方式選択</span>
+	            <label class="choice-body">ランダムパスワード</label>
+	            <input type="radio" name="method" id="situation" checked/>
+	            <label>シーザー暗号</label>
+	            <input type="radio" name="method" id="situation2"/><br>
+	        </div>
 			
-			<label>暗号方式</label>
-            <input type="text" maxlength="50" id="cryptography" class="encrypt-method-body"/><br>
-		
-			<label>ユーザーID</label>
-			<input type="text" th:field="*{userId}" maxlength="30"><br>
+			<div class="encrypt-method">
+				<label>暗号方式</label>
+	            <input type="text" maxlength="50" id="cryptography" class="encrypt-method-body"/><br>
+	        </div>
+			<div class="userId-line">
+				<label>ユーザーID</label>
+				<input type="text" th:field="*{userId}" maxlength="30" class="userId-line-body"><br>
+			</div>
 			
-			<label>パスワード</label>
-			<input type="password" th:field="*{passWd}" maxlength="30" id="create" onchange="passwordOnchange();"><br>
+			<div class="password-line">
+				<label>パスワード</label>
+				<input type="password" th:field="*{passWd}" maxlength="30" id="create" onchange="passwordOnchange();" class="password-line-body"><br>
+			</div>
 			
-			<label>パスワード（確認）</label>
-			<input type="password" th:field="*{re_PassWd}" maxlength="30" id="create2"><br>
+			<div class="rePasswd-line">
+				<label>パスワード（確認）</label>
+				<input type="password" th:field="*{re_PassWd}" maxlength="30" id="create2" class="rePasswd-line-body"><br>
+			</div>
 			
 			<div>
-				<input type="button" value="暗号方式決定" onclick="Choice();" class="submitX"/>
+				<input type="button" value="暗号方式決定" onclick="Choice();" class="encrypt-decision"/>
 			</div>
 			<div>
-           		<input type="button" value="パスワード生成" onclick="Generate();" class="submitY"/>
+           		<input type="button" value="パスワード生成" onclick="Generate();" class="GeneratePassword"/>
            	</div>
 			
-			<input type="submit" value="パスキー取得画面へ"/>
-			<input type="submit" value="戻る" formaction="/login" formmethod="get"/>
+			<input type="submit" value="パスキー取得画面へ" class="toDislaypassKeyGet"/>
+			<input type="submit" value="戻る" formaction="/login" formmethod="get" class="backToDisplay"/>
 		</form>
 	</body>
 </html>

@@ -1,0 +1,122 @@
+@charset "UTF-8";
+
+.title{
+	font-size: 30px;
+	font-weight: bold;
+	text-align: center;
+}
+
+body{
+	 background-image: url(/images/BGImage.jpg);
+	 background-repeat: repeat;
+     background-size: cover; /* 画面全体にフィット */
+     background-position: center;
+     width: 1000px;
+     height: 500px;
+     margin-left: 100px;
+}
+
+.choice{
+	margin-left: 200px;
+	font-weight: bold;
+}
+
+.choice-body{
+	margin-left: 50px;
+}
+
+.encrypt-method{
+	margin-left: 200px;
+	font-weight: bold;
+}
+
+.encrypt-method-body{
+	margin-left: 80px;
+}
+
+.password-line{
+	margin-left: 200px;
+	font-weight: bold;
+}
+
+.password-line-body{
+	margin-left: 65px;
+}
+
+.userId-line{
+	margin-left: 200px;
+	font-weight: bold;
+}
+
+.userId-line-body{
+	margin-left: 60px;
+}
+
+.rePasswd-line{
+	margin-left: 200px;
+	font-weight: bold;
+}
+
+.rePasswd-line-body{
+	margin-left: 1px;
+}
+
+.encrypt-decision{
+	display: block;
+    width: 15%;
+    margin: 8px 0;
+    padding: 10px;
+    border: none;
+    background: #007BFF;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 5px;
+    margin-left: 0px;
+    margin-top: -120px;
+}
+
+.GeneratePassword{
+	display: block;
+    width: 15%;
+    margin: 8px 0;
+    padding: 10px;
+    border: none;
+    background: #007BFF;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 5px;
+    margin-left: 0px;
+    margin-top: 0px;
+}
+
+.toDislaypassKeyGet{
+	display: block;
+    width: 15%;
+    margin: 8px 0;
+    padding: 10px;
+    border: none;
+    background: #007BFF;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 5px;
+    margin-left: 0px;
+    margin-top: 0px;
+}
+
+.backToDisplay{
+	display: block;
+    width: 15%;
+    margin: 8px 0;
+    padding: 10px;
+    border: none;
+    background: #007BFF;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 5px;
+    margin-left: 0px;
+    margin-top: 0px;
+}

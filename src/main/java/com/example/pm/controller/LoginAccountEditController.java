@@ -1,5 +1,8 @@
 package com.example.pm.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
@@ -57,9 +60,7 @@ public class LoginAccountEditController {
 	@PostMapping("/loginAccountEditCompletion")
 	public String loginAccountEditCompletion(@ModelAttribute UserInfoEditEntity userInfoEditEntity, Model model) {
 		if(loginController.loginFlag) {
-			String errorMsg = "";
 			String password = userInfoEditEntity.getPassWd();
-			errorMsg = applicationService.passWdMatchCheckProcess(null, userInfoEditEntity);
 			userInfoEditEntity.setUserId(loginController.userInfoEntity.getUserId());
 			UserInfoEntity userInfoEntity = new UserInfoEntity(null, userInfoEditEntity.getPassWd(), null, null, null, null);
 			userInfoEditEntity.setPassWd(String.valueOf(userInfoEntity.hashCode()));

@@ -131,7 +131,7 @@ public class LoginController {
 		System.out.println(userInfoEntity.getPassWd());
 		System.out.println(userInfoEntity.getRe_PassWd());
 		List<String> errorMsgList = new ArrayList<>();
-		errorMsgList = applicationService.passWdMatchCheckProcess(userInfoEntity, null);
+		errorMsgList = applicationService.passWdMatchCheckProcess(userInfoEntity);
 		
 		model.addAttribute("userInfoEntity", userInfoEntity);
 		this.userInfoEntity = userInfoEntity;

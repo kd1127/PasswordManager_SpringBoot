@@ -104,18 +104,13 @@ public class ApplicationServiceImpl implements ApplicationService {
 	
 	//	パスワード・パスワード（確認）が一致しているか検証するメソッド
 	@Override
-	public List<String> passWdMatchCheckProcess(UserInfoEntity userInfoEntity, UserInfoEditEntity userInfoEditEntity) {
+	public List<String> passWdMatchCheckProcess(UserInfoEntity userInfoEntity) {
 		List<String> errorMsgList = new ArrayList<>();
 		errorMsgList = this.userIdDuplicateCheck(userInfoEntity.getUserId(), errorMsgList);
 		if(userInfoEntity != null) {
 			if(!userInfoEntity.getPassWd().equals(userInfoEntity.getRe_PassWd())) {
 				System.out.println("3");
 				errorMsgList.add("・パスワード・パスワード（確認）が一致しません");
-			}
-		}
-		if(userInfoEditEntity != null) {
-			if(!userInfoEditEntity.getPassWd().equals(userInfoEditEntity.getRe_PassWd())) {
-				errorMsgList.add("パスワード・パスワード（確認）が一致しません");
 			}
 		}
 		return errorMsgList;

@@ -86,13 +86,6 @@ public class CustomerController {
 	
 	@PostMapping("/passwordReConfigureConfirm")
 	public String passwordReConfigureConfirm(@ModelAttribute UserInfoEditEntity userInfoEditEntity, Model model) {
-		String errorMessage = applicationService.passWdMatchCheckProcess(null, userInfoEditEntity);
-		
-		if(!errorMessage.equals("")) {
-			model.addAttribute("userInfoEditEntity", userInfoEditEntity);
-			model.addAttribute("errorMessage", errorMessage);
-			return "customer/passwordReConfigure";
-		}
 		this.userInfoEditEntity = userInfoEditEntity;
 		return "customer/passwordReConfigureConfirm";
 	}

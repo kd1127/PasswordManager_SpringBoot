@@ -261,3 +261,16 @@ function inputMailAdress(){
 	document.getElementById('form').method="GET"
 	document.getElementById('form').action = url;
 }
+
+function PasswordChange(){
+	const url = "http://localhost:8080/passwordReConfigure";
+	const password = document.getElementById('password');
+	const rePassword = document.getElementById('rePassword');
+	const form = document.getElementById('form');
+	
+	if(password.value != rePassword.value){
+		alert("パスワードとパスワード（確認）が一致していません。");
+		form.method = "GET";
+		form.action = url;
+	}
+}

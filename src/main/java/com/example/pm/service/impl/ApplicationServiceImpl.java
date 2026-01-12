@@ -104,19 +104,21 @@ public class ApplicationServiceImpl implements ApplicationService {
 	
 	//	パスワード・パスワード（確認）が一致しているか検証するメソッド
 	@Override
-	public String passWdMatchCheckProcess(UserInfoEntity userInfoEntity, UserInfoEditEntity userInfoEditEntity) {
-		String errorMsg = "";
+	public List<String> passWdMatchCheckProcess(UserInfoEntity userInfoEntity, UserInfoEditEntity userInfoEditEntity) {
+		List<String> errorMsgList = new ArrayList<>();
+		errorMsgList = this.userIdDuplicateCheck(userInfoEntity.getUserId(), errorMsgList);
 		if(userInfoEntity != null) {
 			if(!userInfoEntity.getPassWd().equals(userInfoEntity.getRe_PassWd())) {
-				errorMsg = "・パスワード・パスワード（確認）が一致しません";
+				System.out.println("3");
+				errorMsgList.add("・パスワード・パスワード（確認）が一致しません");
 			}
 		}
 		if(userInfoEditEntity != null) {
 			if(!userInfoEditEntity.getPassWd().equals(userInfoEditEntity.getRe_PassWd())) {
-				errorMsg = "パスワード・パスワード（確認）が一致しません";
+				errorMsgList.add("パスワード・パスワード（確認）が一致しません");
 			}
 		}
-		return errorMsg;
+		return errorMsgList;
 	}	
 	
 	//	ユーザー登録画面で入力したデータをuserinfoテーブルに登録
@@ -142,16 +144,15 @@ public class ApplicationServiceImpl implements ApplicationService {
 	}
 	
 	@Override
-	public String userIdDuplicateCheck(String userId) {
-		String errorMessage = "";
+	public List<String> userIdDuplicateCheck(String userId, List<String> errorMessageList) {
 		if(userId == null) {
-			errorMessage = "・不正なユーザーIDです。";
+			errorMessageList.add("・不正なユーザーIDです。");
 		}
 		
 		List<String> userIdList = tableOperationMapper.userIdAllGet();
 		if(userIdList.contains(userId)) {
-			errorMessage = "・他のユーザーが登録しているユーザーIDです。別のユーザーIDを登録してください。";
+			errorMessageList.add("・他のユーザーが登録しているユーザーIDです。別のユーザーIDを登録してください。");
 		}		
-		return errorMessage;
+		return errorMessageList;
 	}
 }

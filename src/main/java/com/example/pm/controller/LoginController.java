@@ -1,6 +1,5 @@
 package com.example.pm.controller;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -129,22 +128,25 @@ public class LoginController {
 	
 	@PostMapping("/passKeyGet")
 	public String passKeyGet(@ModelAttribute UserInfoEntity userInfoEntity, Model model) {
+		System.out.println(userInfoEntity.getPassWd());
+		System.out.println(userInfoEntity.getRe_PassWd());
 		List<String> errorMsgList = new ArrayList<>();
-		errorMsgList.add(applicationService.passWdMatchCheckProcess(userInfoEntity, null));
-		errorMsgList.add(applicationService.userIdDuplicateCheck(userInfoEntity.getUserId()));
+		errorMsgList = applicationService.passWdMatchCheckProcess(userInfoEntity, null);
 		
 		model.addAttribute("userInfoEntity", userInfoEntity);
 		this.userInfoEntity = userInfoEntity;
 		
 		try {
-			if(!errorMsgList.equals("")) {
+			if(!errorMsgList.isEmpty()) {
 				model.addAttribute("errorMsgList", errorMsgList);
+				errorMsgList.forEach(s -> System.out.println(s));
 				return "login/userRegister";
 			}
 			else{
+				System.out.println("2");
 				return "login/passKeyGet";
 			}
-		}catch(NullPointerException e) {
+		} catch(NullPointerException e) {
 			errorMsgList.add("何らかの理由によりエラーが発生しました。");
 			model.addAttribute("errorMsg", errorMsgList);
 			return "login/userRegister";

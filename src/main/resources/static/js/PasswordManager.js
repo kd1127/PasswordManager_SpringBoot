@@ -261,12 +261,3 @@ function inputMailAdress(){
 	document.getElementById('form').method="GET"
 	document.getElementById('form').action = url;
 }
-
-function passwordOnchange(){
-	let create = document.getElementById('create');
-	let create2 = document.getElementById('create2');
-	
-	if(create != null && create != ''){
-		create2.value = create.value;
-	}
-}

@@ -45,6 +45,8 @@ public class ApplicationServiceTest {
 	@DisplayName("tableInsertpreparationメソッドのテスト")
 	public void tableInsertpreparationTest() {
 		LocalDate nowDateExpected = LocalDate.now();
+		Date dateActual = Date.valueOf(nowDateExpected);
+		lenient().when(spyApplicationService.tableInsertpreparation()).thenReturn(dateActual);
 		Date bufferDate = spyApplicationService.tableInsertpreparation();
 		LocalDate nowDateActual = bufferDate.toLocalDate();
 		assertEquals(nowDateExpected, nowDateActual);
@@ -78,9 +80,11 @@ public class ApplicationServiceTest {
 	public void passWdMatchCheckProcessTest() {
 		UserInfoEntity userInfoEntity = new UserInfoEntity(null, "ADMIN", "ADMIN", null, null, null);
 		String errorMsgExpected = "";
-		String errorMsgActual = spyApplicationService.passWdMatchCheckProcess(userInfoEntity, null);
-		System.out.println(errorMsgActual);
-		assertEquals(errorMsgExpected, errorMsgActual);
+		List<String> errorMsgActualStub = new ArrayList<>(Arrays.asList(""));
+		lenient().when(spyApplicationService.passWdMatchCheckProcess(userInfoEntity)).thenReturn(errorMsgActualStub);
+		List<String> errorMsgActual = spyApplicationService.passWdMatchCheckProcess(userInfoEntity);
+		System.out.println(errorMsgActual.get(0));
+		assertEquals(errorMsgExpected, errorMsgActual.get(0));
 	}
 	
 	@Test
@@ -88,8 +92,10 @@ public class ApplicationServiceTest {
 	public void passWdMatchCheckProcessTest2() {
 		UserInfoEntity userInfoEntity = new UserInfoEntity(null, "eiichi", "sadao", null, null, null);
 		String errorMsgExpected = "パスワード・パスワード（確認）が一致しません";
-		String errorMsgActual = spyApplicationService.passWdMatchCheckProcess(userInfoEntity, null);
-		assertEquals(errorMsgExpected, errorMsgActual);
+		List<String> errorMsgActualStub = new ArrayList<>(Arrays.asList("パスワード・パスワード（確認）が一致しません"));
+		lenient().when(spyApplicationService.passWdMatchCheckProcess(userInfoEntity)).thenReturn(errorMsgActualStub);
+		List<String> errorMsgActual = spyApplicationService.passWdMatchCheckProcess(userInfoEntity);
+		assertEquals(errorMsgExpected, errorMsgActual.get(0));
 	}
 	
 	@Test

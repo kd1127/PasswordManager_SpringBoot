@@ -3,20 +3,20 @@
 	<head>
 		<meta charset="UTF-8">
 		<title>ユーザーID入力</title>
-		<link rel="stylesheet" th:src="@{../customer/inputMailAddress.css}"></link>
+		<link rel="stylesheet" th:href="@{../css/customer/inputMailAddress.css}">
 	</head>
 	<body>
-		<h1>ユーザーID入力</h1>
+		<h1 class="title">ユーザーID入力</h1>
 		
 		<div th:if="${errorMessage} != null">
 			<span th:text="${errorMessage}"></span>
 		</div>
 		
-		<p>サイトのユーザーID（メールアドレス）を入力してください。</p>
+		<p class="explanation">サイトのユーザーID（メールアドレス）を入力してください。</p>
 		<form th:action="@{/mailSend}" method="get" th:object="${userInfoEntity}">
-			<input type="text" th:field="*{userId}"/><br>
-			<input type="submit" value="メール送信画面へ"/>
-			<input type="submit" value="ログインへ" formaction="/login"/>
+			<input type="text" th:field="*{userId}" class="input-mail-address"/><br>
+			<input type="submit" value="メール送信画面へ" class="toMailSend"/>
+			<input type="submit" value="ログインへ" formaction="/login" class="toLogin"/>
 		</form>
 		
 	</body>

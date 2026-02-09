@@ -1,0 +1,28 @@
+@charset "UTF-8";
+
+.title{
+	font-size: 30px;
+	font-weight: bold;
+	text-align: center;
+}
+
+body{
+	 background-image: url(/images/BGImage.jpg);
+	 background-repeat: repeat;
+     background-size: cover; /* 画面全体にフィット */
+     background-position: center;
+     width: 1000px;
+     height: 500px;
+     margin-left: 100px;
+}
+
+.pleaseDisplayClose{
+	font-weight: bold;
+	text-align: center;
+}
+
+.mailSendCompletion{
+	font-weight: bold;
+	text-align: center;
+	margin-left: 400px;
+}

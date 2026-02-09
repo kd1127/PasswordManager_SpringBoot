@@ -3,12 +3,13 @@
 	<head>
 		<meta charset="UTF-8">
 		<title>メール送信</title>
+		<link rel="stylesheet" th:href="@{../css/customer/mailSend.css}">
 	</head>
 	<body>
-		<h1>メール送信</h1>
+		<h1 class="title">メール送信</h1>
 		
-		<span th:text="${message}"></span>
+		<span th:text="${message}" class="mailSendCompletion"></span>
 		
-		<p>ブラウザの×ボタンで閉じてください。</p>
+		<p class="pleaseDisplayClose">ブラウザの×ボタンで閉じてください。</p>
 	</body>
 </html>

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
+import com.example.pm.dto.AccountInfoDto;
 import com.example.pm.entity.AccountInfoEntity;
 import com.example.pm.entity.UserInfoEntity;
 import com.example.pm.mapper.TableOperationMapper;
@@ -100,6 +101,7 @@ public class LoginController {
 		}
 		if(errorMessage.isEmpty()) {
 			if(!this.loginFlag) {
+				//	ログイン成功時の処理
 				this.loginFlag = true;
 				this.userInfoEntity = userInfoEntity;
 				LocalDateTime oldLastLoginDate = tableOperationMapper.lastLoginDateSelect(userInfoEntity.getUserId());

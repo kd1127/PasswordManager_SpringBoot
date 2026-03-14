@@ -3,6 +3,7 @@ package com.example.pm.service;
 import java.sql.Date;
 import java.util.List;
 
+import com.example.pm.dto.AccountInfoDto;
 import com.example.pm.entity.UserInfoEntity;
 
 public interface ApplicationService {
@@ -14,4 +15,8 @@ public interface ApplicationService {
 	String userInfoInsertOperation(UserInfoEntity userInfoEntity);
 	String passWdUpdateDbOperation(String userId, String passWd);
 	List<String> userIdDuplicateCheck(String userId, List<String> errorMsgList);
+	AccountInfoDto displayDataOfPaging(AccountInfoDto accountInfoDto);
+	Long findMaximumPage(AccountInfoDto accountInfoDto);
+	AccountInfoDto nextDataOfPaging(AccountInfoDto accountInfoDto);
+	AccountInfoDto prevDataOfPaging(AccountInfoDto accountInfoDto, int displayCount);
 }

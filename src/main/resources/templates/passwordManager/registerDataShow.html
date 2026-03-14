@@ -29,6 +29,20 @@
     </div>
 	
     <h1 class="title">登録データ表示</h1>
+    <form th:action="@{/display}" method="GET" th:object="${accountInfoDto}">
+	    <label class="paging-label">画面表示件数
+		    <select name="paging" class="paging" th:field="*{displayCount}">
+		    	<option value="20">20</option>
+		    	<option value="50">50</option>
+		    	<option value="100">100</option>
+		    </select>
+	    </label>
+	    <label class="search-label">サイト名
+	    	<input type="text" class="search-text"/>
+	    </label>
+	    <input type="submit" value="表示" class="display-button"/>
+	    <input type="submit" value="検索" class="search-button" formaction="/search" formmethod="POST"/>
+	</form>
     
     <th:block th:if="${maxList.size() == 0}">
     	<p class="error-message">表示できるデータがありません。</p>
@@ -37,6 +51,10 @@
     		<span th:text="${errorMsg}" class="error-message"></span>
     	</div>
     </th:block>
+    <div class="page">
+    	<span th:text="${page}"></span>/
+    	<span th:text="${maxPage}"></span>ページ
+    </div>
     <div th:unless="${maxList.size() == 0}" class="table-style">    
 	    <table border="1" style="border-collapse: collapse">
 	        <thead class="table-one-row-style">
@@ -77,6 +95,14 @@
 	            </tr>
 	        </tbody>
 	    </table>
+	    <form th:action="@{/next}" method="GET">
+		    <span th:if="${prevButtonFlag}">
+		    	<input type="submit" value="前へ" class="prev-button" formaction="/prev"/>
+		    </span>
+		    <span th:if="${nextButtonFlag}">
+		    	<input type="submit" value="次へ" class="next-button"/>
+		    </span>
+		 </form>
     </div>
     
     <script>

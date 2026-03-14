@@ -10,7 +10,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -18,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.pm.service.ApplicationService;
 import com.example.pm.mapper.TableOperationMapper;
+import com.example.pm.dto.AccountInfoDto;
 import com.example.pm.entity.AccountInfoEntity;
 
 @Controller
@@ -26,8 +26,11 @@ public class ManagerController {
 	@Autowired private ApplicationService service;
 	@Autowired private TableOperationMapper mapper;
 	@Autowired private LoginController loginController;
+	@Autowired private AccountInfoDto accountInfoDto;
 	
-	private List<AccountInfoEntity> accountInfoEntityList = new ArrayList<>();;
+	private List<AccountInfoEntity> accountInfoEntityList = new ArrayList<>();
+	
+	private int displayCount = 0;
 	
 	@PostMapping("/dataRegister")
 	public String dataRegister(@ModelAttribute AccountInfoEntity aiEntity, Model model) {
@@ -45,20 +48,112 @@ public class ManagerController {
 			int id = mapper.idOneGet(loginController.userInfoEntity.getUserId());
 			//	userinfoテーブルのidをキーに、accountdataテーブルからid_userと一致するデータを取得		
 			accountInfoEntityList = mapper.selectAllData(id);
+			accountInfoDto.setAccountInfoList(accountInfoEntityList);
+			accountInfoDto.setNextButtonFlag(false);
+			accountInfoDto.setPrevButtonFlag(false);
+			accountInfoDto.setPage(1L);
+			accountInfoDto.setMaxPage(1L);
+			List<Integer> maxList = new ArrayList<>();			
+			//	画面側で取得したデータ数分だけ表示させるため、最大数までの数字をリストに格納
+			for(int i=0; i<accountInfoEntityList.size(); i++) {
+				maxList.add(i);
+			}
+			model.addAttribute("maxList", maxList);
+			model.addAttribute("accountInfoEntity", accountInfoEntityList);
+			model.addAttribute("accountInfoDto", accountInfoDto);
+			//	次へボタン活性化
+			model.addAttribute("nextButtonFlag", accountInfoDto.isNextButtonFlag());
+			//	前へボタン活性化
+			model.addAttribute("prevButtonFlag", accountInfoDto.isPrevButtonFlag());
+			model.addAttribute("page", this.accountInfoDto.getPage());
+			model.addAttribute("maxPage", accountInfoDto.getMaxPage());
+			return "passwordManager/registerDataShow";
+		}
+		else {
+			return "passwordManager/login";
+		}
+	}
+	
+	@GetMapping("/display")
+	public String display(AccountInfoDto accountInfoDto, Model model) {
+		if(loginController.loginFlag) {
+			//	画面で入力したdisplayCountをthisに格納
+			this.displayCount = accountInfoDto.getDisplayCount();
+			this.accountInfoDto.setDisplayCount(accountInfoDto.getDisplayCount());
+			this.accountInfoDto.setShowCompletionCount(0);
+			this.accountInfoDto = service.displayDataOfPaging(this.accountInfoDto);
+			accountInfoEntityList = this.accountInfoDto.getPagingAccountInfoList();
 			List<Integer> maxList = new ArrayList<>();
 			
 			//	画面側で取得したデータ数分だけ表示させるため、最大数までの数字をリストに格納
 			for(int i=0; i<accountInfoEntityList.size(); i++) {
 				maxList.add(i);
 			}
-			
-			//	画面に表示させるため、アトリビュート
 			model.addAttribute("maxList", maxList);
 			model.addAttribute("accountInfoEntity", accountInfoEntityList);
+			//	次へボタン活性化
+			model.addAttribute("nextButtonFlag", this.accountInfoDto.isNextButtonFlag());
+			model.addAttribute("page", this.accountInfoDto.getPage());
+			model.addAttribute("maxPage", this.accountInfoDto.getMaxPage());
 			return "passwordManager/registerDataShow";
 		}
 		else {
-			return "passwordManager/login";
+			return "login/login";
+		}
+	}
+	
+	@GetMapping("/next")
+	public String next(Model model) {
+		System.out.println("------------------");
+		if(loginController.loginFlag) {
+			this.accountInfoDto.setShowCompletionCount(this.accountInfoDto.getDisplayCount());
+			//	displayCountを倍にする
+			int displayCount = accountInfoDto.getDisplayCount() * 2;
+			accountInfoDto.setDisplayCount(displayCount);
+			this.accountInfoDto = service.nextDataOfPaging(accountInfoDto);
+			accountInfoEntityList = this.accountInfoDto.getPagingAccountInfoList();
+			List<Integer> maxList = new ArrayList<>();
+			//	画面側で取得したデータ数分だけ表示させるため、最大数までの数字をリストに格納
+			for(int i=0; i<accountInfoEntityList.size(); i++) {
+				maxList.add(i);
+			}
+			
+			model.addAttribute("maxList", maxList);
+			model.addAttribute("accountInfoEntity", accountInfoEntityList);
+			model.addAttribute("accountInfoDto", this.accountInfoDto);
+			model.addAttribute("nextButtonFlag", this.accountInfoDto.isNextButtonFlag());
+			model.addAttribute("prevButtonFlag", this.accountInfoDto.isPrevButtonFlag());
+			model.addAttribute("page", this.accountInfoDto.getPage());
+			model.addAttribute("maxPage", this.accountInfoDto.getMaxPage());
+			return "passwordManager/registerDataShow";
+		}
+		else {
+			return "login/login";
+		}
+	}
+	
+	@GetMapping("/prev")
+	public String prev(Model model) {
+		if(loginController.loginFlag) {
+			this.accountInfoDto = service.prevDataOfPaging(accountInfoDto, this.displayCount);
+			accountInfoEntityList = this.accountInfoDto.getPagingAccountInfoList();
+			List<Integer> maxList = new ArrayList<>();
+			//	画面側で取得したデータ数分だけ表示させるため、最大数までの数字をリストに格納
+			for(int i=0; i<accountInfoEntityList.size(); i++) {
+				maxList.add(i);
+			}
+			
+			model.addAttribute("maxList", maxList);
+			model.addAttribute("accountInfoEntity", accountInfoEntityList);
+			model.addAttribute("accountInfoDto", this.accountInfoDto);
+			model.addAttribute("nextButtonFlag", this.accountInfoDto.isNextButtonFlag());
+			model.addAttribute("prevButtonFlag", this.accountInfoDto.isPrevButtonFlag());
+			model.addAttribute("page", this.accountInfoDto.getPage());
+			model.addAttribute("maxPage", this.accountInfoDto.getMaxPage());
+			return "passwordManager/registerDataShow";
+		}
+		else {
+			return "login/login";
 		}
 	}
 	
@@ -95,7 +190,7 @@ public class ManagerController {
 			return "passwordManager/registerDataUpd";
 		}
 		else {
-			return "passwordManager/login";
+			return "login/login";
 		}
 	}
 	
@@ -126,7 +221,7 @@ public class ManagerController {
 			return "passwordManager/dataUpdComplete";
 		}
 		else {
-			return "passwordManager/login";
+			return "login/login";
 		}
 	}
 }

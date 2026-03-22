@@ -30,7 +30,15 @@ public class ManagerController {
 	
 	private List<AccountInfoEntity> accountInfoEntityList = new ArrayList<>();
 	
+	//	ページング用displayCount
 	private int displayCount = 0;
+	
+	//	ログインユーザーのID
+	private int loginId;
+	
+	//	「次へ」ボタン・「前へ」ボタンを押下するとtrueになる
+	private boolean nextReloadFlag = false;
+	private boolean prevReloadFlag = false;
 	
 	@PostMapping("/dataRegister")
 	public String dataRegister(@ModelAttribute AccountInfoEntity aiEntity, Model model) {
@@ -45,9 +53,9 @@ public class ManagerController {
 	public String registerDataShow(Model model) {
 		if(loginController.loginFlag) {
 			//	ログイン時に入力したユーザーIDをコントローラークラスから取得する。
-			int id = mapper.idOneGet(loginController.userInfoEntity.getUserId());
+			loginId = mapper.idOneGet(loginController.userInfoEntity.getUserId());
 			//	userinfoテーブルのidをキーに、accountdataテーブルからid_userと一致するデータを取得		
-			accountInfoEntityList = mapper.selectAllData(id);
+			accountInfoEntityList = mapper.selectAllData(loginId);
 			accountInfoDto.setAccountInfoList(accountInfoEntityList);
 			accountInfoDto.setNextButtonFlag(false);
 			accountInfoDto.setPrevButtonFlag(false);
@@ -104,28 +112,46 @@ public class ManagerController {
 	
 	@GetMapping("/next")
 	public String next(Model model) {
-		System.out.println("------------------");
 		if(loginController.loginFlag) {
-			this.accountInfoDto.setShowCompletionCount(this.accountInfoDto.getDisplayCount());
-			//	displayCountを倍にする
-			int displayCount = accountInfoDto.getDisplayCount() * 2;
-			accountInfoDto.setDisplayCount(displayCount);
-			this.accountInfoDto = service.nextDataOfPaging(accountInfoDto);
-			accountInfoEntityList = this.accountInfoDto.getPagingAccountInfoList();
-			List<Integer> maxList = new ArrayList<>();
-			//	画面側で取得したデータ数分だけ表示させるため、最大数までの数字をリストに格納
-			for(int i=0; i<accountInfoEntityList.size(); i++) {
-				maxList.add(i);
+			if(nextReloadFlag == false) {
+				this.accountInfoDto.setShowCompletionCount(this.accountInfoDto.getDisplayCount());
+				//	displayCountを倍にする
+				int displayCount = accountInfoDto.getDisplayCount() * 2;
+				accountInfoDto.setDisplayCount(displayCount);
+				this.accountInfoDto = service.nextDataOfPaging(accountInfoDto);
+				accountInfoEntityList = this.accountInfoDto.getPagingAccountInfoList();
+				List<Integer> maxList = new ArrayList<>();
+				//	画面側で取得したデータ数分だけ表示させるため、最大数までの数字をリストに格納
+				for(int i=0; i<accountInfoEntityList.size(); i++) {
+					maxList.add(i);
+				}
+				nextReloadFlag = true;
+				
+				model.addAttribute("maxList", maxList);
+				model.addAttribute("accountInfoEntity", accountInfoEntityList);
+				model.addAttribute("accountInfoDto", this.accountInfoDto);
+				model.addAttribute("nextButtonFlag", this.accountInfoDto.isNextButtonFlag());
+				model.addAttribute("prevButtonFlag", this.accountInfoDto.isPrevButtonFlag());
+				model.addAttribute("page", this.accountInfoDto.getPage());
+				model.addAttribute("maxPage", this.accountInfoDto.getMaxPage());
+				return "passwordManager/registerDataShow";
 			}
-			
-			model.addAttribute("maxList", maxList);
-			model.addAttribute("accountInfoEntity", accountInfoEntityList);
-			model.addAttribute("accountInfoDto", this.accountInfoDto);
-			model.addAttribute("nextButtonFlag", this.accountInfoDto.isNextButtonFlag());
-			model.addAttribute("prevButtonFlag", this.accountInfoDto.isPrevButtonFlag());
-			model.addAttribute("page", this.accountInfoDto.getPage());
-			model.addAttribute("maxPage", this.accountInfoDto.getMaxPage());
-			return "passwordManager/registerDataShow";
+			else {
+				List<Integer> maxList = new ArrayList<>();
+				//	画面側で取得したデータ数分だけ表示させるため、最大数までの数字をリストに格納
+				for(int i=0; i<accountInfoEntityList.size(); i++) {
+					maxList.add(i);
+				}
+				nextReloadFlag = false;
+				model.addAttribute("maxList", maxList);
+				model.addAttribute("accountInfoEntity", accountInfoEntityList);
+				model.addAttribute("accountInfoDto", this.accountInfoDto);
+				model.addAttribute("nextButtonFlag", this.accountInfoDto.isNextButtonFlag());
+				model.addAttribute("prevButtonFlag", this.accountInfoDto.isPrevButtonFlag());
+				model.addAttribute("page", this.accountInfoDto.getPage());
+				model.addAttribute("maxPage", this.accountInfoDto.getMaxPage());
+				return "passwordManager/registerDataShow";
+			}
 		}
 		else {
 			return "login/login";
@@ -135,21 +161,69 @@ public class ManagerController {
 	@GetMapping("/prev")
 	public String prev(Model model) {
 		if(loginController.loginFlag) {
-			this.accountInfoDto = service.prevDataOfPaging(accountInfoDto, this.displayCount);
-			accountInfoEntityList = this.accountInfoDto.getPagingAccountInfoList();
-			List<Integer> maxList = new ArrayList<>();
+			if(prevReloadFlag == false) {
+				this.accountInfoDto = service.prevDataOfPaging(accountInfoDto, this.displayCount);
+				accountInfoEntityList = this.accountInfoDto.getPagingAccountInfoList();
+				prevReloadFlag = true;
+				List<Integer> maxList = new ArrayList<>();				
+				//	画面側で取得したデータ数分だけ表示させるため、最大数までの数字をリストに格納
+				for(int i=0; i<accountInfoEntityList.size(); i++) {
+					maxList.add(i);
+				}				
+				model.addAttribute("maxList", maxList);
+				model.addAttribute("accountInfoEntity", accountInfoEntityList);
+				model.addAttribute("accountInfoDto", this.accountInfoDto);
+				model.addAttribute("nextButtonFlag", this.accountInfoDto.isNextButtonFlag());
+				model.addAttribute("prevButtonFlag", this.accountInfoDto.isPrevButtonFlag());
+				model.addAttribute("page", this.accountInfoDto.getPage());
+				model.addAttribute("maxPage", this.accountInfoDto.getMaxPage());
+				return "passwordManager/registerDataShow";
+			}
+			else {
+				prevReloadFlag = false;
+				List<Integer> maxList = new ArrayList<>();				
+				//	画面側で取得したデータ数分だけ表示させるため、最大数までの数字をリストに格納
+				for(int i=0; i<accountInfoEntityList.size(); i++) {
+					maxList.add(i);
+				}				
+				model.addAttribute("maxList", maxList);
+				model.addAttribute("accountInfoEntity", accountInfoEntityList);
+				model.addAttribute("accountInfoDto", this.accountInfoDto);
+				model.addAttribute("nextButtonFlag", this.accountInfoDto.isNextButtonFlag());
+				model.addAttribute("prevButtonFlag", this.accountInfoDto.isPrevButtonFlag());
+				model.addAttribute("page", this.accountInfoDto.getPage());
+				model.addAttribute("maxPage", this.accountInfoDto.getMaxPage());
+				return "passwordManager/registerDataShow";
+			}
+		}
+		else {
+			return "login/login";
+		}
+	}
+	
+	@PostMapping("/search")
+	public String search(@ModelAttribute AccountInfoDto accountInfoDto, Model model) {
+		if(loginController.loginFlag) {
+			accountInfoEntityList = service.search(loginId, accountInfoDto.getSiteName());
+			accountInfoDto.setAccountInfoList(accountInfoEntityList);
+			accountInfoDto.setNextButtonFlag(false);
+			accountInfoDto.setPrevButtonFlag(false);
+			accountInfoDto.setPage(1L);
+			accountInfoDto.setMaxPage(1L);
+			List<Integer> maxList = new ArrayList<>();			
 			//	画面側で取得したデータ数分だけ表示させるため、最大数までの数字をリストに格納
 			for(int i=0; i<accountInfoEntityList.size(); i++) {
 				maxList.add(i);
 			}
-			
 			model.addAttribute("maxList", maxList);
 			model.addAttribute("accountInfoEntity", accountInfoEntityList);
-			model.addAttribute("accountInfoDto", this.accountInfoDto);
-			model.addAttribute("nextButtonFlag", this.accountInfoDto.isNextButtonFlag());
-			model.addAttribute("prevButtonFlag", this.accountInfoDto.isPrevButtonFlag());
+			model.addAttribute("accountInfoDto", accountInfoDto);
+			//	次へボタン活性化
+			model.addAttribute("nextButtonFlag", accountInfoDto.isNextButtonFlag());
+			//	前へボタン活性化
+			model.addAttribute("prevButtonFlag", accountInfoDto.isPrevButtonFlag());
 			model.addAttribute("page", this.accountInfoDto.getPage());
-			model.addAttribute("maxPage", this.accountInfoDto.getMaxPage());
+			model.addAttribute("maxPage", accountInfoDto.getMaxPage());
 			return "passwordManager/registerDataShow";
 		}
 		else {

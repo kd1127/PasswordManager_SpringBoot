@@ -4,6 +4,15 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
  <mapper namespace="com.example.pm.mapper.TableOperationMapper">
+ 	<resultMap type="com.example.pm.entity.AccountInfoEntity" id="SearchResult">
+ 		<id column="id" property="id"/>
+ 		<id column="user_id" property="user_id" />
+ 		<result column="userId" property="userId" />
+ 		<result column="passWd" property="passWd" />
+ 		<result column="siteName" property="siteName" />
+ 		<result column="inp_date" property="inp_date" />
+ 		<result column="upd_date" property="upd_date" /> 		
+ 	</resultMap>
  	<!-- Insert -->
     <insert id="userInfoInsert" parameterType="com.example.pm.entity.UserInfoEntity">
     	INSERT INTO userinfo 
@@ -104,6 +113,19 @@
     </select>
     <select id="lastLoginDateSelect">
     	SELECT lastLoginDate FROM userinfo WHERE userId = #{userId}
+    </select>
+    <select id="searchSiteName" resultMap="SearchResult">
+    	SELECT 
+    		userId, 
+    		passWd, 
+    		siteName, 
+    		inp_date, 
+    		upd_date
+    	FROM 
+    		accountdata
+    	WHERE 
+    		id_user = #{id} AND 
+    		siteName = #{siteName}
     </select>
     <!-- Delete Query 論理削除-->
     <delete id="deleteARowOfData" parameterType="Integer">

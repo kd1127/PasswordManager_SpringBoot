@@ -38,7 +38,7 @@
 		    </select>
 	    </label>
 	    <label class="search-label">サイト名
-	    	<input type="text" class="search-text"/>
+	    	<input type="text" class="search-text" th:field="*{siteName}"/>
 	    </label>
 	    <input type="submit" value="表示" class="display-button"/>
 	    <input type="submit" value="検索" class="search-button" formaction="/search" formmethod="POST"/>

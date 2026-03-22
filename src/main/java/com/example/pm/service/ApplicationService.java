@@ -4,6 +4,7 @@ import java.sql.Date;
 import java.util.List;
 
 import com.example.pm.dto.AccountInfoDto;
+import com.example.pm.entity.AccountInfoEntity;
 import com.example.pm.entity.UserInfoEntity;
 
 public interface ApplicationService {
@@ -19,4 +20,5 @@ public interface ApplicationService {
 	Long findMaximumPage(AccountInfoDto accountInfoDto);
 	AccountInfoDto nextDataOfPaging(AccountInfoDto accountInfoDto);
 	AccountInfoDto prevDataOfPaging(AccountInfoDto accountInfoDto, int displayCount);
+	List<AccountInfoEntity> search(int id, String siteName);
 }

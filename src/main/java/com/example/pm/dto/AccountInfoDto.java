@@ -22,6 +22,9 @@ public class AccountInfoDto {
 	//	画面のコンボボックスで選択した表示件数
 	private Integer displayCount;
 	
+	//	サイト名（検索ワード）
+	private String siteName;
+	
 	//	ページ数（現在画面に表示しているページ数）
 	private Long page;
 	

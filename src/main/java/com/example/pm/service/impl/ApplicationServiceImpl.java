@@ -247,4 +247,9 @@ public class ApplicationServiceImpl implements ApplicationService {
 		}
 		return accountInfoDto;
 	}
+	
+	public List<AccountInfoEntity> search(int id, String siteName) {
+		List<AccountInfoEntity> searchResultList = tableOperationMapper.searchSiteName(id, siteName);
+		return searchResultList;
+	}
 }

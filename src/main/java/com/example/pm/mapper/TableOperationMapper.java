@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 
+import com.example.pm.dto.AccountInfoDto;
 import com.example.pm.entity.AccountInfoEntity;
 import com.example.pm.entity.UserInfoEntity;
 
@@ -65,4 +66,10 @@ public interface TableOperationMapper {
 	String userIdOneVerify(String userId);
 	String passWdOneVerify(String passWd);
 	String passKeyOneVerify(String passKey);
+	
+	/**
+	 * 検索機能
+	 * サイト名をキーにaccountdataテーブルから検索する
+	 */
+	List<AccountInfoEntity> searchSiteName(int id, String siteName);
 }

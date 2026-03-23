@@ -125,7 +125,7 @@
     		accountdata
     	WHERE 
     		id_user = #{id} AND 
-    		siteName = #{siteName}
+    		siteName LIKE CONCAT('%', #{siteName}, '%')
     </select>
     <!-- Delete Query 論理削除-->
     <delete id="deleteARowOfData" parameterType="Integer">

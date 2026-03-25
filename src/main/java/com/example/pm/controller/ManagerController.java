@@ -57,16 +57,20 @@ public class ManagerController {
 			//	userinfoテーブルのidをキーに、accountdataテーブルからid_userと一致するデータを取得		
 			accountInfoEntityList = mapper.selectAllData(loginId);
 			accountInfoDto.setAccountInfoList(accountInfoEntityList);
-			accountInfoDto.setNextButtonFlag(false);
-			accountInfoDto.setPrevButtonFlag(false);
-			accountInfoDto.setPage(1L);
-			accountInfoDto.setMaxPage(1L);
-			this.modelAllAddAttribute(model);
+			editAccountInfoDto();
+			modelAllAddAttribute(model);
 			return "passwordManager/registerDataShow";
 		}
 		else {
 			return "passwordManager/login";
 		}
+	}
+	
+	public void editAccountInfoDto() {
+		accountInfoDto.setNextButtonFlag(false);
+		accountInfoDto.setPrevButtonFlag(false);
+		accountInfoDto.setPage(1L);
+		accountInfoDto.setMaxPage(1L);
 	}
 	
 	public void modelAllAddAttribute(Model model) {
@@ -95,7 +99,7 @@ public class ManagerController {
 			this.accountInfoDto.setShowCompletionCount(0);
 			this.accountInfoDto = service.displayDataOfPaging(this.accountInfoDto);
 			accountInfoEntityList = this.accountInfoDto.getPagingAccountInfoList();
-			this.modelAllAddAttribute(model);
+			modelAllAddAttribute(model);
 			return "passwordManager/registerDataShow";
 		}
 		else {
@@ -113,11 +117,11 @@ public class ManagerController {
 				accountInfoDto.setDisplayCount(displayCount);
 				this.accountInfoDto = service.nextDataOfPaging(accountInfoDto);
 				accountInfoEntityList = this.accountInfoDto.getPagingAccountInfoList();
-				this.modelAllAddAttribute(model);
+				modelAllAddAttribute(model);
 				return "passwordManager/registerDataShow";
 			}
 			else {
-				this.modelAllAddAttribute(model);
+				modelAllAddAttribute(model);
 				return "passwordManager/registerDataShow";
 			}
 		}
@@ -133,12 +137,12 @@ public class ManagerController {
 				this.accountInfoDto = service.prevDataOfPaging(accountInfoDto, this.displayCount);
 				accountInfoEntityList = this.accountInfoDto.getPagingAccountInfoList();
 				prevReloadFlag = true;
-				this.modelAllAddAttribute(model);
+				modelAllAddAttribute(model);
 				return "passwordManager/registerDataShow";
 			}
 			else {
 				prevReloadFlag = false;
-				this.modelAllAddAttribute(model);
+				modelAllAddAttribute(model);
 				return "passwordManager/registerDataShow";
 			}
 		}
@@ -152,11 +156,8 @@ public class ManagerController {
 		if(loginController.loginFlag) {
 			accountInfoEntityList = service.search(loginId, accountInfoDto.getSiteName());
 			this.accountInfoDto.setAccountInfoList(accountInfoEntityList);
-			this.accountInfoDto.setNextButtonFlag(false);
-			this.accountInfoDto.setPrevButtonFlag(false);
-			this.accountInfoDto.setPage(1L);
-			this.accountInfoDto.setMaxPage(1L);
-			this.modelAllAddAttribute(model);
+			editAccountInfoDto();
+			modelAllAddAttribute(model);
 			return "passwordManager/registerDataShow";
 		}
 		else {

@@ -21,4 +21,5 @@ public interface ApplicationService {
 	AccountInfoDto nextDataOfPaging(AccountInfoDto accountInfoDto);
 	AccountInfoDto prevDataOfPaging(AccountInfoDto accountInfoDto, int displayCount);
 	List<AccountInfoEntity> search(int id, String siteName);
+	String pdfOutput(List<AccountInfoEntity> accountInfoEntityList);
 }

@@ -1,5 +1,8 @@
 package com.example.pm.service.impl;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -7,6 +10,7 @@ import java.util.List;
 import java.util.Random;
 
 import org.apache.commons.lang3.StringUtils;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,6 +20,14 @@ import com.example.pm.entity.AccountInfoEntity;
 import com.example.pm.entity.UserInfoEntity;
 import com.example.pm.mapper.TableOperationMapper;
 import com.example.pm.service.ApplicationService;
+import com.itextpdf.kernel.font.PdfFont;
+import com.itextpdf.kernel.font.PdfFontFactory;
+import com.itextpdf.kernel.pdf.PdfDocument;
+import com.itextpdf.kernel.pdf.PdfWriter;
+import com.itextpdf.layout.Document;
+import com.itextpdf.layout.element.Cell;
+import com.itextpdf.layout.element.Paragraph;
+import com.itextpdf.layout.element.Table;
 
 import lombok.RequiredArgsConstructor;
 
@@ -251,5 +263,54 @@ public class ApplicationServiceImpl implements ApplicationService {
 	public List<AccountInfoEntity> search(int id, String siteName) {
 		List<AccountInfoEntity> searchResultList = tableOperationMapper.searchSiteName(id, siteName);
 		return searchResultList;
+	}
+	
+	public String pdfOutput(List<AccountInfoEntity> accountInfoEntityList) {
+		String dest = "RegisteredData.pdf";
+		try {
+			// 出力先ファイルの準備
+            File file = new File(dest);
+			//	PDFオブジェクト作成
+			PdfWriter writer = new PdfWriter(file);
+			PdfDocument pdfDocument = new PdfDocument(writer);
+			Document document = new Document(pdfDocument);
+			//	フォントの設定
+			PdfFont font = PdfFontFactory.createFont("HeiseiKakuGo-W5", "UniJIS-UCS2-H", pdfDocument);
+			document.setFont(font);
+			//	タイトル
+			document.add(new Paragraph("登録データ"));
+			float[] columnWidths = {150F, 150F, 150F, 150F, 150F, 150F};
+            Table table = new Table(columnWidths);
+			//	ヘッダーをセット
+			table.addHeaderCell(new Paragraph("No."));
+			table.addHeaderCell(new Paragraph("ユーザーID"));	
+			table.addHeaderCell(new Paragraph("パスワード"));
+			table.addHeaderCell(new Paragraph("サイト名"));
+			table.addHeaderCell(new Paragraph("登録日時"));
+			table.addHeaderCell(new Paragraph("更新日時"));
+			
+			int rowCount = 1;
+			for(AccountInfoEntity accountInfoEntity : accountInfoEntityList) {
+				table.addCell(new Paragraph(String.valueOf(rowCount)));
+				table.addCell(new Paragraph(accountInfoEntity.getUserId()));
+				table.addCell(new Paragraph(accountInfoEntity.getPassWd()));
+				table.addCell(new Paragraph(accountInfoEntity.getSiteName()));
+				table.addCell(new Paragraph(String.valueOf(accountInfoEntity.getInp_date())));
+				table.addCell(new Paragraph(String.valueOf(accountInfoEntity.getUpd_date())));
+				rowCount++;
+			}
+			
+			document.add(table);
+			document.close();
+			return "PDF出力完了";
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+			return "何らかの理由によりファイルが見つかりませんでした。";
+		} catch (Exception e) {
+			e.printStackTrace();
+			return "何らかの理由によりダウンロードできませんでした。";
+		} catch (Throwable e) {
+			return "システムエラーによりダウンロードできませんでした。";
+		}
 	}
 }

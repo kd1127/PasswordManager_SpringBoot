@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>登録データ表示</title>
     <script type="text/javascript" th:src="@{../js/PasswordManager.js}"></script>
+    <script type="text/javascript" th:src="@{../js/RestApi.js}"></script>
     <link rel="stylesheet" th:href="@{../css/passWordManager/registerDataShow.css}">
 </head>
 <body>
@@ -42,6 +43,7 @@
 	    </label>
 	    <input type="submit" value="表示" class="display-button"/>
 	    <input type="submit" value="検索" class="search-button" formaction="/search" formmethod="POST"/>
+	    <input type="button" value="PDF出力" class="pdf_button" onclick="javatoJavasctipt();"/>
 	</form>
     
     <th:block th:if="${maxList.size() == 0}">
@@ -105,7 +107,7 @@
 		 </form>
     </div>
     
-    <script>
+    <script th:inline="javascript">
         function registerDataDelete(){
             if(confirm('削除してもよろしいですか？')){
                 return true; // 削除確認がOKの場合、フォームを送信する

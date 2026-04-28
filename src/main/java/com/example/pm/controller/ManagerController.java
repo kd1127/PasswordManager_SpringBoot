@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.example.pm.service.ApplicationService;
 import com.example.pm.mapper.TableOperationMapper;
 import com.example.pm.dto.AccountInfoDto;
+import com.example.pm.dto.PdfDto;
 import com.example.pm.entity.AccountInfoEntity;
 
 @Controller
@@ -27,15 +28,13 @@ public class ManagerController {
 	@Autowired private TableOperationMapper mapper;
 	@Autowired private LoginController loginController;
 	@Autowired private AccountInfoDto accountInfoDto;
+	@Autowired private PdfDto pdfDto;
 	
 	private List<AccountInfoEntity> accountInfoEntityList = new ArrayList<>();
-	
 	//	ページング用displayCount
 	private int displayCount = 0;
-	
 	//	ログインユーザーのID
 	private int loginId;
-	
 	//	「次へ」ボタン・「前へ」ボタンを押下するとtrueになる
 	private boolean nextReloadFlag = false;
 	private boolean prevReloadFlag = false;

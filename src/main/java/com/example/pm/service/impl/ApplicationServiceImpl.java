@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.pm.dto.AccountInfoDto;
+import com.example.pm.dto.PdfDto;
 import com.example.pm.entity.AccountInfoEntity;
 import com.example.pm.entity.UserInfoEntity;
 import com.example.pm.mapper.TableOperationMapper;
@@ -40,6 +41,8 @@ import lombok.RequiredArgsConstructor;
 public class ApplicationServiceImpl implements ApplicationService {
 	@Autowired
 	public TableOperationMapper tableOperationMapper;
+	@Autowired
+	private PdfDto pdfDto;
 	
 	//	inp_dateに日付を格納
 	@Override
@@ -265,7 +268,7 @@ public class ApplicationServiceImpl implements ApplicationService {
 		return searchResultList;
 	}
 	
-	public String pdfOutput(List<AccountInfoEntity> accountInfoEntityList) {
+	public PdfDto pdfOutput(List<AccountInfoEntity> accountInfoEntityList) {
 		String dest = "RegisteredData.pdf";
 		try {
 			// 出力先ファイルの準備
@@ -302,15 +305,23 @@ public class ApplicationServiceImpl implements ApplicationService {
 			
 			document.add(table);
 			document.close();
-			return "PDF出力完了";
+			pdfDto.setPdfOutputMessage("PDF出力完了");
+			pdfDto.setHttpStatus(200);
+			return pdfDto;
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
-			return "何らかの理由によりファイルが見つかりませんでした。";
+			pdfDto.setPdfOutputMessage("何らかの理由によりファイルが見つかりませんでした。");
+			pdfDto.setHttpStatus(500);
+			return pdfDto;
 		} catch (Exception e) {
 			e.printStackTrace();
-			return "何らかの理由によりダウンロードできませんでした。";
+			pdfDto.setPdfOutputMessage("何らかの理由によりダウンロードできませんでした。");
+			pdfDto.setHttpStatus(500);
+			return pdfDto;
 		} catch (Throwable e) {
-			return "システムエラーによりダウンロードできませんでした。";
+			pdfDto.setPdfOutputMessage("システムエラーによりダウンロードできませんでした。");
+			pdfDto.setHttpStatus(500);
+			return pdfDto;
 		}
 	}
 }

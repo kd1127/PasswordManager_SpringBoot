@@ -4,6 +4,7 @@ import java.sql.Date;
 import java.util.List;
 
 import com.example.pm.dto.AccountInfoDto;
+import com.example.pm.dto.PdfDto;
 import com.example.pm.entity.AccountInfoEntity;
 import com.example.pm.entity.UserInfoEntity;
 
@@ -21,5 +22,5 @@ public interface ApplicationService {
 	AccountInfoDto nextDataOfPaging(AccountInfoDto accountInfoDto);
 	AccountInfoDto prevDataOfPaging(AccountInfoDto accountInfoDto, int displayCount);
 	List<AccountInfoEntity> search(int id, String siteName);
-	String pdfOutput(List<AccountInfoEntity> accountInfoEntityList);
+	PdfDto pdfOutput(List<AccountInfoEntity> accountInfoEntityList);
 }

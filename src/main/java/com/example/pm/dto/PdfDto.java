@@ -12,6 +12,4 @@ public class PdfDto {
 	private Integer httpStatus;
 	//	PDF出力時のメッセージ
 	private String pdfOutputMessage;
-	//	エラー内容
-	private String errMessage;
 }

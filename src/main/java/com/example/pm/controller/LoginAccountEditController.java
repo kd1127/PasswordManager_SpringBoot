@@ -1,8 +1,5 @@
 package com.example.pm.controller;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
@@ -11,6 +8,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import com.example.pm.PmCommon.LoginAccountEditDisplay;
+import com.example.pm.PmLogOutput;
 import com.example.pm.entity.UserInfoEditEntity;
 import com.example.pm.entity.UserInfoEntity;
 import com.example.pm.mapper.TableOperationMapper;
@@ -22,10 +21,11 @@ public class LoginAccountEditController {
 	private LoginController loginController;
 	private ApplicationService applicationService;
 	private UserInfoEntity userInfoEntity;
+	private PmLogOutput log;
 	
 	@Autowired
 	public LoginAccountEditController(TableOperationMapper tableOperationMapper, LoginController loginController, 
-			ApplicationService applicationService, UserInfoEntity userInfoEntity) {
+			ApplicationService applicationService, UserInfoEntity userInfoEntity, PmLogOutput log) {
 		if(applicationService == null) {
 			throw new NullPointerException("何らかの理由によりエラーが発生しました。");
 		}
@@ -38,15 +38,20 @@ public class LoginAccountEditController {
 		if(loginController == null) {
 			throw new NullPointerException("何らかの理由によりエラーが発生しました。");
 		}
+		if(log == null) {
+			throw new NullPointerException("何らかの理由によりエラーが発生しました。");
+		}
 		this.tableOperationMapper = tableOperationMapper;
 		this.loginController = loginController;
 		this.applicationService = applicationService;
 		this.userInfoEntity = userInfoEntity;
+		this.log = log;
 	}
 
 	@GetMapping("/loginAccountEdit")
 	public String loginAccountEdit(@ModelAttribute UserInfoEditEntity userInfoEditEntity, Model model) {
 		if(loginController.loginFlag) {
+			log.info(LoginAccountEditDisplay.LoginAccountEdit);
 			userInfoEditEntity.setUserId(loginController.userInfoEntity.getUserId());
 			userInfoEditEntity.setPassWd(loginController.userInfoEntity.getPassWd());
 			model.addAttribute("userInfoEditEntity", userInfoEditEntity);
@@ -60,6 +65,7 @@ public class LoginAccountEditController {
 	@PostMapping("/loginAccountEditCompletion")
 	public String loginAccountEditCompletion(@ModelAttribute UserInfoEditEntity userInfoEditEntity, Model model) {
 		if(loginController.loginFlag) {
+			log.info(LoginAccountEditDisplay.LoginAccountEditCompletion);
 			String password = userInfoEditEntity.getPassWd();
 			userInfoEditEntity.setUserId(loginController.userInfoEntity.getUserId());
 			UserInfoEntity userInfoEntity = new UserInfoEntity(null, userInfoEditEntity.getPassWd(), null, null, null, null);
@@ -76,6 +82,7 @@ public class LoginAccountEditController {
 	@GetMapping("/passKeyEdit")
 	public String passKeyEdit(@ModelAttribute UserInfoEditEntity userInfoEditEntity, Model model){
 		if(loginController.loginFlag) {
+			log.info(LoginAccountEditDisplay.PasskeyEdit);
 			//	グローバル変数からpassKeyの数値を取得する
 			userInfoEditEntity.setPassKey(loginController.userInfoEntity.getPassKey());
 			model.addAttribute("userInfoEditEntity", userInfoEditEntity);
@@ -89,6 +96,7 @@ public class LoginAccountEditController {
 	@PostMapping("/passKeyEditCompletion")
 	public String passKeyEditCompletion(@ModelAttribute UserInfoEditEntity userInfoEditEntity, Model model) {
 		if(loginController.loginFlag) {
+			log.info(LoginAccountEditDisplay.PasskeyEditCompletion);
 			//	グローバル変数からuserId, passKeyの数値を取得する
 			userInfoEditEntity.setUserId(loginController.userInfoEntity.getUserId());
 			userInfoEntity.setPassKey(userInfoEditEntity.getPassKey());
@@ -103,7 +111,3 @@ public class LoginAccountEditController {
 		}
 	}
 }
-
-//	System.out.println("userId: " + uieEntity.getUserId());
-//	System.out.println("passWd: " + uieEntity.getPassWd());
-//  System.out.println("passKey: " + uieEntity.getPassKey());

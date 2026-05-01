@@ -7,6 +7,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.example.pm.PmLogOutput;
 import com.example.pm.entity.UserInfoEntity;
 import com.example.pm.mapper.TableOperationMapper;
 import com.example.pm.service.ApplicationService;
@@ -16,6 +17,7 @@ import com.example.pm.service.LoginService;
 public class LoginServiceImpl implements LoginService{
 	@Autowired ApplicationService applicationService;
 	@Autowired TableOperationMapper tableOperationMapper;
+	@Autowired private PmLogOutput log;
 	
 	@Override
 	public List<String> validationCheck(UserInfoEntity userInfoEntity){
@@ -30,10 +32,18 @@ public class LoginServiceImpl implements LoginService{
 		if(userInfoEntity.getPassKey() == null) {
 			userInfoEntity.setPassKey("");
 		}
-					
-		//	エラーがあるか検証する
-		if(userInfoEntity.getUserId() != null && userInfoEntity.getPassWd() != null && userInfoEntity.getPassKey() != null) {
-			errorMessage = applicationService.loginDataCheck(userInfoEntity.getUserId(), userInfoEntity.getPassWd(), userInfoEntity.getPassKey());
+		
+		try {
+			//	エラーがあるか検証する
+			if(userInfoEntity.getUserId() != null && userInfoEntity.getPassWd() != null && userInfoEntity.getPassKey() != null) {
+				log.info("", "applicationService.loginDataCheck処理 ---> 開始");
+				errorMessage = applicationService.loginDataCheck(userInfoEntity.getUserId(), userInfoEntity.getPassWd(), userInfoEntity.getPassKey());
+				errorMessage.forEach(s -> log.info(s));
+				log.info("", "applicationService.loginDataCheck処理  --->  正常終了");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			log.error("", "applicationService.loginDataCheck処理 ---> 異常終了", "ログインデータチェック処理でエラー発生", e);
 		}
 		return errorMessage;
 	}

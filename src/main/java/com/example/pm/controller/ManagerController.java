@@ -17,8 +17,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.pm.service.ApplicationService;
 import com.example.pm.mapper.TableOperationMapper;
+import com.example.pm.PmCommon.ManagerDisplay;
+import com.example.pm.PmLogOutput;
 import com.example.pm.dto.AccountInfoDto;
-import com.example.pm.dto.PdfDto;
 import com.example.pm.entity.AccountInfoEntity;
 
 @Controller
@@ -28,7 +29,7 @@ public class ManagerController {
 	@Autowired private TableOperationMapper mapper;
 	@Autowired private LoginController loginController;
 	@Autowired private AccountInfoDto accountInfoDto;
-	@Autowired private PdfDto pdfDto;
+	@Autowired private PmLogOutput log;
 	
 	private List<AccountInfoEntity> accountInfoEntityList = new ArrayList<>();
 	//	ページング用displayCount
@@ -41,6 +42,7 @@ public class ManagerController {
 	
 	@PostMapping("/dataRegister")
 	public String dataRegister(@ModelAttribute AccountInfoEntity aiEntity, Model model) {
+		log.info(ManagerDisplay.DataRegister);
 		aiEntity.setInp_date(service.tableInsertpreparation());
 		aiEntity.setId_user(mapper.userInfoIdOneGet(loginController.userInfoEntity.getUserId()));
 		mapper.accountDataRegisterInsert(aiEntity);
@@ -51,6 +53,7 @@ public class ManagerController {
 	@GetMapping("/registerDataShow")
 	public String registerDataShow(Model model) {
 		if(loginController.loginFlag) {
+			log.info(ManagerDisplay.RegisterDataShow);
 			//	ログイン時に入力したユーザーIDをコントローラークラスから取得する。
 			loginId = mapper.idOneGet(loginController.userInfoEntity.getUserId());
 			//	userinfoテーブルのidをキーに、accountdataテーブルからid_userと一致するデータを取得		
@@ -96,7 +99,9 @@ public class ManagerController {
 			this.displayCount = accountInfoDto.getDisplayCount();
 			this.accountInfoDto.setDisplayCount(accountInfoDto.getDisplayCount());
 			this.accountInfoDto.setShowCompletionCount(0);
+			log.info("", "service.displayDataOfPaging処理 ---> 開始");
 			this.accountInfoDto = service.displayDataOfPaging(this.accountInfoDto);
+			log.info("", "service.displayDataOfPaging処理 ---> 正常終了");
 			accountInfoEntityList = this.accountInfoDto.getPagingAccountInfoList();
 			modelAllAddAttribute(model);
 			return "passwordManager/registerDataShow";
@@ -114,7 +119,9 @@ public class ManagerController {
 				//	displayCountを倍にする
 				int displayCount = accountInfoDto.getDisplayCount() * 2;
 				accountInfoDto.setDisplayCount(displayCount);
+				log.info("", "service.nextDataOfPaging処理 ---> 開始");
 				this.accountInfoDto = service.nextDataOfPaging(accountInfoDto);
+				log.info("", "service.nextDataOfPaging処理 ---> 正常終了");
 				accountInfoEntityList = this.accountInfoDto.getPagingAccountInfoList();
 				modelAllAddAttribute(model);
 				return "passwordManager/registerDataShow";
@@ -133,7 +140,9 @@ public class ManagerController {
 	public String prev(Model model) {
 		if(loginController.loginFlag) {
 			if(prevReloadFlag == false) {
+				log.info("", "service.prevDataOfPaging処理 ---> 開始");
 				this.accountInfoDto = service.prevDataOfPaging(accountInfoDto, this.displayCount);
+				log.info("", "service.prevDataOfPaging処理 ---> 正常終了");
 				accountInfoEntityList = this.accountInfoDto.getPagingAccountInfoList();
 				prevReloadFlag = true;
 				modelAllAddAttribute(model);
@@ -153,7 +162,9 @@ public class ManagerController {
 	@PostMapping("/search")
 	public String search(@ModelAttribute AccountInfoDto accountInfoDto, Model model) {
 		if(loginController.loginFlag) {
+			log.info("", "service.search処理 ---> 開始");
 			accountInfoEntityList = service.search(loginId, accountInfoDto.getSiteName());
+			log.info("", "service.search処理 ---> 正常終了");
 			this.accountInfoDto.setAccountInfoList(accountInfoEntityList);
 			editAccountInfoDto();
 			modelAllAddAttribute(model);
@@ -166,6 +177,7 @@ public class ManagerController {
 	
 	@PostMapping(value="/registerDataDel")
 	public String registerDataDel(@RequestParam String dataDelete, Model model) {
+		log.info(ManagerDisplay.RegisterDataDel);
 		Integer id = Integer.parseInt(dataDelete);
 		//	データ削除処理とauto_incrementを-1にする処理を追加
 		int deleteRow =  mapper.deleteARowOfData(id);
@@ -176,6 +188,7 @@ public class ManagerController {
 			AccountInfoEntity aiEntity = new AccountInfoEntity();
 			model.addAttribute("aiEntity", aiEntity);
 			model.addAttribute("infoMessage", infoMessage);
+			log.warning(ManagerDisplay.RegisterDataDel, "データ削除", "何らかの原因によりデータ削除失敗");
 			return "passwordManager/topPage"; 
 		}
 		return "passwordManager/registerDataDel"; 
@@ -184,14 +197,15 @@ public class ManagerController {
 	@RequestMapping(value="/registerDataUpd", method=RequestMethod.GET)
 	public String registerDataUpd(Model model, @RequestParam String index) {
 		if(loginController.loginFlag) {
+			log.info(ManagerDisplay.RegisterDataUpd);
 			try {
 				//	indexfをキーにDBから取得してaccountInfoEntityに格納する
 				AccountInfoEntity accountInfoEntity = mapper.selectOneData(Integer.parseInt(index));
 				model.addAttribute("accountInfoEntity", accountInfoEntity);
 			} catch (NumberFormatException e) {
-				// TODO 自動生成された catch ブロック
 				String errorMsg = "エラーが発生しました。数値には変換できない値が渡されました。";
 				model.addAttribute("errorMsg", errorMsg);
+				log.error(ManagerDisplay.RegisterDataUpd, "データ型変換", "データ型不正", e);
 				return "passwordManager/registerDataShow";
 			}
 			return "passwordManager/registerDataUpd";
@@ -204,6 +218,7 @@ public class ManagerController {
 	@RequestMapping(value="/dataUpdComplete", method=RequestMethod.GET)
 	public String dataUpdComplete(@ModelAttribute AccountInfoEntity aiEntity, Model model) {
 		if(loginController.loginFlag) {
+			log.info(ManagerDisplay.DataUpdCompletion);
 			try {
 				int updateRows = mapper.updateAccountDataOneARow(aiEntity.getId(), aiEntity.getUserId(), aiEntity.getPassWd(), 
 						aiEntity.getSiteName());
@@ -211,15 +226,17 @@ public class ManagerController {
 				if(updateRows < 1) {
 					String errorMsg = "何らかの原因により、更新に失敗しました。";
 					model.addAttribute("errorMsg", errorMsg);
+					log.warning(ManagerDisplay.DataUpdCompletion, "データ更新", "何らかの原因により、更新に失敗しました。");
 					return "passwordManager/registerDataUpd";
 				}
 			} catch (DataAccessException ex) {
+				log.error(ManagerDisplay.DataUpdCompletion, "データ更新", "データアクセスエラーが発生しました。", ex);
 				String errorMsg = "データアクセスエラーが発生しました。";
 				model.addAttribute("errorMsg", errorMsg);
 				ex.printStackTrace();
 				return "passwordManager/registerDataUpd";
 			} catch (Exception e) {
-				// TODO 自動生成された catch ブロック
+				log.error(ManagerDisplay.DataUpdCompletion, "データ更新", "予期しないエラーが発生しました。", e);
 				String errorMsg = "予期しないエラーが発生しました。";
 				e.printStackTrace();
 				model.addAttribute("errorMsg", errorMsg);
@@ -232,13 +249,3 @@ public class ManagerController {
 		}
 	}
 }
-
-//System.out.println("userId: " + uiEntity.getUserId());
-//System.out.println("passWd: " + uiEntity.getPassWd());
-//System.out.println("re_PassWd: " + uiEntity.getRe_PassWd());
-//System.out.println("passKey: " + uiEntity.getPassKey());
-
-//	デバッグ
-//System.out.println("id: " + id);
-//maxList.forEach(s -> System.out.println(s));
-//userIdList.forEach(s ->System.out.println(s));

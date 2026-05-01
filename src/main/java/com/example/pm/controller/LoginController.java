@@ -14,7 +14,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
-import com.example.pm.dto.AccountInfoDto;
+import com.example.pm.PmCommon.Display;
+import com.example.pm.PmLogOutput;
 import com.example.pm.entity.AccountInfoEntity;
 import com.example.pm.entity.UserInfoEntity;
 import com.example.pm.mapper.TableOperationMapper;
@@ -27,14 +28,12 @@ import lombok.RequiredArgsConstructor;
 @Controller
 @SessionAttributes(types=UserInfoEntity.class)
 @RequiredArgsConstructor
-public class LoginController {
-	
-	@Autowired public ApplicationService applicationService;
-	@Autowired private LoginService loginService;
-	@Autowired private TableOperationMapper tableOperationMapper;
-	
-	private HttpSession session;
-	
+public class LoginController{	
+	public ApplicationService applicationService;
+	private LoginService loginService;
+	private TableOperationMapper tableOperationMapper;
+	private PmLogOutput log;	
+	private HttpSession session;	
 	//	値保持用 LoginAccountEditControllerクラスなどが使用
 	public UserInfoEntity userInfoEntity;
 	
@@ -49,7 +48,8 @@ public class LoginController {
 	
 	//	コンストラクタインジェクション
 	@Autowired
-	public LoginController(ApplicationService applicationService, HttpSession session, UserInfoEntity userInfoEntity) {
+	public LoginController(ApplicationService applicationService, HttpSession session, UserInfoEntity userInfoEntity, 
+			LoginService loginService, TableOperationMapper tableOperationMapper, PmLogOutput log) {
 		if(applicationService == null) {
 			throw new NullPointerException("何らかの理由によりエラーが発生しました。");
 		}
@@ -58,10 +58,22 @@ public class LoginController {
 		}
 		if(userInfoEntity == null) {
 			throw new NullPointerException("何らかの理由によりエラーが発生しました。");
-		}		
+		}
+		if(loginService == null) {
+			throw new NullPointerException("何らかの理由によりエラーが発生しました。");
+		}
+		if(tableOperationMapper == null) {
+			throw new NullPointerException("何らかの理由によりエラーが発生しました。");
+		}
+		if(log == null) {
+			throw new NullPointerException("何らかの理由によりエラーが発生しました。");
+		}
 		this.applicationService = applicationService;
 		this.session = session;
 		this.userInfoEntity = userInfoEntity;
+		this.log = log;
+		this.loginService = loginService;
+		this.tableOperationMapper = tableOperationMapper;
 	}
 	
 	@PostMapping("/logout")
@@ -70,6 +82,7 @@ public class LoginController {
 		session.removeAttribute("userInfoEntity");
 		session.removeAttribute("userInfoEditEntity");
 		session.removeAttribute("AccountInfoEntity");
+		log.info(Display.Logout, "ログアウト処理実行");
 		return "login/logout";
 	}
 	
@@ -80,6 +93,7 @@ public class LoginController {
 		session.removeAttribute("userInfoEntity");
 		session.removeAttribute("userInfoEditEntity");
 		session.removeAttribute("AccountInfoEntity");
+		log.info(Display.Login);
 		return "login/login";
 	}
 	
@@ -87,6 +101,7 @@ public class LoginController {
 	public String passKeyCertification(@ModelAttribute UserInfoEntity userInfoEntity, Model model) {
 		this.userInfoEntity = userInfoEntity;
 		model.addAttribute("userInfoEntity", userInfoEntity);
+		log.info(Display.PassKeyCert, userInfoEntity.getUserId(), userInfoEntity.getPassWd(), "");
 		return "login/passKeyCertification";
 	}
 	
@@ -110,6 +125,8 @@ public class LoginController {
 				model.addAttribute("lastLoginDate", lastLoginDate);
 				userInfoEntity.setLastLoginDate(LocalDateTime.now());
 				loginService.lastLoginDateUpdate(this.userInfoEntity.getUserId(), this.userInfoEntity.getLastLoginDate());
+				log.info(Display.TopPage, "", "", userInfoEntity.getPassKey());
+				log.info(Display.TopPage, "ログイン処理実行 ---> ログイン成功");
 			}
 			AccountInfoEntity accountInfoEntity = new AccountInfoEntity();			
 			model.addAttribute("accountInfoEntity", accountInfoEntity);
@@ -118,6 +135,8 @@ public class LoginController {
 		else {
 			model.addAttribute("userInfoEntity", userInfoEntity);
 			model.addAttribute("errorMessage", errorMessage);
+			log.info(Display.TopPage, "", "", userInfoEntity.getPassKey());
+			log.info(Display.TopPage, "ログイン処理実行 ---> ログイン失敗");
 			return "login/passKeyCertification";
 		}
 	}
@@ -125,13 +144,12 @@ public class LoginController {
 	@PostMapping("/userRegister")
 	public String userRegister(@ModelAttribute UserInfoEntity userInfoEntity, Model model) {
 		model.addAttribute("userInfoEntity", userInfoEntity);
+		log.info(Display.UserRegister);
 		return "login/userRegister";
 	}
 	
 	@PostMapping("/passKeyGet")
 	public String passKeyGet(@ModelAttribute UserInfoEntity userInfoEntity, Model model) {
-		System.out.println(userInfoEntity.getPassWd());
-		System.out.println(userInfoEntity.getRe_PassWd());
 		List<String> errorMsgList = new ArrayList<>();
 		errorMsgList = applicationService.passWdMatchCheckProcess(userInfoEntity);
 		
@@ -141,16 +159,17 @@ public class LoginController {
 		try {
 			if(!errorMsgList.isEmpty()) {
 				model.addAttribute("errorMsgList", errorMsgList);
-				errorMsgList.forEach(s -> System.out.println(s));
+				log.info(Display.PassKeyGet, "パスワードとパスワード（確認）が一致していないため、ユーザー登録画面に自画面遷移");
 				return "login/userRegister";
 			}
 			else{
-				System.out.println("2");
+				log.info(Display.PassKeyGet, "パスワードとパスワード（確認）が一致していることにより次画面に遷移");
 				return "login/passKeyGet";
 			}
 		} catch(NullPointerException e) {
 			errorMsgList.add("何らかの理由によりエラーが発生しました。");
 			model.addAttribute("errorMsg", errorMsgList);
+			log.error(Display.PassKeyGet, "エラー発生", "何らかの理由によりエラーが発生しました。", e);
 			return "login/userRegister";
 		}
 	}
@@ -162,6 +181,7 @@ public class LoginController {
 		userInfoEntity.setRe_PassWd(this.userInfoEntity.getRe_PassWd());
 		this.userInfoEntity.setPassKey(userInfoEntity.getPassKey());
 		model.addAttribute("userInfoEntity", userInfoEntity);
+		log.info(Display.UserRegisterCheck);
 		return "login/userRegisterCheck";
 	}
 	
@@ -182,24 +202,15 @@ public class LoginController {
 		try {
 			if(!errorMsg.equals("")) {
 				model.addAttribute("errorMsg", errorMsg);
+				log.info(Display.UserRegisterCompletion, "ユーザー登録完了");
 				return "login/userRegisterCheck";
 			}
 		} catch (NullPointerException e) {
 			errorMsg = "何らかの理由によりエラーが発生しました。";
 			model.addAttribute("errorMsg", errorMsg);
+			log.error(Display.UserRegisterCompletion, "エラー発生", "何らかの理由によりエラーが発生しました。", e);
 			return "login/userRegisterCheck";
 		}
 		return "login/userRegisterCompletion";
 	}
 }
-
-//	デバッグツール
-//System.out.println("3回目のチェック");
-//System.out.println("userId: " + this.uiEntity.getUserId());
-//System.out.println("passWd: " + this.uiEntity.getPassWd());
-//System.out.println("re_PassWd: " + this.uiEntity.getRe_PassWd());
-//System.out.println("passKey: " + this.uiEntity.getPassKey());
-//System.out.println("userId: " + uiEntity.getUserId());
-//System.out.println("passWd: " + uiEntity.getPassWd());
-//System.out.println("re_PassWd: " + uiEntity.getRe_PassWd());
-//System.out.println("passKey: " + uiEntity.getPassKey());

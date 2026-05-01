@@ -49,6 +49,11 @@ public class ApplicationConfig {
 		return new PdfDto();
 	}
 	
+	@Bean
+	public PmLogOutput pmLogOutputConfig() {
+		return new PmLogOutput();
+	}
+	
 //	@Bean
 //	public UserInfoEntity uiEntityBeanConfig() {
 //		return new UserInfoEntity();

@@ -2,7 +2,7 @@ package com.example.pm.service.impl;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
+import java.nio.file.FileAlreadyExistsException;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.example.pm.PmLogOutput;
 import com.example.pm.dto.AccountInfoDto;
 import com.example.pm.dto.PdfDto;
 import com.example.pm.entity.AccountInfoEntity;
@@ -26,7 +27,6 @@ import com.itextpdf.kernel.font.PdfFontFactory;
 import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfWriter;
 import com.itextpdf.layout.Document;
-import com.itextpdf.layout.element.Cell;
 import com.itextpdf.layout.element.Paragraph;
 import com.itextpdf.layout.element.Table;
 
@@ -43,6 +43,8 @@ public class ApplicationServiceImpl implements ApplicationService {
 	public TableOperationMapper tableOperationMapper;
 	@Autowired
 	private PdfDto pdfDto;
+	@Autowired 
+	private PmLogOutput log;
 	
 	//	inp_dateに日付を格納
 	@Override
@@ -72,49 +74,60 @@ public class ApplicationServiceImpl implements ApplicationService {
 	 * 各リクエストパラーメーターは未入力だと、空文字になる
 	 */
 	@Override
-	public List<String> loginDataCheck(String userId, String passWd, String passKey) {
+	public List<String> loginDataCheck(String userId, String passWd, String passKey) throws Exception{
 		List<String> errorMessage = new ArrayList<String>();
-		
+		log.info("", userId, passWd, passKey);
 		//	ユーザーIDの検証
 		if(StringUtils.isEmpty(userId)) {
 			errorMessage.add("ユーザーIDを入力してください。");
+			log.warning("", "ユーザーIDの検証", "ユーザーIDを入力してください。");
 		}
 		else {
+			log.info("", "tableOperationMapper.userIdOneVerify処理 ---> 開始");
 			String userIdVerify = tableOperationMapper.userIdOneVerify(userId);
+			log.info("userIdVerify: " + userIdVerify, "tableOperationMapper.userIdOneVerify処理 ---> 正常終了");
 			
 			if(!StringUtils.equals(userId, userIdVerify)) {
 				errorMessage.add("ユーザーIDが一致しません。");
+				log.warning("", "ユーザーIDの検証", "ユーザーIDが一致しません。");
 			}
 		}
 		
 		//	パスワードの検証、入力値有りの場合、パスワードをハッシュ化してテーブルから取得したデータと突き合わせ
 		if(StringUtils.isEmpty(passWd)) {
 			errorMessage.add("パスワードを入力してください。");
+			log.warning("", "パスワードの検証", "パスワードを入力してください。");
 		}
 		else {
 			if (!StringUtils.equals(passWd, "ADMIN")) {
 				UserInfoEntity userInfoEntity = new UserInfoEntity(null, passWd, null, null, null, null);
 				passWd = String.valueOf(userInfoEntity.hashCode());
 			}
+			log.info("", "tableOperationMapper.passWdOneVerify処理 ---> 開始");
 			String passWdVerify = tableOperationMapper.passWdOneVerify(passWd);
+			log.info("passWdVerify: " + passWdVerify, "tableOperationMapper.passWdOneVerify処理 ---> 正常終了");
 			
 			if(!StringUtils.equals(passWd, passWdVerify)) {
 				errorMessage.add("パスワードが一致しません。");
+				log.warning("", "パスワードの検証", "パスワードが一致しません。");
 			}
 		}
 		
 		//	パスキーの検証
 		if(StringUtils.isEmpty(passKey)) {
 			errorMessage.add("パスキーを入力してください。");
+			log.warning("", "パスキーの検証", "パスキーを入力してください。");
 		}
 		else {
+			log.info("", "tableOperationMapper.passKeyOneVerify処理 ---> 開始");
 			String passKeyVerify = tableOperationMapper.passKeyOneVerify(passKey);
+			log.info("passKeyVerify: " + passKeyVerify, "tableOperationMapper.passKeyOneVerify処理 ---> 正常終了");
 			
 			if(!StringUtils.equals(passKey, passKeyVerify)) {
+				log.warning("", "パスキーの検証", "パスキーが一致しません。");
 				errorMessage.add("パスキーが一致しません。");
 			}
-		}
-		
+		}		
 		return errorMessage;
 	}
 	
@@ -122,11 +135,14 @@ public class ApplicationServiceImpl implements ApplicationService {
 	@Override
 	public List<String> passWdMatchCheckProcess(UserInfoEntity userInfoEntity) {
 		List<String> errorMsgList = new ArrayList<>();
+		log.info("", "ApplicationService.userIdDuplicateCheck処理 ---> 開始");
 		errorMsgList = this.userIdDuplicateCheck(userInfoEntity.getUserId(), errorMsgList);
+		errorMsgList.forEach(s -> log.info(s));
+		log.info("", "ApplicationService.userIdDuplicateCheck処理 ---> 正常終了");
 		if(userInfoEntity != null) {
 			if(!userInfoEntity.getPassWd().equals(userInfoEntity.getRe_PassWd())) {
-				System.out.println("3");
 				errorMsgList.add("・パスワード・パスワード（確認）が一致しません");
+				log.warning("", "パスワード・パスワード（確認）の検証", "パスワード・パスワード（確認）が一致しません");
 			}
 		}
 		return errorMsgList;
@@ -135,38 +151,57 @@ public class ApplicationServiceImpl implements ApplicationService {
 	//	ユーザー登録画面で入力したデータをuserinfoテーブルに登録
 	@Override
 	public String userInfoInsertOperation(UserInfoEntity userInfoEntity) {
+		log.info("", "tableOperationMapper.userInfoInsert処理 ---> 開始");
 		int insertCount = tableOperationMapper.userInfoInsert(userInfoEntity);
+		log.info("登録件数： " + insertCount, "tableOperationMapper.userInfoInsert処理 ---> 正常終了");
 		if(insertCount < 1) {
+			log.warning("", "データ登録", "データ登録に失敗しました。");
 			String errorMsg = "データ登録に失敗しました。";
 			return errorMsg;
 		}
 		return "";
 	}
 	
+	/**
+	 * ログインパスワード変更メソッド
+	 * @param userId ユーザーID
+	 * @param passWd パスワード
+	 */
 	@Override
 	public String passWdUpdateDbOperation(String userId, String passWd) {
+		log.info("", "tableOperationMapper.passWdUpdate処理 ---> 開始");
 		int updateCount = tableOperationMapper.passWdUpdate(userId, passWd);
+		log.info("更新件数: " + updateCount, "tableOperationMapper.passWdUpdate処理 ---> 正常終了");
 		String message = "";
 		
 		if(updateCount < 1) {
+			log.warning("", "ログインパスワード更新", "何らかの理由により、パスワード更新に失敗しました。");
 			message = "何らかの理由により、パスワード更新に失敗しました。";
 		}		
 		return message;
 	}
 	
+	/**
+	 * ユーザー登録時、ユーザーIDの重複を調べるメソッド
+	 * @param userId ユーザーID
+	 * @param errorMessageList エラーメッセージを格納するリスト
+	 */
 	@Override
 	public List<String> userIdDuplicateCheck(String userId, List<String> errorMessageList) {
 		if(userId == null) {
 			errorMessageList.add("・不正なユーザーIDです。");
 		}
-		
+		log.info("", "tableOperationMapper.userIdAllGet処理 ---> 開始");
 		List<String> userIdList = tableOperationMapper.userIdAllGet();
+		log.info("", "tableOperationMapper.userIdAllGet処理 ---> 正常終了");
 		if(userIdList.contains(userId)) {
 			errorMessageList.add("・他のユーザーが登録しているユーザーIDです。別のユーザーIDを登録してください。");
+			log.warning("", "ユーザーIDの重複の検証", "他のユーザーが登録しているユーザーIDです。別のユーザーIDを登録してください。");
 		}		
 		return errorMessageList;
 	}
 	
+	// 登録データ表示画面で、表示ボタンを押下して動作するメソッド
 	@Override
 	public AccountInfoDto displayDataOfPaging(AccountInfoDto accountInfoDto){
 		List<AccountInfoEntity> returnToAccountInfoList = new ArrayList<>();
@@ -194,6 +229,7 @@ public class ApplicationServiceImpl implements ApplicationService {
 		return accountInfoDto;
 	}
 	
+	//	最大ページを調べる
 	@Override
 	public Long findMaximumPage(AccountInfoDto accountInfoDto){
 		Integer maximumPage = accountInfoDto.getAccountInfoList().size() / accountInfoDto.getDisplayCount() + 1;
@@ -264,7 +300,9 @@ public class ApplicationServiceImpl implements ApplicationService {
 	}
 	
 	public List<AccountInfoEntity> search(int id, String siteName) {
+		log.info("", "tableOperationMapper.searchSiteName処理 ---> 開始");
 		List<AccountInfoEntity> searchResultList = tableOperationMapper.searchSiteName(id, siteName);
+		log.info("", "tableOperationMapper.searchSiteName処理 ---> 正常終了");
 		return searchResultList;
 	}
 	
@@ -273,6 +311,9 @@ public class ApplicationServiceImpl implements ApplicationService {
 		try {
 			// 出力先ファイルの準備
             File file = new File(dest);
+            if(file.exists()) {
+            	throw new FileAlreadyExistsException(dest);
+            }
 			//	PDFオブジェクト作成
 			PdfWriter writer = new PdfWriter(file);
 			PdfDocument pdfDocument = new PdfDocument(writer);
@@ -310,15 +351,18 @@ public class ApplicationServiceImpl implements ApplicationService {
 			return pdfDto;
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
+			log.error("", "PDF出力", "何らかの理由によりファイルが見つかりませんでした。", e);
 			pdfDto.setPdfOutputMessage("何らかの理由によりファイルが見つかりませんでした。");
 			pdfDto.setHttpStatus(500);
 			return pdfDto;
 		} catch (Exception e) {
 			e.printStackTrace();
+			log.error("", "PDF出力", "何らかの理由によりダウンロードできませんでした。", e);
 			pdfDto.setPdfOutputMessage("何らかの理由によりダウンロードできませんでした。");
 			pdfDto.setHttpStatus(500);
 			return pdfDto;
 		} catch (Throwable e) {
+			log.error("", "PDF出力", "システムエラー・ハードウェアエラーによりダウンロードできませんでした。", e);
 			pdfDto.setPdfOutputMessage("システムエラーによりダウンロードできませんでした。");
 			pdfDto.setHttpStatus(500);
 			return pdfDto;

@@ -153,3 +153,28 @@ body{
     cursor: pointer;
     border-radius: 5px;
 }
+
+.update-button{
+	padding: 5px;
+    width: 100%;
+    margin: 8px 0;
+    margin-bottom: -10px;
+    border: none;
+    background: #007BFF;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.delete-button{
+	padding: 5px;
+    width: 10%;
+    margin: 8px 0;
+    border: none;
+    background: #007BFF;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 5px;
+}

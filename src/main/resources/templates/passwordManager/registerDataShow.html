@@ -82,7 +82,7 @@
 	                    <!-- 削除フォーム -->
 	                    <form th:action="@{registerDataDel}" method="post" id="form3" onsubmit="return registerDataDelete();">
 	                        <label for="delete">
-	                            <input type="submit" value="消去" />
+	                            <input type="submit" value="消去" class="update-button"/>
 	                        </label>
 	                        	<input type="hidden" name="dataDelete" th:value="${accountInfoEntity.get(i).getId()}"/>
 	                        <!--  <input type="hidden" name="dataDelete" th:value="${i}"/> -->
@@ -90,7 +90,7 @@
 	                    
 	                    <!-- 更新フォーム -->
 	                    <form th:action="@{registerDataUpd}" method="get">
-	                        <input type="submit" value="更新"/>
+	                        <input type="submit" value="更新" class="update-button"/>
 	                        <input type="hidden" name="index" th:value="${accountInfoEntity.get(i).getId()}"/>
 	                    </form>
 	                </td>

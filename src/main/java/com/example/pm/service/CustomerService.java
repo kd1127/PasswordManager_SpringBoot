@@ -1,7 +1,11 @@
 package com.example.pm.service;
 
+import com.example.pm.dto.InquiryForm;
+
 public interface CustomerService {
 
-	public String mailAddressFormatCheck(String mailAddress);
-	public String mailSend(String mailAddress);
+	String mailAddressFormatCheck(String mailAddress);
+	String mailSend(String mailAddress);
+	String mailSendInruiryForm(InquiryForm inquiryForm);
+	InquiryForm insertToNewLineChar(InquiryForm inquiryForm);
 }

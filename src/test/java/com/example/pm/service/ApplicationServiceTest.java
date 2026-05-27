@@ -66,7 +66,7 @@ public class ApplicationServiceTest {
 	
 	@Test
 	@DisplayName("loginDataCheckメソッドのテスト")
-	public void loginDataCheckTest() {
+	public void loginDataCheckTest() throws Exception {
 //		applicationService.tableOperationMapper = tableOperationMapper;
 		List<String> errorMsgExpected = new ArrayList<>(Arrays.asList("ユーザーIDが一致しません。"));
 		lenient().doReturn(new ArrayList<>(Arrays.asList("ユーザーIDが一致しません。"))).when(applicationService).loginDataCheck(any(), any(), any());

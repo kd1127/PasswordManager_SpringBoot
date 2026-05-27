@@ -1,7 +1,6 @@
 "use strict";
 
 async function javatoJavasctipt(){
-	console.log("クリックされた");
 	if(!navigator.onLine){
 		console.log('インターネット接続がありません。');
 		throw new Error('インターネット接続がありません。');

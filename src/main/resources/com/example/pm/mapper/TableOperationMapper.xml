@@ -103,13 +103,13 @@
     		delete_flag = false
     </select>
     <select id="userIdOneVerify" resultType="String" parameterType="String">
-    	SELECT userId FROM userinfo WHERE 1=1 and userId = #{userId}
+    	SELECT userId FROM userinfo WHERE userId = #{userId}
     </select>
     <select id="passWdOneVerify" resultType="String" parameterType="String">
-    	SELECT passWd FROM userinfo WHERE 1=1 and passWd = #{passWd}
+    	SELECT passWd FROM userinfo WHERE passWd = #{passWd}
     </select>
     <select id="passKeyOneVerify" resultType="String" parameterType="String">
-    	SELECT passKey FROM userinfo WHERE 1=1 and passKey = #{passKey}
+    	SELECT passKey FROM userinfo WHERE passKey = #{passKey}
     </select>
     <select id="lastLoginDateSelect">
     	SELECT lastLoginDate FROM userinfo WHERE userId = #{userId}

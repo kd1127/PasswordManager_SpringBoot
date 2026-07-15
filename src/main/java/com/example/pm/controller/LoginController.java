@@ -130,7 +130,7 @@ public class LoginController{
 			}
 			AccountInfoEntity accountInfoEntity = new AccountInfoEntity();			
 			model.addAttribute("accountInfoEntity", accountInfoEntity);
-			return "passwordManager/topPage";
+			return "main_function/topPage";
 		}
 		else {
 			model.addAttribute("userInfoEntity", userInfoEntity);

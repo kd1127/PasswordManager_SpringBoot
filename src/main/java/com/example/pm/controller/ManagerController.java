@@ -47,7 +47,7 @@ public class ManagerController {
 		aiEntity.setId_user(mapper.userInfoIdOneGet(loginController.userInfoEntity.getUserId()));
 		mapper.accountDataRegisterInsert(aiEntity);
 		model.addAttribute("aiEntity", aiEntity);
-		return "passwordManager/dataRegister";
+		return "main_function/dataRegister";
 	}
 	
 	@GetMapping("/registerDataShow")
@@ -61,10 +61,10 @@ public class ManagerController {
 			accountInfoDto.setAccountInfoList(accountInfoEntityList);
 			editAccountInfoDto();
 			modelAllAddAttribute(model);
-			return "passwordManager/registerDataShow";
+			return "main_function/registerDataShow";
 		}
 		else {
-			return "passwordManager/login";
+			return "main_function/login";
 		}
 	}
 	
@@ -104,7 +104,7 @@ public class ManagerController {
 			log.info("", "service.displayDataOfPaging処理 ---> 正常終了");
 			accountInfoEntityList = this.accountInfoDto.getPagingAccountInfoList();
 			modelAllAddAttribute(model);
-			return "passwordManager/registerDataShow";
+			return "main_function/registerDataShow";
 		}
 		else {
 			return "login/login";
@@ -124,11 +124,11 @@ public class ManagerController {
 				log.info("", "service.nextDataOfPaging処理 ---> 正常終了");
 				accountInfoEntityList = this.accountInfoDto.getPagingAccountInfoList();
 				modelAllAddAttribute(model);
-				return "passwordManager/registerDataShow";
+				return "main_function/registerDataShow";
 			}
 			else {
 				modelAllAddAttribute(model);
-				return "passwordManager/registerDataShow";
+				return "main_function/registerDataShow";
 			}
 		}
 		else {
@@ -146,12 +146,12 @@ public class ManagerController {
 				accountInfoEntityList = this.accountInfoDto.getPagingAccountInfoList();
 				prevReloadFlag = true;
 				modelAllAddAttribute(model);
-				return "passwordManager/registerDataShow";
+				return "main_function/registerDataShow";
 			}
 			else {
 				prevReloadFlag = false;
 				modelAllAddAttribute(model);
-				return "passwordManager/registerDataShow";
+				return "main_function/registerDataShow";
 			}
 		}
 		else {
@@ -168,7 +168,7 @@ public class ManagerController {
 			this.accountInfoDto.setAccountInfoList(accountInfoEntityList);
 			editAccountInfoDto();
 			modelAllAddAttribute(model);
-			return "passwordManager/registerDataShow";
+			return "main_function/registerDataShow";
 		}
 		else {
 			return "login/login";
@@ -189,9 +189,9 @@ public class ManagerController {
 			model.addAttribute("aiEntity", aiEntity);
 			model.addAttribute("infoMessage", infoMessage);
 			log.warning(ManagerDisplay.RegisterDataDel, "データ削除", "何らかの原因によりデータ削除失敗");
-			return "passwordManager/topPage"; 
+			return "main_function/topPage"; 
 		}
-		return "passwordManager/registerDataDel"; 
+		return "main_function/registerDataDel"; 
 	}
 	
 	@RequestMapping(value="/registerDataUpd", method=RequestMethod.GET)
@@ -206,9 +206,9 @@ public class ManagerController {
 				String errorMsg = "エラーが発生しました。数値には変換できない値が渡されました。";
 				model.addAttribute("errorMsg", errorMsg);
 				log.error(ManagerDisplay.RegisterDataUpd, "データ型変換", "データ型不正", e);
-				return "passwordManager/registerDataShow";
+				return "main_function/registerDataShow";
 			}
-			return "passwordManager/registerDataUpd";
+			return "main_function/registerDataUpd";
 		}
 		else {
 			return "login/login";
@@ -227,22 +227,22 @@ public class ManagerController {
 					String errorMsg = "何らかの原因により、更新に失敗しました。";
 					model.addAttribute("errorMsg", errorMsg);
 					log.warning(ManagerDisplay.DataUpdCompletion, "データ更新", "何らかの原因により、更新に失敗しました。");
-					return "passwordManager/registerDataUpd";
+					return "main_function/registerDataUpd";
 				}
 			} catch (DataAccessException ex) {
 				log.error(ManagerDisplay.DataUpdCompletion, "データ更新", "データアクセスエラーが発生しました。", ex);
 				String errorMsg = "データアクセスエラーが発生しました。";
 				model.addAttribute("errorMsg", errorMsg);
 				ex.printStackTrace();
-				return "passwordManager/registerDataUpd";
+				return "main_function/registerDataUpd";
 			} catch (Exception e) {
 				log.error(ManagerDisplay.DataUpdCompletion, "データ更新", "予期しないエラーが発生しました。", e);
 				String errorMsg = "予期しないエラーが発生しました。";
 				e.printStackTrace();
 				model.addAttribute("errorMsg", errorMsg);
-				return "passwordManager/registerDataUpd";
+				return "main_function/registerDataUpd";
 			}
-			return "passwordManager/dataUpdComplete";
+			return "main_function/dataUpdComplete";
 		}
 		else {
 			return "login/login";

@@ -51,8 +51,10 @@ public class CustomerServiceImpl implements CustomerService {
 			
 			mailMessage.setTo(mailAddress);
 			mailMessage.setFrom("y.hashimoto1127@gmail.com");
-			mailMessage.setSubject("テスト送信");
-			mailMessage.setText("http://localhost:8080/passwordReConfigure");
+//			mailMessage.setSubject("テスト送信");
+			mailMessage.setSubject("パスワード再設定");
+//			mailMessage.setText("http://localhost:8080/passwordReConfigure");
+			mailMessage.setText("http://ec2-3-113-162-188.ap-northeast-1.compute.amazonaws.com//passwordReConfigure");
 			
 			mailSender.send(mailMessage);
 			log.info("", "パスワード再設定メール送信");
@@ -107,7 +109,8 @@ public class CustomerServiceImpl implements CustomerService {
 			
 			mailMessage.setTo(inquiryForm.getMailAddress());
 			mailMessage.setFrom("y.hashimoto1127@gmail.com");
-			mailMessage.setSubject("テスト送信");
+			//	mailMessage.setSubject("テスト送信");
+			mailMessage.setSubject("お問い合わせ");
 			mailMessage.setText("名前：" + inquiryForm.getName() + "\n 問い合わせ内容：\n" + inquiryForm.getInquiryContent());
 			
 			mailSender.send(mailMessage);

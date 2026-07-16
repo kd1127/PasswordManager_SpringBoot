@@ -89,7 +89,6 @@ public class CustomerServiceImpl implements CustomerService {
 		for(int i=0; i<inquiryContentList.size(); i++) {
 			inquiryContent.concat(String.valueOf(inquiryContentList.get(i)));
 		}
-		System.out.println(inquiryContent);
 		inquiryForm.setInquiryContent(inquiryContent);
 		return inquiryForm;
 	}
@@ -107,9 +106,8 @@ public class CustomerServiceImpl implements CustomerService {
 			
 			SimpleMailMessage mailMessage = new SimpleMailMessage();
 			
-			mailMessage.setTo(inquiryForm.getMailAddress());
-			mailMessage.setFrom("y.hashimoto1127@gmail.com");
-			//	mailMessage.setSubject("テスト送信");
+			mailMessage.setFrom(inquiryForm.getMailAddress());
+			mailMessage.setTo("y.hashimoto1127@gmail.com");
 			mailMessage.setSubject("お問い合わせ");
 			mailMessage.setText("名前：" + inquiryForm.getName() + "\n 問い合わせ内容：\n" + inquiryForm.getInquiryContent());
 			

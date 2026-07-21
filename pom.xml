@@ -13,10 +13,10 @@
 	<version>0.0.1</version>
 	<name>PasswordManager</name>
 	<description>new project for Spring Boot</description>
-	<packaging>war</packaging>
+	<packaging>jar</packaging>
 	<url>https://www.password-manager.dev</url>
 	<properties>
-		<java.version>11</java.version>
+		<java.version>17</java.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -93,13 +93,13 @@
 		</dependency>
     	<dependency>
 		  <groupId>com.sun.mail</groupId>
-		  <artifactId>javax.mail</artifactId>
-		  <version>1.5.4</version>
+		  <artifactId>jakarta.mail</artifactId>
+		  <version>2.0.2</version>
 		</dependency>
 		<dependency>
 		    <groupId>org.springframework</groupId>
 		    <artifactId>spring-context-support</artifactId>
-		    <version>3.2.8.RELEASE</version>
+		    <version>6.0.13</version>
 		</dependency>
 		<dependency>
     		<groupId>org.mozilla</groupId>
@@ -149,13 +149,6 @@
 						</exclude>
 					</excludes>
 				</configuration>
-				<executions>
-					<execution>
-						<goals>
-							<goal>test-run</goal>
-						</goals>
-					</execution>
-				</executions>
 			</plugin>
 		</plugins>
 	</build>

@@ -4,48 +4,34 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.function.BiConsumer;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.servlet.ModelAndView;
-
-import static org.assertj.core.api.Assertions.*;
 
 import com.example.pm.LoginControllerTestAnnotation;
 import com.example.pm.entity.UserInfoEntity;
-import com.example.pm.mapper.TableOperationMapper;
 import com.example.pm.service.ApplicationService;
 
-import static com.example.pm.controller.LoginController.*;
-
-import static org.hamcrest.Matchers.containsString;
-import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
 
 @LoginControllerTestAnnotation
 public class LoginControllerTest {
 	
 	@Autowired private MockMvc mockMvc;
-	@Autowired private UserInfoEntity userInfoEntity;
-	@Autowired private ApplicationService applicationService;
+	@MockBean private UserInfoEntity userInfoEntity;
+	@MockBean private ApplicationService applicationService;
 	@Autowired private LoginController loginController;
 	
 	@BeforeEach
@@ -103,6 +89,7 @@ public class LoginControllerTest {
 		loginController.applicationService = applicationService;
 		userInfoEntity = new UserInfoEntity("ADMIN", "ADMIN", null, "AD999", null, null);
 		List<String> errorMsg = List.of("ユーザーIDを入力してください。", "パスワードを入力してください。", "パスキーを入力してください。");
+		
 		lenient().when(applicationService.loginDataCheck(any(), any(), any())).thenReturn(errorMsg);
 		errorMsg = applicationService.loginDataCheck(userInfoEntity.getUserId(), userInfoEntity.getPassWd(), userInfoEntity.getPassKey());
 		
@@ -129,21 +116,21 @@ public class LoginControllerTest {
 	public void passKeyGetTest() throws Exception{
 		userInfoEntity = new UserInfoEntity("ADMIN", "ADMIN", null, "AD999", null, null);
 		loginController.applicationService = this.applicationService;
-		String errorMsg = "";
-		lenient().when(applicationService.passWdMatchCheckProcess(userInfoEntity, null)).thenReturn(errorMsg);
-		errorMsg = applicationService.passWdMatchCheckProcess(userInfoEntity, null);
+		List<String> errorMsgList = new ArrayList<>();
+		lenient().when(applicationService.passWdMatchCheckProcess(userInfoEntity)).thenReturn(errorMsgList);
+		errorMsgList= applicationService.passWdMatchCheckProcess(userInfoEntity);
 		
 		MockHttpServletRequestBuilder request = MockMvcRequestBuilders
 				.post("/passKeyGet")
 				.content("userInfoEntity")
 				.param("userInfoEntity", userInfoEntity.getUserId(), userInfoEntity.getPassWd(), userInfoEntity.getPassKey())
-				.content("login/userRegister")
+				.content("login/passKeyGet")
 				.contentType(MediaType.ALL_VALUE);
 		
 		mockMvc.perform(request)
 			.andDo(print())
 			.andExpect(status().isOk())
-			.andExpect(view().name("login/userRegister"))
+			.andExpect(view().name("login/passKeyGet"))
 			.andExpect(model().attributeExists("userInfoEntity"));
 	}
 	

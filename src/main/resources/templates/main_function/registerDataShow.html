@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <title>登録データ表示</title>
     <script type="text/javascript" th:src="@{../js/PasswordManager.js}"></script>
-    <link rel="stylesheet" th:href="@{../css/passWordManager/registerDataShow.css}">
+    <script type="text/javascript" th:src="@{../js/RestApi.js}"></script>
+    <link rel="stylesheet" th:href="@{/css/main_function/registerDataShow.css}">
 </head>
 <body>
 	<!-- 左側固定メニュー -->
@@ -20,15 +21,27 @@
         <form method="get" action="/passKeyEdit">
             <input type="submit" value="パスキー変更"/>
         </form>
-        <form method="get" action="/siteMap">
-            <input type="submit" value="サイトマップ"/>
-        </form>
         <form method="post" action="/logout">
             <input type="submit" value="ログアウト"/>
         </form>
     </div>
 	
     <h1 class="title">登録データ表示</h1>
+    <form th:action="@{/display}" method="GET" th:object="${accountInfoDto}">
+	    <label class="paging-label">画面表示件数
+		    <select name="paging" class="paging" th:field="*{displayCount}">
+		    	<option value="20">20</option>
+		    	<option value="50">50</option>
+		    	<option value="100">100</option>
+		    </select>
+	    </label>
+	    <label class="search-label">サイト名
+	    	<input type="text" class="search-text" th:field="*{siteName}"/>
+	    </label>
+	    <input type="submit" value="表示" class="display-button"/>
+	    <input type="submit" value="検索" class="search-button" formaction="/search" formmethod="POST"/>
+	    <input type="button" value="PDF出力" class="pdf_button" onclick="javatoJavasctipt();"/>
+	</form>
     
     <th:block th:if="${maxList.size() == 0}">
     	<p class="error-message">表示できるデータがありません。</p>
@@ -37,6 +50,10 @@
     		<span th:text="${errorMsg}" class="error-message"></span>
     	</div>
     </th:block>
+    <div class="page">
+    	<span th:text="${page}"></span>/
+    	<span th:text="${maxPage}"></span>ページ
+    </div>
     <div th:unless="${maxList.size() == 0}" class="table-style">    
 	    <table border="1" style="border-collapse: collapse">
 	        <thead class="table-one-row-style">
@@ -62,7 +79,7 @@
 	                    <!-- 削除フォーム -->
 	                    <form th:action="@{registerDataDel}" method="post" id="form3" onsubmit="return registerDataDelete();">
 	                        <label for="delete">
-	                            <input type="submit" value="消去" />
+	                            <input type="submit" value="消去" class="update-button"/>
 	                        </label>
 	                        	<input type="hidden" name="dataDelete" th:value="${accountInfoEntity.get(i).getId()}"/>
 	                        <!--  <input type="hidden" name="dataDelete" th:value="${i}"/> -->
@@ -70,16 +87,24 @@
 	                    
 	                    <!-- 更新フォーム -->
 	                    <form th:action="@{registerDataUpd}" method="get">
-	                        <input type="submit" value="更新"/>
+	                        <input type="submit" value="更新" class="update-button"/>
 	                        <input type="hidden" name="index" th:value="${accountInfoEntity.get(i).getId()}"/>
 	                    </form>
 	                </td>
 	            </tr>
 	        </tbody>
 	    </table>
+	    <form th:action="@{/next}" method="GET">
+		    <span th:if="${prevButtonFlag}">
+		    	<input type="submit" value="前へ" class="prev-button" formaction="/prev"/>
+		    </span>
+		    <span th:if="${nextButtonFlag}">
+		    	<input type="submit" value="次へ" class="next-button"/>
+		    </span>
+		 </form>
     </div>
     
-    <script>
+    <script th:inline="javascript">
         function registerDataDelete(){
             if(confirm('削除してもよろしいですか？')){
                 return true; // 削除確認がOKの場合、フォームを送信する

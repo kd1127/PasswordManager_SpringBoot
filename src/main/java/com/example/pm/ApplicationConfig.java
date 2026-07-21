@@ -6,6 +6,8 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 
+import com.example.pm.dto.AccountInfoDto;
+import com.example.pm.dto.PdfDto;
 import com.example.pm.service.ApplicationService;
 import com.example.pm.service.impl.ApplicationServiceImpl;
 import com.example.pm.service.impl.CustomerServiceImpl;
@@ -35,6 +37,21 @@ public class ApplicationConfig {
 	@Bean
 	public JavaMailSender javaMailSenderSetup() {
 		return new JavaMailSenderImpl();
+	}
+	
+	@Bean
+	public AccountInfoDto accountInfoDtoConfig() {
+		return new AccountInfoDto();
+	}
+	
+	@Bean
+	public PdfDto pdfDtoSetConfig() {
+		return new PdfDto();
+	}
+	
+	@Bean
+	public PmLogOutput pmLogOutputConfig() {
+		return new PmLogOutput();
 	}
 	
 //	@Bean

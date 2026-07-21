@@ -7,33 +7,18 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.ibatis.session.SqlSession;
-import org.apache.ibatis.session.SqlSessionFactory;
-import org.apache.ibatis.session.SqlSessionFactoryBuilder;
+import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mybatis.spring.annotation.MapperScan;
-import org.mybatis.spring.boot.test.autoconfigure.AutoConfigureMybatis;
-import org.mybatis.spring.boot.test.autoconfigure.MybatisTest;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.boot.test.mock.mockito.SpyBean;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.mockito.Mockito;
-import org.mockito.Spy;
 
 import com.example.pm.entity.UserInfoEntity;
-import com.example.pm.service.ApplicationService;
 
 import lombok.RequiredArgsConstructor;
-
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.*;
 
 @SpringBootTest(classes = TableOperationMapper.class)
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
@@ -60,7 +45,7 @@ public class TableOperationMapperTest {
 		userInfoEntityList.add(userInfoEntityMap);
 		int insertCount = 1;
 		for(int i=0; i<userInfoEntityMap.size(); i++) {
-			lenient().when(tableOperationMapper.userInfoInsert(userInfoEntityMap.get(i))).thenReturn(insertCount++);
+			Mockito.lenient().when(tableOperationMapper.userInfoInsert(userInfoEntityMap.get(i))).thenReturn(insertCount++);
 			insertCount = tableOperationMapper.userInfoInsert(userInfoEntityMap.get(i));
 		}
 	}	
@@ -70,9 +55,9 @@ public class TableOperationMapperTest {
 	public void userIdAllGetTest() {
 		List<String> userIdExpected = List.of("ADMIN", "dohentai_hashimotoke@samie.com");
 		List<String> userIdActual = List.of("ADMIN", "dohentai_hashimotoke@samie.com");
-		lenient().when(tableOperationMapper.userIdAllGet()).thenReturn(userIdActual);
+		Mockito.lenient().when(tableOperationMapper.userIdAllGet()).thenReturn(userIdActual);
 		userIdActual = tableOperationMapper.userIdAllGet();
-		assertEquals(userIdExpected, userIdActual);
+		Assert.assertEquals(userIdExpected, userIdActual);
 	}
 	
 	@Test
@@ -80,9 +65,9 @@ public class TableOperationMapperTest {
 	public void passWdAllGetTest() {
 		List<String> passWdExpected = List.of("ADMIN", "dohentai_king");
 		List<String> passWdActual = List.of("ADMIN", "dohentai_king");
-		lenient().when(tableOperationMapper.passWdAllGet()).thenReturn(passWdActual);
+		Mockito.lenient().when(tableOperationMapper.passWdAllGet()).thenReturn(passWdActual);
 		passWdActual = tableOperationMapper.passWdAllGet();
-		assertEquals(passWdExpected, passWdActual);
+		Assert.assertEquals(passWdExpected, passWdActual);
 	}
 	
 	@Test
@@ -90,9 +75,9 @@ public class TableOperationMapperTest {
 	public void passKeyAllGetTest() {
 		List<String> passKeyExpected = List.of("AD999", "DH33713756");
 		List<String> passKeyActual = List.of("AD999", "DH33713756");
-		lenient().when(tableOperationMapper.passKeyAllGet()).thenReturn(passKeyActual);
+		Mockito.lenient().when(tableOperationMapper.passKeyAllGet()).thenReturn(passKeyActual);
 		passKeyActual = tableOperationMapper.passKeyAllGet();
-		assertEquals(passKeyExpected, passKeyActual);
+		Assert.assertEquals(passKeyExpected, passKeyActual);
 	}
 	
 	@Test
@@ -100,8 +85,8 @@ public class TableOperationMapperTest {
 	public void idOneGetTest() {
 		int idExpected = 1;
 		int idActual = 1;
-		lenient().when(tableOperationMapper.idOneGet("ADMIN")).thenReturn(idActual);
+		Mockito.lenient().when(tableOperationMapper.idOneGet("ADMIN")).thenReturn(idActual);
 		idActual = tableOperationMapper.idOneGet("ADMIN");
-		assertEquals(idExpected, idActual);
+		Assert.assertEquals(idExpected, idActual);
 	}
 }

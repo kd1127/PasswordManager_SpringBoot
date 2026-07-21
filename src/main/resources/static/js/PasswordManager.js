@@ -262,11 +262,15 @@ function inputMailAdress(){
 	document.getElementById('form').action = url;
 }
 
-function passwordOnchange(){
-	let create = document.getElementById('create');
-	let create2 = document.getElementById('create2');
+function PasswordChange(){
+	const url = "http://localhost:8080/passwordReConfigure";
+	const password = document.getElementById('password');
+	const rePassword = document.getElementById('rePassword');
+	const form = document.getElementById('form');
 	
-	if(create != null && create != ''){
-		create2.value = create.value;
+	if(password.value != rePassword.value){
+		alert("パスワードとパスワード（確認）が一致していません。");
+		form.method = "GET";
+		form.action = url;
 	}
 }

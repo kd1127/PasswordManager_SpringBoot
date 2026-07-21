@@ -65,4 +65,10 @@ public interface TableOperationMapper {
 	String userIdOneVerify(String userId);
 	String passWdOneVerify(String passWd);
 	String passKeyOneVerify(String passKey);
+	
+	/**
+	 * 検索機能
+	 * サイト名をキーにaccountdataテーブルから検索する
+	 */
+	List<AccountInfoEntity> searchSiteName(int id, String siteName);
 }

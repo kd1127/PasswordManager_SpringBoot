@@ -120,9 +120,23 @@
 		</dependency>
 		<dependency>
 		    <groupId>com.itextpdf</groupId>
-		    <artifactId>itext7-core</artifactId>
-		    <version>8.0.2</version>
-		    <type>pom</type>
+		    <artifactId>kernel</artifactId>
+		    <version>9.7.1</version>
+		</dependency>
+		<dependency>
+		    <groupId>com.itextpdf</groupId>
+		    <artifactId>layout</artifactId>
+		    <version>9.7.0</version>
+		</dependency>
+		<dependency>
+		    <groupId>com.itextpdf</groupId>
+		    <artifactId>commons</artifactId>
+		    <version>9.7.1</version>
+		</dependency>
+		<dependency>
+		    <groupId>com.itextpdf</groupId>
+		    <artifactId>itext-asian</artifactId>
+		    <version>5.2.0</version>
 		</dependency>
 		<dependency>
 		    <groupId>org.netbeans.external</groupId>

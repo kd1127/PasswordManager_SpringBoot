@@ -53,16 +53,18 @@ public class CustomerServiceImpl implements CustomerService {
 			mailMessage.setFrom("y.hashimoto1127@gmail.com");
 //			mailMessage.setSubject("テスト送信");
 			mailMessage.setSubject("パスワード再設定");
-//			mailMessage.setText("http://localhost:8080/passwordReConfigure");
+			//	mailMessage.setText("http://localhost:8080/passwordReConfigure");
 			mailMessage.setText("http://ec2-3-113-162-188.ap-northeast-1.compute.amazonaws.com//passwordReConfigure");
 			
 			mailSender.send(mailMessage);
 			log.info("", "パスワード再設定メール送信");
 		} catch (MailException e) {
 			log.error("", "メール送信", "何らかの理由により、メール送信失敗しました。", e);
+			e.printStackTrace();
 			return "何らかの理由により、メール送信失敗しました。";
 		} catch (Exception e2) {
 			log.error("", "メール送信", "何らかの理由により、メール送信失敗しました。", e2);
+			e2.printStackTrace();
 			return "何らかの理由により、メール送信失敗しました。";
 		}
 		return "メール送信完了しました。";

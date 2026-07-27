@@ -24,12 +24,11 @@ public class ApplicationConfig {
 	
 	@Bean
 	@Primary
-	public ApplicationService beanConfig() {
+	public ApplicationServiceImpl beanConfig() {
 		return new ApplicationServiceImpl();
 	}
 	
 	@Bean
-	@Primary
 	public CustomerServiceImpl customerServiceConfig() {
 		return new CustomerServiceImpl(mailSender);
 	}

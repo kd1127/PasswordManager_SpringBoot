@@ -22,6 +22,8 @@ import com.example.pm.entity.AccountInfoEntity;
 import com.example.pm.entity.UserInfoEntity;
 import com.example.pm.mapper.TableOperationMapper;
 import com.example.pm.service.ApplicationService;
+import com.itextpdf.io.font.PdfEncodings;
+import com.itextpdf.io.font.constants.StandardFonts;
 import com.itextpdf.kernel.font.PdfFont;
 import com.itextpdf.kernel.font.PdfFontFactory;
 import com.itextpdf.kernel.pdf.PdfDocument;
@@ -319,7 +321,10 @@ public class ApplicationServiceImpl implements ApplicationService {
 			PdfDocument pdfDocument = new PdfDocument(writer);
 			Document document = new Document(pdfDocument);
 			//	フォントの設定
-			PdfFont font = PdfFontFactory.createFont("HeiseiKakuGo-W5", "UniJIS-UCS2-H", pdfDocument);
+			PdfFont font = PdfFontFactory.createFont(
+					"C:/Windows/Fonts/msgothic.ttc,0",
+					PdfEncodings.IDENTITY_H
+			);
 			document.setFont(font);
 			//	タイトル
 			document.add(new Paragraph("登録データ"));
@@ -362,6 +367,7 @@ public class ApplicationServiceImpl implements ApplicationService {
 			pdfDto.setHttpStatus(500);
 			return pdfDto;
 		} catch (Throwable e) {
+			e.printStackTrace();
 			log.error("", "PDF出力", "システムエラー・ハードウェアエラーによりダウンロードできませんでした。", e);
 			pdfDto.setPdfOutputMessage("システムエラーによりダウンロードできませんでした。");
 			pdfDto.setHttpStatus(500);

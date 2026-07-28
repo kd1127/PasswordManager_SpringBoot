@@ -51,10 +51,10 @@ public class CustomerServiceImpl implements CustomerService {
 			
 			mailMessage.setTo(mailAddress);
 			mailMessage.setFrom("y.hashimoto1127@gmail.com");
-//			mailMessage.setSubject("テスト送信");
+			//	mailMessage.setSubject("テスト送信");
 			mailMessage.setSubject("パスワード再設定");
-			//	mailMessage.setText("http://localhost:8080/passwordReConfigure");
-			mailMessage.setText("http://ec2-3-113-162-188.ap-northeast-1.compute.amazonaws.com//passwordReConfigure");
+			mailMessage.setText("http://localhost:8080/passwordReConfigure");
+			//	mailMessage.setText("http://ec2-3-113-162-188.ap-northeast-1.compute.amazonaws.com//passwordReConfigure");
 			
 			mailSender.send(mailMessage);
 			log.info("", "パスワード再設定メール送信");

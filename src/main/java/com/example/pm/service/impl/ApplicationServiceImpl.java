@@ -321,8 +321,12 @@ public class ApplicationServiceImpl implements ApplicationService {
 			PdfDocument pdfDocument = new PdfDocument(writer);
 			Document document = new Document(pdfDocument);
 			//	フォントの設定
+//			PdfFont font = PdfFontFactory.createFont(
+//					"C:/Windows/Fonts/msgothic.ttc,0",
+//					PdfEncodings.IDENTITY_H
+//			);
 			PdfFont font = PdfFontFactory.createFont(
-					"C:/Windows/Fonts/msgothic.ttc,0",
+					"/home/ec2-user/fonts/msgothic.ttc,0",
 					PdfEncodings.IDENTITY_H
 			);
 			document.setFont(font);

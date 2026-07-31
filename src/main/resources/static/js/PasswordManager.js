@@ -4,7 +4,7 @@
 function confirmLogic(){
 	//	書き換えURL
 	//	let actionUrl = "http://localhost:8080/loginAccountEdit";
-	let actionUrl = "http://ec2-3-113-162-188.ap-northeast-1.compute.amazonaws.com/loginAccountEdit";
+	let actionUrl = "http://password-manager.dev/loginAccountEdit";
 	//	入力フォームの値を取得			 
 	 let passWd = document.getElementById('passWd');
 	 let rePassWd = document.getElementById('re_PassWd');
@@ -30,7 +30,7 @@ function confirmLogic(){
 async function confirmLogic2(){
 	//	書き換えURL
 	//	let actionUrl = "http://localhost:8080/passKeyEdit";
-	let actionUrl = "http://ec2-3-113-162-188.ap-northeast-1.compute.amazonaws.com/passKeyEdit";
+	let actionUrl = "http://password-manager.dev/passKeyEdit";
 	//	入力フォームの値を取得			 
 	 let passKey = document.getElementById('passKey');
 	 
@@ -60,7 +60,7 @@ async function confirmLogic2(){
 //	何故かconfirmのキャンセルボタンを押下しても自画面遷移されないから、一旦放置
 function registerDataDelete(){
 	//	let actionUrl = "http://localhost:8080/registerDataShow";
-	let actionUrl = "http://ec2-3-113-162-188.ap-northeast-1.compute.amazonaws.com/registerDataShow";
+	let actionUrl = "http://password-manager.dev/registerDataShow";
 	
 	 if(confirm('削除してもよろしいですか？')){
 		 document.getElementById("form3").submit();
@@ -78,7 +78,7 @@ function dataRegister(){
 	//	POST通信に設定	
 	document.getElementById('form').method = 'POST';
 	//	let actionUrl = "http://localhost:8080/topPage";
-	let actionToTopPage = "http://ec2-3-113-162-188.ap-northeast-1.compute.amazonaws.com/topPage";
+	let actionToTopPage = "http://password-manager.dev/topPage";
 	//	入力フォームの値を取得
 	let create = document.getElementById('create');
 	let userId = document.getElementById('userId');
@@ -92,7 +92,7 @@ function dataRegister(){
 	else{
 		 if(confirm('登録してもよろしいですか？\nPassword: ' + create.value + '\nuserId: ' + userId.value + '\nsiteName: ' + siteName.value)){ 
 			 //	let actionUrl = 'http://localhost:8080/dataRegister';
-			 let actionUrl = 'http://ec2-3-113-162-188.ap-northeast-1.compute.amazonaws.com/dataRegister';
+			 let actionUrl = 'http://password-manager.dev/dataRegister';
 			 document.getElementById('form').action = actionUrl;
 		 }
 		 else{
@@ -245,7 +245,7 @@ function Generate(){
 
 function save(){
 	//	let actionUrl = "http://localhost:8080/registerDataShow";
-	const actionUrl = "http://ec2-3-113-162-188.ap-northeast-1.compute.amazonaws.com/registerDataShow";
+	const actionUrl = "http://password-manager.dev/registerDataShow";
 	let userId = document.getElementById('userId');
 	let passWd = document.getElementById('passWd');
 	let siteName = document.getElementById('siteName');
@@ -263,7 +263,7 @@ function save(){
 
 function inputMailAdress(){
 	//	const url = "http://localhost:8080/inputMailAddress";
-	const url = "http://ec2-3-113-162-188.ap-northeast-1.compute.amazonaws.com/inputMailAddress";
+	const url = "http://password-manager.dev/inputMailAddress";
 	
 	document.getElementById('form').method="GET"
 	document.getElementById('form').action = url;
@@ -271,7 +271,7 @@ function inputMailAdress(){
 
 function PasswordChange(){
 	//	const url = "http://localhost:8080/passwordReConfigure";
-	const url = "http://ec2-3-113-162-188.ap-northeast-1.compute.amazonaws.com/passwordReConfigure";
+	const url = "http://password-manager.dev/passwordReConfigure";
 	const password = document.getElementById('password');
 	const rePassword = document.getElementById('rePassword');
 	const form = document.getElementById('form');

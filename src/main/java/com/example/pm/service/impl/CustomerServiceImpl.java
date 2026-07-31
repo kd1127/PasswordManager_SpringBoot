@@ -54,7 +54,7 @@ public class CustomerServiceImpl implements CustomerService {
 //			mailMessage.setSubject("テスト送信");
 			mailMessage.setSubject("パスワード再設定");
 			//	mailMessage.setText("http://localhost:8080/passwordReConfigure");
-			mailMessage.setText("http://ec2-3-113-162-188.ap-northeast-1.compute.amazonaws.com//passwordReConfigure");
+			mailMessage.setText("http://password-manager.dev/passwordReConfigure");
 			
 			mailSender.send(mailMessage);
 			log.info("", "パスワード再設定メール送信");

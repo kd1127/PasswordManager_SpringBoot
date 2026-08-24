@@ -211,6 +211,7 @@ public class LoginController{
 			log.error(Display.UserRegisterCompletion, "エラー発生", "何らかの理由によりエラーが発生しました。", e);
 			return "login/userRegisterCheck";
 		}
+		model.addAttribute("passKey", userInfoEntity.getPassKey());
 		return "login/userRegisterCompletion";
 	}
 }

@@ -3,25 +3,26 @@
 	<head>
 		<meta charset="UTF-8">
 		<title>ユーザー登録確認</title>
+		<link rel="stylesheet" th:href="@{../css/login/userRegisterCheck.css}">
 	</head>
 	<body>
-		<h1>ユーザー登録確認</h1>
+		<h1 class="title">ユーザー登録確認</h1>
 		
 		<div th:if="${errorMsg} != null">
 			<span th:text="${errorMsg}"></span>
 		</div>
 		
 		<form th:action="@{/userRegisterCompletion}" method="get" th:object="${userInfoEntity}">
-			<label>ユーザーID</label>
-			<span th:text="*{userId}">ユーザーID</span><br>
-			<label>パスワード</label>
-			<span th:text="*{passWd}">パスワード</span><br>
-			<label>パスワード（確認用）</label>
-			<span th:text="*{re_PassWd}">パスワード（確認用）</span><br>
-			<label>パスキー</label>
-			<span th:text="*{passKey}">パスキー</span><br>
-			<input type="submit" value="ユーザー登録完了画面へ"/>
-			<input type="submit" value="戻る" formaction="/passKeyGet" formmethod="post"/>
+			<label class="label-userid">ユーザーID</label>
+			<span th:text="*{userId}" class="text-userid">ユーザーID</span><br>
+			<label class="label-passwd">パスワード</label>
+			<span th:text="*{passWd}" class="text-passwd">パスワード</span><br>
+			<label class="label-repasswd">パスワード（確認用）</label>
+			<span th:text="*{re_PassWd}" class="text-repasswd">パスワード（確認用）</span><br>
+			<label class="label-passkey">パスキー</label>
+			<span th:text="*{passKey}" class="text-passkey">パスキー</span><br>
+			<input type="submit" value="ユーザー登録完了画面へ" class="toUserRegisterCompletion"/>
+			<input type="submit" value="戻る" formaction="/passKeyGet" formmethod="post" class="toBack"/>
 		</form>		
 	</body>
 </html>

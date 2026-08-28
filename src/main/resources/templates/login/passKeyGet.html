@@ -3,15 +3,17 @@
 	<head>
 		<meta charset="UTF-8">
 		<title>パスキー取得</title>
+		<link rel="stylesheet" th:href="@{../css/login/passKeyGet.css}">
 	</head>
 	<body>
-		<h1>パスキー取得</h1>
+		<h1 class="title">パスキー取得</h1>
 		
 		<form th:action="@{/userRegisterCheck}" method="post" th:object="${userInfoEntity}">
-			<label>パスキー<br>大文字小文字で2文字入力してください。</label><br>
-			<input type="text" th:field="*{passKey}" maxlength="2"/><br>
-			<input type="submit" value="ユーザー登録確認画面へ"/>
-			<input type="submit" value="戻る" formaction="/userRegister"/>
+			<div class="explanation">※大文字小文字で2文字入力してください。</div>
+			<label class="label-field">パスキー</label>
+			<input type="text" th:field="*{passKey}" maxlength="2" class="text-field"/><br>
+			<input type="submit" value="ユーザー登録確認画面へ" class="toUserRegisterConfirm"/>
+			<input type="submit" value="戻る" formaction="/userRegister" class="toBack"/>
 		</form>
 	</body>
 </html>

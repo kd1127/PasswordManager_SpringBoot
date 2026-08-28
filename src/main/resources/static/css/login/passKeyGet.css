@@ -1,0 +1,54 @@
+@charset "UTF-8";
+
+.title{
+	font-size: 30px;
+	font-weight: bold;
+	text-align: center;
+}
+
+body{
+	 background-image: url(/images/BGImage.jpg);
+}
+
+.explanation{
+	margin-left: 500px;
+}
+
+.label-field{
+	margin-left: 450px;
+	margin-bottom: -500px;
+}
+
+.text-field{
+	margin-left: 50px;
+	margin-bottom: -500px;
+}
+
+.toBack{
+	display: block;
+    width: 15%;
+    margin: 8px 0;
+    padding: 10px;
+    border: none;
+    background: #007BFF;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 5px;
+    margin-left: 450px;
+    margin-top: -50px;
+}
+
+.toUserRegisterConfirm{
+	display: block;
+    width: 15%;
+    margin: 8px 0;
+    padding: 10px;
+    border: none;
+    background: #007BFF;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 5px;
+    margin-left: 700px;
+    margin-top:  50px;

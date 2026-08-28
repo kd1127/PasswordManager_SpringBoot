@@ -79,9 +79,6 @@ public class LoginController{
 	@PostMapping("/logout")
 	public String logoutController() {
 		this.loginFlag = false;
-		session.removeAttribute("userInfoEntity");
-		session.removeAttribute("userInfoEditEntity");
-		session.removeAttribute("AccountInfoEntity");
 		log.info(Display.Logout, "ログアウト処理実行");
 		return "login/logout";
 	}
@@ -90,9 +87,6 @@ public class LoginController{
 	public String loginController(@ModelAttribute UserInfoEntity userInfoEntity, Model model) {
 		this.loginFlag = false;
 		model.addAttribute("userInfoEntity", userInfoEntity);
-		session.removeAttribute("userInfoEntity");
-		session.removeAttribute("userInfoEditEntity");
-		session.removeAttribute("AccountInfoEntity");
 		log.info(Display.Login);
 		return "login/login";
 	}
@@ -107,7 +101,6 @@ public class LoginController{
 	
 	@RequestMapping(value="/topPage", method= {RequestMethod.GET, RequestMethod.POST})
 	public String topPage(@ModelAttribute UserInfoEntity userInfoEntity, Model model) {
-		session.removeAttribute("userInfoEntity");
 		List<String> errorMessage = new ArrayList<>();
 		
 		//	ログイン未完了の時のみ、バリデーションチェックを行う

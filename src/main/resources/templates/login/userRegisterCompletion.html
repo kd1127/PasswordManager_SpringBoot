@@ -15,7 +15,34 @@
 		</p>
 		
 		<form th:action="@{/login}" method="get">			
-			<input type="submit" value="ログインへ" class="toLogin"/>
+			<input type="submit" value="ログインへ" class="toLogin" id="button"/>
 		</form>
 	</body>
+	<script th:inline="javascript">
+		  let flag = false;
+		  const button = document.getElementById("button");
+	  	  button.addEventListener('click', function(){
+		  	  flag = true;
+	  	  });
+		  window.addEventListener('beforeunload', function(event) {
+			  if(flag == true){
+				  return;
+			  }
+			  event.preventDefault();
+			  event.returnValue = "";
+		  });
+		  document.addEventListener("keydown", (event) => {
+			  const key = event.key.toLowerCase();
+	
+			  const isReload =
+			    event.key === "F5" ||
+			    ((event.ctrlKey || event.metaKey) && key === "r");
+	
+			  if (isReload) {
+			    event.preventDefault();
+			  }
+			  event.preventDefault();
+			  event.returnValue = "";
+		});
+	</script>
 </html>

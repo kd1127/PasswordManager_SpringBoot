@@ -115,42 +115,81 @@ function Choice(){
 	
 	//	ランダムパスワード方式
 	if(situation.checked === true){
-		//	cryptography.value="パスワード長を入力してください。";
-		cryptography.placeholder="12文字以上24文字以下のパスワード長を入力してください。";
+		cryptography.placeholder="12以上24以下のパスワード長を入力してください。";
 	}
 	if(situation2.checked === true){	//	シーザー暗号
-		//	cryptography.value="元となるパスワードを入力してください";
 		cryptography.placeholder="元となるパスワードを入力してください";
 	}
 }
 
 //	ひらがなが入力されたか検証する関数
-function isHiragana(str){
+function isHiraganaAndKatakana(str){
 	str = (str == null) ? "" : str;
 	
 	let check = false;
-	if(str.match(/^[ぁ-ん]*$/)) {
+	if(str.match(/^[ぁ-んア-ン]*$/)) {
 		check = true;
 	}
-	else{
-		check = false;
+	return check;
+}
+
+//	全角英数字が入力されたか検証する関数
+function getByteLengthUTF8(str){
+	if(typeof str !== "string"){
+		alert("文字列を入力してください。");
+		return;
+	}
+	return new TextEncoder().encode(str).length;
+}
+
+//	数字以外が入力されたどうかを検証する関数
+function isNotNumber(str){
+	str = (str == null) ? "" : str;
+	
+	//	数字以外が入力されたらtrue、数字入力はfalseから変わらず
+	let check = false;
+	if(str.match(/[^1-9+?]/)){
+		check = true;
 	}
 	return check;
 }
 
 //	2種類の暗号方式によってパスワードを生成する
 function Generate(){
-	let cryptography = document.getElementById('cryptography');
-	let create = document.getElementById('create');
-	let create2 = document.getElementById('create2');
+	const cryptography = document.getElementById('cryptography');
+	const create = document.getElementById('create');
+	const create2 = document.getElementById('create2');
+	const situation = document.getElementById('situation');
+	const situation2 = document.getElementById('situation2');
 	
 	if(cryptography.value === ""){
 		alert("暗号方式を入力してください。");
+		return;
 	}
-	//	ひらがなが入力された際のエラーハンドリング処理を作る
-	let check = isHiragana(cryptography.value);
-	if(check === true){
-		alert("アルファベットを入力してください。");
+	//	ランダムパスワード方式を選択した時のバリデーションチェック
+	if(situation.checked === true){
+		if(cryptography.value < 12 || cryptography.value > 24){
+			alert('12以上24以下のパスワード長を入力してください。');
+			return;
+		}
+		const check_isNotNumber = isNotNumber(cryptography.value);
+		if(check_isNotNumber === true){
+			alert('数字(半角)で12以上24以下のパスワード長を入力してください。');
+			return;
+		}
+	}
+	//	シーザー暗号方式を選択した時のバリデーションチェック
+	if(situation2.checked === true){
+		const check_isHiragana = isHiraganaAndKatakana(cryptography.value);
+		if(check_isHiragana === true){
+			alert("半角アルファベットを入力してください。");
+			return;
+		}
+		const cryptgraphy_byte = getByteLengthUTF8(cryptography.value);
+		if((cryptgraphy_byte % 3) == 0){
+			alert("全角ではなく半角アルファベットを入力してください。");
+			return;
+		}
 	}
 	
 	const alphabet_list = new Array('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L',

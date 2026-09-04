@@ -33,7 +33,6 @@ public class LoginController{
 	private LoginService loginService;
 	private TableOperationMapper tableOperationMapper;
 	private PmLogOutput log;	
-	private HttpSession session;	
 	//	値保持用 LoginAccountEditControllerクラスなどが使用
 	public UserInfoEntity userInfoEntity;
 	
@@ -48,12 +47,9 @@ public class LoginController{
 	
 	//	コンストラクタインジェクション
 	@Autowired
-	public LoginController(ApplicationService applicationService, HttpSession session, UserInfoEntity userInfoEntity, 
+	public LoginController(ApplicationService applicationService, UserInfoEntity userInfoEntity, 
 			LoginService loginService, TableOperationMapper tableOperationMapper, PmLogOutput log) {
 		if(applicationService == null) {
-			throw new NullPointerException("何らかの理由によりエラーが発生しました。");
-		}
-		if(session == null) {
 			throw new NullPointerException("何らかの理由によりエラーが発生しました。");
 		}
 		if(userInfoEntity == null) {
@@ -69,7 +65,6 @@ public class LoginController{
 			throw new NullPointerException("何らかの理由によりエラーが発生しました。");
 		}
 		this.applicationService = applicationService;
-		this.session = session;
 		this.userInfoEntity = userInfoEntity;
 		this.log = log;
 		this.loginService = loginService;

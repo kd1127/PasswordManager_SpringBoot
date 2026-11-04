@@ -27,7 +27,7 @@ public interface TableOperationMapper {
 	//	最終ログイン日を更新
 	void lastLoginDateUpdate(String userId, LocalDateTime lastLoginDate);
 	//	一つのパスワードを取得
-	String passWdOneGet(String userId);	
+	String passWdOneGet(String userId);
 	//	一つのパスキーを取得
 	String passKeyOneGet(String userId);
 	//	accountdataテーブルのid_userカラムで必要なuserinfoテーブルのidをuserIdをキーにして取得する
@@ -51,11 +51,11 @@ public interface TableOperationMapper {
 	 * ManagerController.javaで使用
 	 */
 	//	public void autoIncrementSubtractByMinus1(String dataDelete);
-	
+
 	//	アカウントデータ更新
 	int updateAccountDataOneARow(Integer id, String userId, String passWd, String siteName);
 	AccountInfoEntity selectOneData(int id);
-	
+
 	/*
 	 * ログイン機能
 	 * 一致したユーザーIDが存在しているか検証
@@ -65,7 +65,7 @@ public interface TableOperationMapper {
 	String userIdOneVerify(String userId);
 	String passWdOneVerify(String passWd);
 	String passKeyOneVerify(String passKey);
-	
+
 	/**
 	 * 検索機能
 	 * サイト名をキーにaccountdataテーブルから検索する

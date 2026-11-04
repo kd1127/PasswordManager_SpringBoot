@@ -18,11 +18,11 @@ public class LoginServiceImpl implements LoginService{
 	@Autowired ApplicationService applicationService;
 	@Autowired TableOperationMapper tableOperationMapper;
 	@Autowired private PmLogOutput log;
-	
+
 	@Override
 	public List<String> validationCheck(UserInfoEntity userInfoEntity){
 		List<String> errorMessage = new ArrayList<>();
-		
+
 		if(userInfoEntity.getUserId() == null) {
 			userInfoEntity.setUserId("");
 		}
@@ -32,7 +32,7 @@ public class LoginServiceImpl implements LoginService{
 		if(userInfoEntity.getPassKey() == null) {
 			userInfoEntity.setPassKey("");
 		}
-		
+
 		try {
 			//	エラーがあるか検証する
 			if(userInfoEntity.getUserId() != null && userInfoEntity.getPassWd() != null && userInfoEntity.getPassKey() != null) {
@@ -47,7 +47,7 @@ public class LoginServiceImpl implements LoginService{
 		}
 		return errorMessage;
 	}
-	
+
 	@Override
 	public void lastLoginDateUpdate(String userId, LocalDateTime lastLoginDate) {
 		tableOperationMapper.lastLoginDateUpdate(userId, lastLoginDate);

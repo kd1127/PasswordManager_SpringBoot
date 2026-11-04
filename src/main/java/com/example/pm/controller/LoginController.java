@@ -22,43 +22,33 @@ import com.example.pm.mapper.TableOperationMapper;
 import com.example.pm.service.ApplicationService;
 import com.example.pm.service.LoginService;
 
-import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 
 @Controller
 @SessionAttributes(types=UserInfoEntity.class)
 @RequiredArgsConstructor
-public class LoginController{	
+public class LoginController{
 	public ApplicationService applicationService;
 	private LoginService loginService;
 	private TableOperationMapper tableOperationMapper;
-	private PmLogOutput log;	
+	private PmLogOutput log;
 	//	値保持用 LoginAccountEditControllerクラスなどが使用
 	public UserInfoEntity userInfoEntity;
-	
+
 	//	ログイン処理がすべて完了するとtrueになる
 	public boolean loginFlag = false;
-	
+
 	//	セッション
 	@ModelAttribute
 	UserInfoEntity registrySessionUserInfoEntity() {
 		return new UserInfoEntity();
 	}
-	
+
 	//	コンストラクタインジェクション
 	@Autowired
-	public LoginController(ApplicationService applicationService, UserInfoEntity userInfoEntity, 
+	public LoginController(ApplicationService applicationService, UserInfoEntity userInfoEntity,
 			LoginService loginService, TableOperationMapper tableOperationMapper, PmLogOutput log) {
-		if(applicationService == null) {
-			throw new NullPointerException("何らかの理由によりエラーが発生しました。");
-		}
-		if(userInfoEntity == null) {
-			throw new NullPointerException("何らかの理由によりエラーが発生しました。");
-		}
-		if(loginService == null) {
-			throw new NullPointerException("何らかの理由によりエラーが発生しました。");
-		}
-		if(tableOperationMapper == null) {
+		if((applicationService == null) || (userInfoEntity == null) || (loginService == null) || (tableOperationMapper == null)) {
 			throw new NullPointerException("何らかの理由によりエラーが発生しました。");
 		}
 		if(log == null) {
@@ -70,14 +60,14 @@ public class LoginController{
 		this.loginService = loginService;
 		this.tableOperationMapper = tableOperationMapper;
 	}
-	
+
 	@PostMapping("/logout")
 	public String logoutController() {
 		this.loginFlag = false;
 		log.info(Display.Logout, "ログアウト処理実行");
 		return "login/logout";
 	}
-	
+
 	@GetMapping("/login")
 	public String loginController(@ModelAttribute UserInfoEntity userInfoEntity, Model model) {
 		this.loginFlag = false;
@@ -85,7 +75,7 @@ public class LoginController{
 		log.info(Display.Login);
 		return "login/login";
 	}
-	
+
 	@PostMapping("/passKeyCertification")
 	public String passKeyCertification(@ModelAttribute UserInfoEntity userInfoEntity, Model model) {
 		this.userInfoEntity = userInfoEntity;
@@ -93,11 +83,11 @@ public class LoginController{
 		log.info(Display.PassKeyCert, userInfoEntity.getUserId(), userInfoEntity.getPassWd(), "");
 		return "login/passKeyCertification";
 	}
-	
+
 	@RequestMapping(value="/topPage", method= {RequestMethod.GET, RequestMethod.POST})
 	public String topPage(@ModelAttribute UserInfoEntity userInfoEntity, Model model) {
 		List<String> errorMessage = new ArrayList<>();
-		
+
 		//	ログイン未完了の時のみ、バリデーションチェックを行う
 		if(!this.loginFlag) {
 			errorMessage = loginService.validationCheck(userInfoEntity);
@@ -116,7 +106,7 @@ public class LoginController{
 				log.info(Display.TopPage, "", "", userInfoEntity.getPassKey());
 				log.info(Display.TopPage, "ログイン処理実行 ---> ログイン成功");
 			}
-			AccountInfoEntity accountInfoEntity = new AccountInfoEntity();			
+			AccountInfoEntity accountInfoEntity = new AccountInfoEntity();
 			model.addAttribute("accountInfoEntity", accountInfoEntity);
 			return "main_function/topPage";
 		}
@@ -128,22 +118,21 @@ public class LoginController{
 			return "login/passKeyCertification";
 		}
 	}
-	
+
 	@PostMapping("/userRegister")
 	public String userRegister(@ModelAttribute UserInfoEntity userInfoEntity, Model model) {
 		model.addAttribute("userInfoEntity", userInfoEntity);
 		log.info(Display.UserRegister);
 		return "login/userRegister";
 	}
-	
+
 	@PostMapping("/passKeyGet")
 	public String passKeyGet(@ModelAttribute UserInfoEntity userInfoEntity, Model model) {
 		List<String> errorMsgList = new ArrayList<>();
 		errorMsgList = applicationService.passWdMatchCheckProcess(userInfoEntity);
-		
 		model.addAttribute("userInfoEntity", userInfoEntity);
 		this.userInfoEntity = userInfoEntity;
-		
+
 		try {
 			if(!errorMsgList.isEmpty()) {
 				model.addAttribute("errorMsgList", errorMsgList);
@@ -161,7 +150,7 @@ public class LoginController{
 			return "login/userRegister";
 		}
 	}
-	
+
 	@PostMapping("/userRegisterCheck")
 	public String userRegisterCheck(@ModelAttribute UserInfoEntity userInfoEntity, Model model) {
 		userInfoEntity.setUserId(this.userInfoEntity.getUserId());
@@ -172,13 +161,13 @@ public class LoginController{
 		log.info(Display.UserRegisterCheck);
 		return "login/userRegisterCheck";
 	}
-	
+
 	/*
 	 * ユーザー登録確認画面から遷移した場合に処理を行うメソッド
 	 * インスタンス変数にinp_dateとpassKeyをセットし、DB登録を行うサービスクラスのメソッドに値を渡す
-	 * 
-	 * @param model 
-	 */	
+	 *
+	 * @param model
+	 */
 	@GetMapping("/userRegisterCompletion")
 	public String userRegisterCompletion(Model model) {
 		String passWdTemporary = String.valueOf(userInfoEntity.hashCode());
@@ -186,7 +175,7 @@ public class LoginController{
 		userInfoEntity.setInp_date(applicationService.tableInsertpreparation());
 		userInfoEntity.setPassKey(applicationService.passKeyNumberRandomGet(userInfoEntity));
 		String errorMsg = applicationService.userInfoInsertOperation(userInfoEntity);
-		
+
 		try {
 			if(!errorMsg.equals("")) {
 				model.addAttribute("errorMsg", errorMsg);

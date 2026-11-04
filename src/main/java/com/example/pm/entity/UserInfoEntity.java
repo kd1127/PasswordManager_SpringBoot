@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;	
+import lombok.NoArgsConstructor;
 
 /*
  * ログイン用情報格納クラス
@@ -20,28 +20,28 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserInfoEntity {
-	
+
 	@NotBlank
 	private String userId;
-	
+
 	@NotBlank
 	private String passWd;
-	
+
 	@NotBlank
 	private String re_PassWd;
-	
+
 	@NotBlank
 	private String passKey;
-	
+
 	private Date inp_date;
-	
+
 	private LocalDateTime lastLoginDate;
-	
+
 	@Override
 	public int hashCode() {
 		return Objects.hash(this.passWd);
 	}
-	
+
 	@Override
 	public boolean equals(Object object) {
 		if(object == null) {

@@ -30,7 +30,7 @@ public class PasswordManagerApplication {
 		SpringApplication.run(PasswordManagerApplication.class, args)
 		.getBean(PasswordManagerApplication.class).adminAccountRegister();
 	}
-	
+
 	// admin用のアカウントを登録する
 	private void adminAccountRegister() {
 		LocalDate nowDate = LocalDate.now();
@@ -38,22 +38,22 @@ public class PasswordManagerApplication {
 		uiEntity.setPassWd("ADMIN");
 		uiEntity.setPassKey("AD999");
 		uiEntity.setInp_date(Date.valueOf(nowDate));
-		
+
 		List<String> userIdList = new ArrayList<>();
 		userIdList = mapper.userIdAllGet();
-		
+
 		//	uiEntityのuserIdと一致する文字列があればtrueになる
 		boolean match_flag = false;
-		
+
 		for(String user_id : userIdList) {
 			if(user_id.equals(uiEntity.getUserId())) {
 				match_flag = true;
 				break;
 			}
 		}
-		
+
 		//	一致した文字列がなければデータ登録
-		if(match_flag == false) {
+		if(!match_flag) {
 			mapper.userInfoInsert(uiEntity);
 		}
 	}

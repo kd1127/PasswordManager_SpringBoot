@@ -8,7 +8,6 @@ import org.springframework.mail.javamail.JavaMailSenderImpl;
 
 import com.example.pm.dto.AccountInfoDto;
 import com.example.pm.dto.PdfDto;
-import com.example.pm.service.ApplicationService;
 import com.example.pm.service.impl.ApplicationServiceImpl;
 import com.example.pm.service.impl.CustomerServiceImpl;
 
@@ -19,40 +18,40 @@ import com.example.pm.service.impl.CustomerServiceImpl;
 
 @Configuration
 public class ApplicationConfig {
-	
+
 	public JavaMailSender mailSender;
-	
+
 	@Bean
 	@Primary
 	public ApplicationServiceImpl beanConfig() {
 		return new ApplicationServiceImpl();
 	}
-	
+
 	@Bean
 	public CustomerServiceImpl customerServiceConfig() {
 		return new CustomerServiceImpl(mailSender);
 	}
-	
+
 	@Bean
 	public JavaMailSender javaMailSenderSetup() {
 		return new JavaMailSenderImpl();
 	}
-	
+
 	@Bean
 	public AccountInfoDto accountInfoDtoConfig() {
 		return new AccountInfoDto();
 	}
-	
+
 	@Bean
 	public PdfDto pdfDtoSetConfig() {
 		return new PdfDto();
 	}
-	
+
 	@Bean
 	public PmLogOutput pmLogOutputConfig() {
 		return new PmLogOutput();
 	}
-	
+
 //	@Bean
 //	public UserInfoEntity uiEntityBeanConfig() {
 //		return new UserInfoEntity();

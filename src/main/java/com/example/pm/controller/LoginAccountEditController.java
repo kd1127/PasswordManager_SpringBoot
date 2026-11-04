@@ -2,7 +2,6 @@ package com.example.pm.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -22,20 +21,11 @@ public class LoginAccountEditController {
 	private ApplicationService applicationService;
 	private UserInfoEntity userInfoEntity;
 	private PmLogOutput log;
-	
+
 	@Autowired
-	public LoginAccountEditController(TableOperationMapper tableOperationMapper, LoginController loginController, 
+	public LoginAccountEditController(TableOperationMapper tableOperationMapper, LoginController loginController,
 			ApplicationService applicationService, UserInfoEntity userInfoEntity, PmLogOutput log) {
-		if(applicationService == null) {
-			throw new NullPointerException("何らかの理由によりエラーが発生しました。");
-		}
-		if(tableOperationMapper == null) {
-			throw new NullPointerException("何らかの理由によりエラーが発生しました。");
-		}
-		if(userInfoEntity == null) {
-			throw new NullPointerException("何らかの理由によりエラーが発生しました。");
-		}
-		if(loginController == null) {
+		if((applicationService == null) || (tableOperationMapper == null) || (userInfoEntity == null) || (loginController == null)) {
 			throw new NullPointerException("何らかの理由によりエラーが発生しました。");
 		}
 		if(log == null) {
@@ -61,7 +51,7 @@ public class LoginAccountEditController {
 			return "login/login";
 		}
 	}
-	
+
 	@PostMapping("/loginAccountEditCompletion")
 	public String loginAccountEditCompletion(@ModelAttribute UserInfoEditEntity userInfoEditEntity, Model model) {
 		if(loginController.loginFlag) {
@@ -78,7 +68,7 @@ public class LoginAccountEditController {
 			return "login/login";
 		}
 	}
-	
+
 	@GetMapping("/passKeyEdit")
 	public String passKeyEdit(@ModelAttribute UserInfoEditEntity userInfoEditEntity, Model model){
 		if(loginController.loginFlag) {
@@ -92,7 +82,7 @@ public class LoginAccountEditController {
 			return "login/login";
 		}
 	}
-	
+
 	@PostMapping("/passKeyEditCompletion")
 	public String passKeyEditCompletion(@ModelAttribute UserInfoEditEntity userInfoEditEntity, Model model) {
 		if(loginController.loginFlag) {

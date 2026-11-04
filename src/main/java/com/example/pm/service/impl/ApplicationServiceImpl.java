@@ -2,6 +2,7 @@ package com.example.pm.service.impl;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.UnsupportedEncodingException;
 import java.nio.file.FileAlreadyExistsException;
 import java.sql.Date;
 import java.time.LocalDate;
@@ -10,11 +11,11 @@ import java.util.List;
 import java.util.Random;
 
 import org.apache.commons.lang3.StringUtils;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.example.pm.PmCommon;
 import com.example.pm.PmLogOutput;
 import com.example.pm.dto.AccountInfoDto;
 import com.example.pm.dto.PdfDto;
@@ -23,7 +24,6 @@ import com.example.pm.entity.UserInfoEntity;
 import com.example.pm.mapper.TableOperationMapper;
 import com.example.pm.service.ApplicationService;
 import com.itextpdf.io.font.PdfEncodings;
-import com.itextpdf.io.font.constants.StandardFonts;
 import com.itextpdf.kernel.font.PdfFont;
 import com.itextpdf.kernel.font.PdfFontFactory;
 import com.itextpdf.kernel.pdf.PdfDocument;
@@ -45,9 +45,9 @@ public class ApplicationServiceImpl implements ApplicationService {
 	public TableOperationMapper tableOperationMapper;
 	@Autowired
 	private PdfDto pdfDto;
-	@Autowired 
+	@Autowired
 	private PmLogOutput log;
-	
+
 	//	inp_dateに日付を格納
 	@Override
 	public Date tableInsertpreparation() {
@@ -55,21 +55,21 @@ public class ApplicationServiceImpl implements ApplicationService {
 		Date inp_date = Date.valueOf(local);
 		return inp_date;
 	}
-	
+
 	//	passKeyの数字部分を一桁ずつ乱数で得る
 	@Override
 	public String passKeyNumberRandomGet(UserInfoEntity uiEntity) {
 		String passKey = uiEntity.getPassKey();
 		Random random = new Random();
 		int rand = -1;
-		
+
 		for(int i=0; i<8; i++) {
 			rand = random.nextInt(10);
-			passKey = passKey.concat(String.valueOf(rand));			
-		}		
+			passKey = passKey.concat(String.valueOf(rand));
+		}
 		return passKey;
 	}
-	
+
 	/*
 	 * ログイン機能
 	 * 各カラムのデータを取得してきたListの中身と入力内容を比較してエラーメッセージを格納して呼び出し元に返す
@@ -77,7 +77,7 @@ public class ApplicationServiceImpl implements ApplicationService {
 	 */
 	@Override
 	public List<String> loginDataCheck(String userId, String passWd, String passKey) throws Exception{
-		List<String> errorMessage = new ArrayList<String>();
+		List<String> errorMessage = new ArrayList<>();
 		log.info("", userId, passWd, passKey);
 		//	ユーザーIDの検証
 		if(StringUtils.isEmpty(userId)) {
@@ -88,13 +88,13 @@ public class ApplicationServiceImpl implements ApplicationService {
 			log.info("", "tableOperationMapper.userIdOneVerify処理 ---> 開始");
 			String userIdVerify = tableOperationMapper.userIdOneVerify(userId);
 			log.info("userIdVerify: " + userIdVerify, "tableOperationMapper.userIdOneVerify処理 ---> 正常終了");
-			
+
 			if(!StringUtils.equals(userId, userIdVerify)) {
 				errorMessage.add("ユーザーIDが一致しません。");
 				log.warning("", "ユーザーIDの検証", "ユーザーIDが一致しません。");
 			}
 		}
-		
+
 		//	パスワードの検証、入力値有りの場合、パスワードをハッシュ化してテーブルから取得したデータと突き合わせ
 		if(StringUtils.isEmpty(passWd)) {
 			errorMessage.add("パスワードを入力してください。");
@@ -108,13 +108,13 @@ public class ApplicationServiceImpl implements ApplicationService {
 			log.info("", "tableOperationMapper.passWdOneVerify処理 ---> 開始");
 			String passWdVerify = tableOperationMapper.passWdOneVerify(passWd);
 			log.info("passWdVerify: " + passWdVerify, "tableOperationMapper.passWdOneVerify処理 ---> 正常終了");
-			
+
 			if(!StringUtils.equals(passWd, passWdVerify)) {
 				errorMessage.add("パスワードが一致しません。");
 				log.warning("", "パスワードの検証", "パスワードが一致しません。");
 			}
 		}
-		
+
 		//	パスキーの検証
 		if(StringUtils.isEmpty(passKey)) {
 			errorMessage.add("パスキーを入力してください。");
@@ -124,19 +124,64 @@ public class ApplicationServiceImpl implements ApplicationService {
 			log.info("", "tableOperationMapper.passKeyOneVerify処理 ---> 開始");
 			String passKeyVerify = tableOperationMapper.passKeyOneVerify(passKey);
 			log.info("passKeyVerify: " + passKeyVerify, "tableOperationMapper.passKeyOneVerify処理 ---> 正常終了");
-			
+
 			if(!StringUtils.equals(passKey, passKeyVerify)) {
 				log.warning("", "パスキーの検証", "パスキーが一致しません。");
 				errorMessage.add("パスキーが一致しません。");
 			}
-		}		
+		}
 		return errorMessage;
 	}
-	
+
+	//	ユーザー登録画面でのバリデーションチェック
+	@Override
+	public List<String> userRegisterInputCheck(UserInfoEntity userInfoEntity) throws UnsupportedEncodingException{
+		log.info(PmCommon.Display.UserRegister, "ユーザー登録画面の入力値検証処理：開始");
+		List<String> errorMsgList = new ArrayList<>();
+
+		//	ユーザーIDの検証
+		if(StringUtils.equals(userInfoEntity.getUserId(), "") || StringUtils.equals(userInfoEntity.getUserId(), null)) {
+			errorMsgList.add("ユーザーIDを入力してください。");
+		}
+		else {
+			if(userInfoEntity.getUserId().matches("^[あ-んア-ン一-龠]*$")) {
+				errorMsgList.add("ユーザーIDは半角英数字で入力してください。");
+			}
+		}
+		//	パスワードの検証
+		if(StringUtils.equals(userInfoEntity.getPassWd(), "") || StringUtils.equals(userInfoEntity.getPassWd(), null)) {
+			errorMsgList.add("パスワードを入力してください。");
+		}
+		else {
+			if(userInfoEntity.getPassWd().matches("^[あ-んア-ン一-龠]*$")) {
+				errorMsgList.add("パスワードは半角英数字で入力してください。");
+			}
+		}
+		//	パスワード（確認）
+		if(StringUtils.equals(userInfoEntity.getRe_PassWd(), "") || StringUtils.equals(userInfoEntity.getRe_PassWd(), null)) {
+			errorMsgList.add("パスワード（確認）を入力してください。");
+		}
+		else {
+			if(userInfoEntity.getRe_PassWd().matches("^[あ-んア-ン一-龠]*$")) {
+				errorMsgList.add("パスワード（確認）は半角英数字で入力してください。");
+			}
+		}
+		log.info(PmCommon.Display.UserRegister, "ユーザー登録画面の入力値検証処理：正常終了");
+		return errorMsgList;
+	}
+
 	//	パスワード・パスワード（確認）が一致しているか検証するメソッド
 	@Override
 	public List<String> passWdMatchCheckProcess(UserInfoEntity userInfoEntity) {
 		List<String> errorMsgList = new ArrayList<>();
+		try {
+			errorMsgList = this.userRegisterInputCheck(userInfoEntity);
+		} catch (UnsupportedEncodingException e1) {
+			log.info(PmCommon.Display.UserRegister, "ユーザー登録画面の入力値検証処理で実行時エラー発生！");
+			log.info(null, "実行時エラーが発生したため、画面遷移なし");
+			e1.printStackTrace();
+		}
+
 		log.info("", "ApplicationService.userIdDuplicateCheck処理 ---> 開始");
 		errorMsgList = this.userIdDuplicateCheck(userInfoEntity.getUserId(), errorMsgList);
 		errorMsgList.forEach(s -> log.info(s));
@@ -148,8 +193,8 @@ public class ApplicationServiceImpl implements ApplicationService {
 			}
 		}
 		return errorMsgList;
-	}	
-	
+	}
+
 	//	ユーザー登録画面で入力したデータをuserinfoテーブルに登録
 	@Override
 	public String userInfoInsertOperation(UserInfoEntity userInfoEntity) {
@@ -163,7 +208,7 @@ public class ApplicationServiceImpl implements ApplicationService {
 		}
 		return "";
 	}
-	
+
 	/**
 	 * ログインパスワード変更メソッド
 	 * @param userId ユーザーID
@@ -175,14 +220,14 @@ public class ApplicationServiceImpl implements ApplicationService {
 		int updateCount = tableOperationMapper.passWdUpdate(userId, passWd);
 		log.info("更新件数: " + updateCount, "tableOperationMapper.passWdUpdate処理 ---> 正常終了");
 		String message = "";
-		
+
 		if(updateCount < 1) {
 			log.warning("", "ログインパスワード更新", "何らかの理由により、パスワード更新に失敗しました。");
 			message = "何らかの理由により、パスワード更新に失敗しました。";
-		}		
+		}
 		return message;
 	}
-	
+
 	/**
 	 * ユーザー登録時、ユーザーIDの重複を調べるメソッド
 	 * @param userId ユーザーID
@@ -199,21 +244,21 @@ public class ApplicationServiceImpl implements ApplicationService {
 		if(userIdList.contains(userId)) {
 			errorMessageList.add("・他のユーザーが登録しているユーザーIDです。別のユーザーIDを登録してください。");
 			log.warning("", "ユーザーIDの重複の検証", "他のユーザーが登録しているユーザーIDです。別のユーザーIDを登録してください。");
-		}		
+		}
 		return errorMessageList;
 	}
-	
+
 	// 登録データ表示画面で、表示ボタンを押下して動作するメソッド
 	@Override
 	public AccountInfoDto displayDataOfPaging(AccountInfoDto accountInfoDto){
 		List<AccountInfoEntity> returnToAccountInfoList = new ArrayList<>();
 		int i = accountInfoDto.getShowCompletionCount();
 		int displayCount = accountInfoDto.getDisplayCount();
-		
+
 		while(i<displayCount) {
 			returnToAccountInfoList.add(accountInfoDto.getAccountInfoList().get((int)i));
 			i++;
-			
+
 			if(i == accountInfoDto.getAccountInfoList().size()) {
 				break;
 			}
@@ -230,19 +275,19 @@ public class ApplicationServiceImpl implements ApplicationService {
 		}
 		return accountInfoDto;
 	}
-	
+
 	//	最大ページを調べる
 	@Override
 	public Long findMaximumPage(AccountInfoDto accountInfoDto){
 		Integer maximumPage = accountInfoDto.getAccountInfoList().size() / accountInfoDto.getDisplayCount() + 1;
-		return maximumPage.longValue(); 
+		return maximumPage.longValue();
 	}
-	
+
 	@Override
 	public AccountInfoDto nextDataOfPaging(AccountInfoDto accountInfoDto) {
 		List<AccountInfoEntity> nextPageAccountInfo = new ArrayList<>();
 		int i = accountInfoDto.getShowCompletionCount();
-		
+
 		while(i < accountInfoDto.getDisplayCount()) {
 			if(i == accountInfoDto.getAccountInfoList().size()) {
 				accountInfoDto.setNextButtonFlag(true);
@@ -255,24 +300,24 @@ public class ApplicationServiceImpl implements ApplicationService {
 		int showCompletionCount = accountInfoDto.getShowCompletionCount() + i;
 		accountInfoDto.setShowCompletionCount(showCompletionCount);
 		accountInfoDto.setPrevButtonFlag(true);
-		
+
 		long page = accountInfoDto.getPage() + 1;
 		accountInfoDto.setPage(page);
-		
+
 		//	ページが最大ページと同じなら「次へ」ボタンを非活性にする
 		if(accountInfoDto.getPage() == accountInfoDto.getMaxPage()) {
 			accountInfoDto.setNextButtonFlag(false);
 		}
 		return accountInfoDto;
 	}
-	
+
 	@Override
 	public AccountInfoDto prevDataOfPaging(AccountInfoDto accountInfoDto, int displayCount) {
 		List<AccountInfoEntity> prevPageAccountInfo = new ArrayList<>();
 		//	初期値用displayCount
-		Integer initDisplayCount = accountInfoDto.getDisplayCount() - displayCount * 2;
+		int initDisplayCount = accountInfoDto.getDisplayCount() - displayCount * 2;
 		//	終値用displayCount
-		Integer closingDisplayCount = accountInfoDto.getDisplayCount() - displayCount;
+		int closingDisplayCount = accountInfoDto.getDisplayCount() - displayCount;
 		int i = initDisplayCount;
 		//	displayCountを表示件数分、値をマイナスにする
 		int count = 0;
@@ -293,21 +338,23 @@ public class ApplicationServiceImpl implements ApplicationService {
 		accountInfoDto.setShowCompletionCount(showCompletionCount);
 		int setDisplayCount = accountInfoDto.getDisplayCount() - count;
 		accountInfoDto.setDisplayCount(setDisplayCount);
-		
+
 		//	pageが1ページ目なら「前へボタン」を非活性にする
 		if(accountInfoDto.getPage() == 1) {
 			accountInfoDto.setPrevButtonFlag(false);
 		}
 		return accountInfoDto;
 	}
-	
+
+	@Override
 	public List<AccountInfoEntity> search(int id, String siteName) {
 		log.info("", "tableOperationMapper.searchSiteName処理 ---> 開始");
 		List<AccountInfoEntity> searchResultList = tableOperationMapper.searchSiteName(id, siteName);
 		log.info("", "tableOperationMapper.searchSiteName処理 ---> 正常終了");
 		return searchResultList;
 	}
-	
+
+	@Override
 	public PdfDto pdfOutput(List<AccountInfoEntity> accountInfoEntityList) {
 		String dest = "RegisteredData.pdf";
 		try {
@@ -336,12 +383,12 @@ public class ApplicationServiceImpl implements ApplicationService {
             Table table = new Table(columnWidths);
 			//	ヘッダーをセット
 			table.addHeaderCell(new Paragraph("No."));
-			table.addHeaderCell(new Paragraph("ユーザーID"));	
+			table.addHeaderCell(new Paragraph("ユーザーID"));
 			table.addHeaderCell(new Paragraph("パスワード"));
 			table.addHeaderCell(new Paragraph("サイト名"));
 			table.addHeaderCell(new Paragraph("登録日時"));
 			table.addHeaderCell(new Paragraph("更新日時"));
-			
+
 			int rowCount = 1;
 			for(AccountInfoEntity accountInfoEntity : accountInfoEntityList) {
 				table.addCell(new Paragraph(String.valueOf(rowCount)));
@@ -352,7 +399,7 @@ public class ApplicationServiceImpl implements ApplicationService {
 				table.addCell(new Paragraph(String.valueOf(accountInfoEntity.getUpd_date())));
 				rowCount++;
 			}
-			
+
 			document.add(table);
 			document.close();
 			pdfDto.setPdfOutputMessage("PDF出力完了");

@@ -100,7 +100,7 @@
     		accountdata
     	WHERE 
     		id_user = #{id} and 
-    		delete_flag = false
+    		delete_flg = false
     </select>
     <select id="userIdOneVerify" resultType="String" parameterType="String">
     	SELECT userId FROM userinfo WHERE userId = #{userId}
@@ -129,6 +129,6 @@
     </select>
     <!-- Delete Query 論理削除-->
     <delete id="deleteARowOfData" parameterType="Integer">
-    	UPDATE accountdata SET Delete_flag = true where id = #{id};
+    	UPDATE accountdata SET Delete_flg = true where id = #{id};
     </delete>
 </mapper>

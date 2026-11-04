@@ -1,5 +1,6 @@
 package com.example.pm.service;
 
+import java.io.UnsupportedEncodingException;
 import java.sql.Date;
 import java.util.List;
 
@@ -13,6 +14,7 @@ public interface ApplicationService {
 	Date tableInsertpreparation();
 	String passKeyNumberRandomGet(UserInfoEntity uiEntity);
 	List<String> loginDataCheck(String userId, String passWd, String passKey) throws Exception;
+	List<String> userRegisterInputCheck(UserInfoEntity userInfoEntity) throws UnsupportedEncodingException;
 	List<String> passWdMatchCheckProcess(UserInfoEntity userInfoEntity);
 	String userInfoInsertOperation(UserInfoEntity userInfoEntity);
 	String passWdUpdateDbOperation(String userId, String passWd);

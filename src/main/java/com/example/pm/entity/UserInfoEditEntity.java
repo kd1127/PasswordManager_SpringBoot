@@ -16,15 +16,15 @@ import lombok.Data;
 public class UserInfoEditEntity {
 	@NotBlank
 	private String userId;
-	
+
 	@NotBlank
 	private String passWd;
-	
+
 	@NotBlank
 	private String re_PassWd;
-	
+
 	@NotBlank
 	private String passKey;
-	
+
 	private Date inp_date;
 }

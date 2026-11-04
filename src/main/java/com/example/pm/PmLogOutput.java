@@ -12,11 +12,11 @@ import com.example.pm.PmCommon.Display;
 import com.example.pm.PmCommon.Strings;
 
 public class PmLogOutput {
-	
+
 	private File file;
 	private FileWriter fileWriter;
 	private PrintWriter printWriter;
-	
+
 	/**
 	 * 現在日付を取得する
 	 */
@@ -26,12 +26,12 @@ public class PmLogOutput {
 		String nowTimeStr = nowTime.format(format);
 		return nowTimeStr;
 	}
-	
+
 	/**
 	 * ファイルの共通オープン処理
 	 */
 	public void setUp() {
-		file = new File("C:\\Users\\kingd\\Desktop\\フォルダ１\\sts workspace\\PasswordManager\\PmLog.log");
+		file = new File("C:\\Users\\yhash\\OneDrive\\Desktop\\フォルダ１\\sts workspace\\PasswordManager\\PmLog.log");
 		try {
 			fileWriter = new FileWriter(file, true);
 			printWriter = new PrintWriter(new BufferedWriter(fileWriter));
@@ -39,7 +39,7 @@ public class PmLogOutput {
 			e.printStackTrace();
 		}
 	}
-	
+
 	/**
 	 * ファイルの共通クローズ処理
 	 */
@@ -51,7 +51,7 @@ public class PmLogOutput {
 			e.printStackTrace();
 		}
 	}
-	
+
 	/**
 	 * 通常レベルのログ出力を行う
 	 * @param displayName 画面名
@@ -61,7 +61,7 @@ public class PmLogOutput {
 		printWriter.println("INFO ".concat(getNowTime()).concat("  ").concat(displayName));
 		this.closeProcess();
 	}
-	
+
 	/**
 	 * 通常レベルのログ出力を行う
 	 * @param displayName 画面名
@@ -78,7 +78,7 @@ public class PmLogOutput {
 		}
 		this.closeProcess();
 	}
-	
+
 	/**
 	 * 通常レベルのログ出力を行う（ログイン時専用）
 	 * @param displayName 画面名
@@ -101,7 +101,7 @@ public class PmLogOutput {
 		}
 		this.closeProcess();
 	}
-	
+
 	/**
 	 * 警告レベルのログ出力を行う
 	 * @param displayName 画面名
@@ -114,7 +114,7 @@ public class PmLogOutput {
 				concat("  ").concat(process).concat("  ").concat(warningContent));
 		this.closeProcess();
 	}
-	
+
 	/**
 	 * エラーレベルのログ出力を行う
 	 * @param displayName 画面名

@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.MailException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -19,7 +20,16 @@ public class CustomerServiceImpl implements CustomerService {
 	private final JavaMailSender mailSender;
 	@Autowired
 	private PmLogOutput log;
-
+	//	SpringBoot Profiles
+	@Value("${spring.profiles.active:未設定}")
+	private String activeProfiles;
+	private String devSubject = "テスト送信";
+	@Value("${dev.mail-send.text}")
+	private String devText;
+	private String prdSubject = "パスワード再設定";
+	@Value("${prd.mail-send.subject}")
+	private String prdText;
+	
 	public CustomerServiceImpl(JavaMailSender mailSender) {
 		this.mailSender = mailSender;
 	}
@@ -51,11 +61,14 @@ public class CustomerServiceImpl implements CustomerService {
 
 			mailMessage.setTo(mailAddress);
 			mailMessage.setFrom("y.hashimoto1127@gmail.com");
-//			mailMessage.setSubject("テスト送信");
-			mailMessage.setSubject("パスワード再設定");
-			//	mailMessage.setText("http://localhost:8080/passwordReConfigure");
-			mailMessage.setText("http://password-manager.dev/passwordReConfigure");
-
+			if("dev".equals(activeProfiles)) {
+				mailMessage.setSubject("テスト送信");
+				mailMessage.setText("http://localhost:8080/passwordReConfigure");
+			}
+			else {
+				mailMessage.setSubject("パスワード再設定");
+				mailMessage.setText("http://password-manager.dev/passwordReConfigure");
+			}
 			mailSender.send(mailMessage);
 			log.info("", "パスワード再設定メール送信");
 		} catch (MailException e) {

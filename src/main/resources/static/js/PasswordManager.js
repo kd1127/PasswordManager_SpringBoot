@@ -3,55 +3,47 @@
 //	ログインアカウント編集画面で使用
 function confirmLogic(){
 	//	書き換えURL
-	//	let actionUrl = "http://localhost:8080/loginAccountEdit";
-	let actionUrl = "http://password-manager.dev/loginAccountEdit";
-	//	入力フォームの値を取得			 
+	let actionUrl = document.getElementById("url");
+	//	入力フォームの値を取得
 	 let passWd = document.getElementById('passWd');
 	 let rePassWd = document.getElementById('re_PassWd');
 	 
 	 if(passWd.value != rePassWd.value){
 		 alert('パスワードとパスワード（確認）が異なります。');
 		 document.getElementById("form1").method = 'GET';
-	 	 document.getElementById("form1").action = actionUrl;
+	 	 document.getElementById("form1").action = actionUrl.value;
 	 	 return;
 	 }
 	 
-	 if(confirm('登録してもよろしいですか？\n新パスワード：' + passWd.value)){ 
-		 console.log(passWd.value);
-	 }
-	 else{
-		//	confirmでキャンセルを押下
+	 if(!confirm('登録してもよろしいですか？\n新パスワード：' + passWd.value)){ 
+		 //	confirmでキャンセルを押下した場合、同じ画面に遷移
 		document.getElementById("form1").method = 'GET';
-	 	document.getElementById("form1").action = actionUrl;
+	 	document.getElementById("form1").action = actionUrl.value;
 	 }
 }
 
 //	パスキー編集画面で使用
 async function confirmLogic2(){
 	//	書き換えURL
-	//	let actionUrl = "http://localhost:8080/passKeyEdit";
-	let actionUrl = "http://password-manager.dev/passKeyEdit";
+	let actionUrl = document.getElementById('url');
 	//	入力フォームの値を取得			 
 	 let passKey = document.getElementById('passKey');
 	 
 	if(passKey == null || passKey.value == ""){
 		alert('パスキーを入力してください。');
 		document.getElementById("form2").method = 'GET';
-		document.getElementById("form2").action = actionUrl;
+		document.getElementById("form2").action = actionUrl.value;
 	}
 	else if(passKey.value.length != 2){
 		 alert('2文字のみを入力してください。');
 		 document.getElementById("form2").method = 'GET';
-		 document.getElementById("form2").action = actionUrl;
+		 document.getElementById("form2").action = actionUrl.value;
 	}
 	else{ 
-		 if(confirm('登録してもよろしいですか？\n新パスワード：' + passKey.value)){ 
-			 console.log(passKey.value);
-		 }
-		 else{
-			//	confirmでキャンセルを押下
+		 if(!confirm('登録してもよろしいですか？\n新パスキー：' + passKey.value)){ 
+			 //	confirmでキャンセルを押下
 			document.getElementById("form2").method = 'GET';
-		 	document.getElementById("form2").action = actionUrl;
+		 	document.getElementById("form2").action = actionUrl.value;
 		 }
 	}
 }

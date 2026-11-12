@@ -1,6 +1,7 @@
 package com.example.pm.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,6 +22,17 @@ public class LoginAccountEditController {
 	private ApplicationService applicationService;
 	private UserInfoEntity userInfoEntity;
 	private PmLogOutput log;
+	//	SpringBoot Profiles
+	@Value("${spring.profiles.active:未設定}")
+	private String activeProfiles;
+	@Value("${dev.login-account.url}")
+	private String devLoginAccountUrl;
+	@Value("${prd.login-account.url}")
+	private String prdLoginAccountUrl;
+	@Value("${dev.passkey-edit.url}")
+	private String devPasskeyEditUrl;
+	@Value("${prd.passkey-edit.url}")
+	private String prdPasskeyEditUrl;
 
 	@Autowired
 	public LoginAccountEditController(TableOperationMapper tableOperationMapper, LoginController loginController,
@@ -45,6 +57,12 @@ public class LoginAccountEditController {
 			userInfoEditEntity.setUserId(loginController.userInfoEntity.getUserId());
 			userInfoEditEntity.setPassWd(loginController.userInfoEntity.getPassWd());
 			model.addAttribute("userInfoEditEntity", userInfoEditEntity);
+			if("dev".equals(activeProfiles)) {	
+				model.addAttribute("LoginAccountUrl", devLoginAccountUrl);
+			}
+			else {
+				model.addAttribute("LoginAccountUrl", prdLoginAccountUrl);
+			}
 			return "loginAccountEdit/loginAccountEdit";
 		}
 		else {
@@ -76,6 +94,12 @@ public class LoginAccountEditController {
 			//	グローバル変数からpassKeyの数値を取得する
 			userInfoEditEntity.setPassKey(loginController.userInfoEntity.getPassKey());
 			model.addAttribute("userInfoEditEntity", userInfoEditEntity);
+			if("dev".equals(activeProfiles)) {
+				model.addAttribute("passkeyEditUrl", devPasskeyEditUrl);
+			}
+			else {
+				model.addAttribute("passkeyEditUrl", prdPasskeyEditUrl);
+			}
 			return "loginAccountEdit/passKeyEdit";
 		}
 		else {

@@ -44,6 +44,7 @@
 				<input type="submit" value="トップページへ" formaction="topPage" class="toTopPage"/>
 				<input type="submit" value="更新完了画面へ" onclick="save();" class="toUpdateConpletion"/>
 				<input type="hidden" th:value="*{id}" th:field="*{id}"/>
+				<input type="hidden" th:value="${saveUrl}" id="saveUrl"/>
 			</form>
 		</div>
 	</body>

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,6 +31,14 @@ public class ManagerController {
 	@Autowired private LoginController loginController;
 	@Autowired private AccountInfoDto accountInfoDto;
 	@Autowired private PmLogOutput log;
+	
+	//	SpringBoot Profiles
+	@Value("${spring.profiles.active}")
+	private String activeProfile;
+	@Value("${dev.save.url}")
+	private String devSaveUrl;
+	@Value("${prd.save.url}")
+	private String prdSaveUrl;
 
 	private List<AccountInfoEntity> accountInfoEntityList = new ArrayList<>();
 	//	ページング用displayCount
@@ -202,6 +211,12 @@ public class ManagerController {
 				//	indexfをキーにDBから取得してaccountInfoEntityに格納する
 				AccountInfoEntity accountInfoEntity = mapper.selectOneData(Integer.parseInt(index));
 				model.addAttribute("accountInfoEntity", accountInfoEntity);
+				if("dev".equals(activeProfile)) {
+					model.addAttribute("saveUrl", devSaveUrl);
+				}
+				else {
+					model.addAttribute("saveUrl", prdSaveUrl);
+				}
 			} catch (NumberFormatException e) {
 				String errorMsg = "エラーが発生しました。数値には変換できない値が渡されました。";
 				model.addAttribute("errorMsg", errorMsg);

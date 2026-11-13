@@ -273,8 +273,9 @@ function Generate(){
 }
 
 function save(){
+	let actionUrl = document.getElementById('saveUrl');
 	//	let actionUrl = "http://localhost:8080/registerDataShow";
-	const actionUrl = "http://password-manager.dev/registerDataShow";
+	//	const actionUrl = "http://password-manager.dev/registerDataShow";
 	let userId = document.getElementById('userId');
 	let passWd = document.getElementById('passWd');
 	let siteName = document.getElementById('siteName');
@@ -286,7 +287,7 @@ function save(){
 	
 	if(!confirm('以下のデータで更新してもよろしいですか？\n ユーザーID: ' + userId.value + '\n パスワード: ' + passWd.value + '\n サイト名: ' + siteName.value)){
 		document.getElementById('form1').method = 'GET'
-		document.getElementById('form1').action = actionUrl;
+		document.getElementById('form1').action = actionUrl.value;
 	}
 }
 

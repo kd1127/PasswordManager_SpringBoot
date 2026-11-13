@@ -46,6 +46,10 @@ public class LoginController{
 	private String devDataRegisterUrl;
 	@Value("${prd.data-register.url}")
 	private String prdDataRegisterUrl;
+	@Value("${dev.input-mail-address.url}")
+	private String devInputMailAddressUrl;
+	@Value("${prd.input-mail.address.url}")
+	private String prdInputMailAddressUrl;
 
 	//	ログイン処理がすべて完了するとtrueになる
 	public boolean loginFlag = false;
@@ -84,6 +88,12 @@ public class LoginController{
 	public String loginController(@ModelAttribute UserInfoEntity userInfoEntity, Model model) {
 		this.loginFlag = false;
 		model.addAttribute("userInfoEntity", userInfoEntity);
+		if("dev".equalsIgnoreCase(activeProfile)) {
+			model.addAttribute("inputMailAddressUrl", devInputMailAddressUrl);
+		}
+		else {
+			model.addAttribute("inputMailAddressUrl", prdInputMailAddressUrl);
+		}
 		log.info(Display.Login);
 		return "login/login";
 	}

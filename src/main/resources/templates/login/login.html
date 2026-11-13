@@ -18,10 +18,9 @@
 			
 			<input type="submit" value="パスキー認証" class="submitX"/>
 			<input type="submit" value="ユーザー登録" formaction="/userRegister" class="submitX"><br>
-			<a rel="#" href="http://localhost:8080/inputMailAddress" onclick="inputMailAdress();" 
-				class="forgotPassword">パスワードを忘れた方</a>
-			<!-- <a rel="#" href="http://password-manager.dev/inputMailAddress" onclick="inputMailAdress();"
-				class="forgotPassword">パスワードを忘れた方</a> -->
+			<a rel="#" th:href="${inputMailAddressUrl}" class="forgotPassword">パスワードを忘れた方</a>
+			<!-- <a rel="#" href="http://localhost:8080/inputMailAddress" class="forgotPassword">パスワードを忘れた方</a> -->
+			<!-- <a rel="#" href="http://password-manager.dev/inputMailAddress"	class="forgotPassword">パスワードを忘れた方</a> -->
 		</form>
 	</body>
 </html>

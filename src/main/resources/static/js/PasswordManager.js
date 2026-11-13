@@ -274,8 +274,6 @@ function Generate(){
 
 function save(){
 	let actionUrl = document.getElementById('saveUrl');
-	//	let actionUrl = "http://localhost:8080/registerDataShow";
-	//	const actionUrl = "http://password-manager.dev/registerDataShow";
 	let userId = document.getElementById('userId');
 	let passWd = document.getElementById('passWd');
 	let siteName = document.getElementById('siteName');
@@ -289,14 +287,6 @@ function save(){
 		document.getElementById('form1').method = 'GET'
 		document.getElementById('form1').action = actionUrl.value;
 	}
-}
-
-function inputMailAdress(){
-	//	const url = "http://localhost:8080/inputMailAddress";
-	const url = "http://password-manager.dev/inputMailAddress";
-	
-	document.getElementById('form').method="GET"
-	document.getElementById('form').action = url;
 }
 
 function PasswordChange(){

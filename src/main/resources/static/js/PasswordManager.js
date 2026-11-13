@@ -290,8 +290,7 @@ function save(){
 }
 
 function PasswordChange(){
-	//	const url = "http://localhost:8080/passwordReConfigure";
-	const url = "http://password-manager.dev/passwordReConfigure";
+	let actionUrl = document.getElementById('passwordChangeUrl');
 	const password = document.getElementById('password');
 	const rePassword = document.getElementById('rePassword');
 	const form = document.getElementById('form');
@@ -299,6 +298,6 @@ function PasswordChange(){
 	if(password.value != rePassword.value){
 		alert("パスワードとパスワード（確認）が一致していません。");
 		form.method = "GET";
-		form.action = url;
+		form.action = actionUrl;
 	}
 }

@@ -2,6 +2,7 @@ package com.example.pm.controller;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,6 +28,13 @@ public class CustomerController {
 	private ApplicationService applicationService;
 	@Autowired
 	private PmLogOutput log;
+	//	SpringBoot Profiles
+	@Value("${spring.profiles.active}")
+	private String activeProfile;
+	@Value("${dev.password-change.url}")
+	private String devPasswordChangeUrl;
+	@Value("${prd.password-change.url}")
+	private String prdPasswordChangeUrl;
 
 	//	メール送信したらtrueになり、それ以外は常にfalse falseの時はURL直打ちで遷移できない
 	private boolean transitionFromFlag = false;
@@ -81,6 +89,12 @@ public class CustomerController {
 		if(!transitionFromFlag) {
 			model.addAttribute("userInfoEntity", userInfoEntity);
 			return "login/login";
+		}
+		if("dev".equals(activeProfile)) {
+			model.addAttribute("passwordChangeUrl", devPasswordChangeUrl);
+		}
+		else {
+			model.addAttribute("passwordChangeUrl", prdPasswordChangeUrl);
 		}
 		model.addAttribute("userInfoEditEntity", userInfoEditEntity);
 		return "customer/passwordReConfigure";

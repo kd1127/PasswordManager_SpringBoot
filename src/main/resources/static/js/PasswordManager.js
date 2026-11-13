@@ -69,8 +69,8 @@ function registerDataDelete(){
 function dataRegister(){		
 	//	POST通信に設定	
 	document.getElementById('form').method = 'POST';
-	//	let actionUrl = "http://localhost:8080/topPage";
-	let actionToTopPage = "http://password-manager.dev/topPage";
+	let toToppageUrl = document.getElementById('topPageUrl');
+	let dataRegisterUrl = document.getElementById('dataRegisterUrl');
 	//	入力フォームの値を取得
 	let create = document.getElementById('create');
 	let userId = document.getElementById('userId');
@@ -79,17 +79,15 @@ function dataRegister(){
 	if(create.value == "" || userId == ""){
 		alert('ユーザーID、パスワードを入力してください。');
 		document.getElementById('form').method = "GET";
-		document.getElementById('form').action = actionToTopPage;
+		document.getElementById('form').action = toToppageUrl.value;
 	}
 	else{
 		 if(confirm('登録してもよろしいですか？\nPassword: ' + create.value + '\nuserId: ' + userId.value + '\nsiteName: ' + siteName.value)){ 
-			 //	let actionUrl = 'http://localhost:8080/dataRegister';
-			 let actionUrl = 'http://password-manager.dev/dataRegister';
-			 document.getElementById('form').action = actionUrl;
+			 document.getElementById('form').action = dataRegisterUrl.value;
 		 }
 		 else{
 			//	confirmでキャンセルボタンを押下
-		 	document.getElementById("form").action = actionToTopPage;
+		 	document.getElementById("form").action = toToppageUrl.value;
 		 }
 	}
 }

@@ -68,6 +68,8 @@
             <div>
             	<input type="submit" value="登録" onclick="dataRegister();" class="submitZ"/>
             </div>
+            <input type="hidden" th:value="${topPageUrl}" id="topPageUrl"/>
+            <input type="hidden" th:value="${dataRegisterUrl}" id="dataRegisterUrl"/>
         </form>
 
         <p class="loginDay">前回ログイン日: 

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -34,6 +35,17 @@ public class LoginController{
 	private PmLogOutput log;
 	//	値保持用 LoginAccountEditControllerクラスなどが使用
 	public UserInfoEntity userInfoEntity;
+	//	SpringBoot Profiles
+	@Value("${spring.profiles.active}")
+	private String activeProfile;
+	@Value("${dev.top-page.url}")
+	private String devTopPageUrl;
+	@Value("${prd.top-page.url}")
+	private String prdTopPageUrl;
+	@Value("${dev.data-register.url}")
+	private String devDataRegisterUrl;
+	@Value("${prd.data-register.url}")
+	private String prdDataRegisterUrl;
 
 	//	ログイン処理がすべて完了するとtrueになる
 	public boolean loginFlag = false;
@@ -108,6 +120,14 @@ public class LoginController{
 			}
 			AccountInfoEntity accountInfoEntity = new AccountInfoEntity();
 			model.addAttribute("accountInfoEntity", accountInfoEntity);
+			if("dev".equals(activeProfile)) {
+				model.addAttribute("topPageUrl", devTopPageUrl);
+				model.addAttribute("dataRegisterUrl", devDataRegisterUrl);
+			}
+			else {
+				model.addAttribute("topPageUrl", prdTopPageUrl);
+				model.addAttribute("dataRegisterUrl", prdDataRegisterUrl);
+			}
 			return "main_function/topPage";
 		}
 		else {

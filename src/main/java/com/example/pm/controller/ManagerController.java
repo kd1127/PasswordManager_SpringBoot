@@ -25,7 +25,7 @@ import com.example.pm.service.ApplicationService;
 @Controller
 @Transactional
 public class ManagerController {
-	@Autowired private ApplicationService service;
+	@Autowired private ApplicationService applicationService;
 	@Autowired private TableOperationMapper mapper;
 	@Autowired private LoginController loginController;
 	@Autowired private AccountInfoDto accountInfoDto;
@@ -43,7 +43,7 @@ public class ManagerController {
 	@PostMapping("/dataRegister")
 	public String dataRegister(@ModelAttribute AccountInfoEntity aiEntity, Model model) {
 		log.info(ManagerDisplay.DataRegister);
-		aiEntity.setInp_date(service.tableInsertpreparation());
+		aiEntity.setInp_date(applicationService.tableInsertpreparation());
 		aiEntity.setId_user(mapper.userInfoIdOneGet(loginController.userInfoEntity.getUserId()));
 		mapper.accountDataRegisterInsert(aiEntity);
 		model.addAttribute("aiEntity", aiEntity);
@@ -100,7 +100,7 @@ public class ManagerController {
 			this.accountInfoDto.setDisplayCount(accountInfoDto.getDisplayCount());
 			this.accountInfoDto.setShowCompletionCount(0);
 			log.info("", "service.displayDataOfPaging処理 ---> 開始");
-			this.accountInfoDto = service.displayDataOfPaging(this.accountInfoDto);
+			this.accountInfoDto = applicationService.displayDataOfPaging(this.accountInfoDto);
 			log.info("", "service.displayDataOfPaging処理 ---> 正常終了");
 			accountInfoEntityList = this.accountInfoDto.getPagingAccountInfoList();
 			modelAllAddAttribute(model);
@@ -120,7 +120,7 @@ public class ManagerController {
 				int displayCount = accountInfoDto.getDisplayCount() * 2;
 				accountInfoDto.setDisplayCount(displayCount);
 				log.info("", "service.nextDataOfPaging処理 ---> 開始");
-				this.accountInfoDto = service.nextDataOfPaging(accountInfoDto);
+				this.accountInfoDto = applicationService.nextDataOfPaging(accountInfoDto);
 				log.info("", "service.nextDataOfPaging処理 ---> 正常終了");
 				accountInfoEntityList = this.accountInfoDto.getPagingAccountInfoList();
 				modelAllAddAttribute(model);
@@ -141,7 +141,7 @@ public class ManagerController {
 		if(loginController.loginFlag) {
 			if(!prevReloadFlag) {
 				log.info("", "service.prevDataOfPaging処理 ---> 開始");
-				this.accountInfoDto = service.prevDataOfPaging(accountInfoDto, this.displayCount);
+				this.accountInfoDto = applicationService.prevDataOfPaging(accountInfoDto, this.displayCount);
 				log.info("", "service.prevDataOfPaging処理 ---> 正常終了");
 				accountInfoEntityList = this.accountInfoDto.getPagingAccountInfoList();
 				prevReloadFlag = true;
@@ -163,7 +163,7 @@ public class ManagerController {
 	public String search(@ModelAttribute AccountInfoDto accountInfoDto, Model model) {
 		if(loginController.loginFlag) {
 			log.info("", "service.search処理 ---> 開始");
-			accountInfoEntityList = service.search(loginId, accountInfoDto.getSiteName());
+			accountInfoEntityList = applicationService.search(loginId, accountInfoDto.getSiteName());
 			log.info("", "service.search処理 ---> 正常終了");
 			this.accountInfoDto.setAccountInfoList(accountInfoEntityList);
 			editAccountInfoDto();

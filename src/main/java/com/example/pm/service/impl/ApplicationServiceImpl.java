@@ -12,6 +12,7 @@ import java.util.Random;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -47,6 +48,13 @@ public class ApplicationServiceImpl implements ApplicationService {
 	private PdfDto pdfDto;
 	@Autowired
 	private PmLogOutput log;
+	//	SpringBoot Profiles
+	@Value("${spring.profiles.active}")
+	private String activeProfile;
+	@Value("${dev.pdf-output.url}")
+	private String devPdfOutputUrl;
+	@Value("${prd.pdf-output.url}")
+	private String prdPdfOutputUrl;
 
 	//	inp_dateに日付を格納
 	@Override
@@ -367,15 +375,21 @@ public class ApplicationServiceImpl implements ApplicationService {
 			PdfWriter writer = new PdfWriter(file);
 			PdfDocument pdfDocument = new PdfDocument(writer);
 			Document document = new Document(pdfDocument);
-			//	フォントの設定
-//			PdfFont font = PdfFontFactory.createFont(
-//					"C:/Windows/Fonts/msgothic.ttc,0",
-//					PdfEncodings.IDENTITY_H
-//			);
-			PdfFont font = PdfFontFactory.createFont(
-					"/home/ec2-user/fonts/msgothic.ttc,0",
-					PdfEncodings.IDENTITY_H
-			);
+			PdfFont font;
+			if("dev".equals(activeProfile)) {
+				//	フォントの設定（開発環境用）
+				font = PdfFontFactory.createFont(
+						devPdfOutputUrl, 
+						PdfEncodings.IDENTITY_H
+				);
+			}
+			else {
+				//	フォントの設定（本番環境用）
+				font = PdfFontFactory.createFont(
+						prdPdfOutputUrl, 
+						PdfEncodings.IDENTITY_H
+				);
+			}
 			document.setFont(font);
 			//	タイトル
 			document.add(new Paragraph("登録データ"));

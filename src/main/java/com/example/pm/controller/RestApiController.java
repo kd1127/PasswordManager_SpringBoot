@@ -44,7 +44,7 @@ public class RestApiController {
 		return pdfDto;
 	}
 	
-	@CrossOrigin(origins = "https://master.dos5c59jycv61.amplifyapp.com")
+	@CrossOrigin(origins = "https://www.developer-portfolio.jp")
 	@PostMapping("/mailSend")
 	public String RestApiMailSend(@RequestBody InquiryForm inquiryForm) {
 		String message = customerService.mailSendInruiryForm(inquiryForm);

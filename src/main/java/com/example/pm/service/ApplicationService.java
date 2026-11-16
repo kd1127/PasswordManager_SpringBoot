@@ -18,7 +18,7 @@ public interface ApplicationService {
 	List<String> passWdMatchCheckProcess(UserInfoEntity userInfoEntity);
 	String userInfoInsertOperation(UserInfoEntity userInfoEntity);
 	String passWdUpdateDbOperation(String userId, String passWd);
-	List<String> userIdDuplicateCheck(String userId, List<String> errorMsgList);
+	String userIdDuplicateCheck(String userId);
 	AccountInfoDto displayDataOfPaging(AccountInfoDto accountInfoDto);
 	Long findMaximumPage(AccountInfoDto accountInfoDto);
 	AccountInfoDto nextDataOfPaging(AccountInfoDto accountInfoDto);

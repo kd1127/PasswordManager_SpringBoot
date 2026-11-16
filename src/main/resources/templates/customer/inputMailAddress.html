@@ -11,10 +11,16 @@
 		<div th:if="${errorMessage} != null">
 			<span th:text="${errorMessage}"></span>
 		</div>
+		<div th:if="${userIdCheck} != null">
+			<span th:text="${userIdCheck}"></span>
+		</div>
 		
-		<p class="explanation">サイトのユーザーID（メールアドレス）を入力してください。</p>
-		<form th:action="@{/mailSend}" method="get" th:object="${userInfoEntity}">
+		<p class="explanation"> ※メールアドレスは、ユーザーIDがメールアドレス形式でも入力必須</p>
+		<form th:action="@{/mailSend}" method="get" th:object="${customerDto}">
+			<label>ユーザーID</label>
 			<input type="text" th:field="*{userId}" class="input-mail-address"/><br>
+			<label>メールアドレス</label>
+			<input type="text" th:field="*{mailAddress}"/>
 			<input type="submit" value="メール送信画面へ" class="toMailSend"/>
 			<input type="submit" value="ログインへ" formaction="/login" class="toLogin"/>
 		</form>

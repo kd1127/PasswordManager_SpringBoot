@@ -7,6 +7,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 
 import com.example.pm.dto.AccountInfoDto;
+import com.example.pm.dto.CustomerDto;
 import com.example.pm.dto.PdfDto;
 import com.example.pm.service.impl.ApplicationServiceImpl;
 import com.example.pm.service.impl.CustomerServiceImpl;
@@ -50,6 +51,11 @@ public class ApplicationConfig {
 	@Bean
 	public PmLogOutput pmLogOutputConfig() {
 		return new PmLogOutput();
+	}
+	
+	@Bean
+	public CustomerDto customerDtoConfig() {
+		return new CustomerDto();
 	}
 
 //	@Bean

@@ -191,8 +191,8 @@ public class ApplicationServiceImpl implements ApplicationService {
 		}
 
 		log.info("", "ApplicationService.userIdDuplicateCheck処理 ---> 開始");
-		errorMsgList = this.userIdDuplicateCheck(userInfoEntity.getUserId(), errorMsgList);
-		errorMsgList.forEach(s -> log.info(s));
+		String errorMessage = this.userIdDuplicateCheck(userInfoEntity.getUserId());
+		errorMsgList.add(errorMessage);
 		log.info("", "ApplicationService.userIdDuplicateCheck処理 ---> 正常終了");
 		if(userInfoEntity != null) {
 			if(!userInfoEntity.getPassWd().equals(userInfoEntity.getRe_PassWd())) {
@@ -242,18 +242,20 @@ public class ApplicationServiceImpl implements ApplicationService {
 	 * @param errorMessageList エラーメッセージを格納するリスト
 	 */
 	@Override
-	public List<String> userIdDuplicateCheck(String userId, List<String> errorMessageList) {
+	public String userIdDuplicateCheck(String userId) {
+		String errorMessage = "";
 		if(userId == null) {
-			errorMessageList.add("・不正なユーザーIDです。");
+			errorMessage = "・不正なユーザーIDです。";
+			return errorMessage;
 		}
 		log.info("", "tableOperationMapper.userIdAllGet処理 ---> 開始");
 		List<String> userIdList = tableOperationMapper.userIdAllGet();
 		log.info("", "tableOperationMapper.userIdAllGet処理 ---> 正常終了");
 		if(userIdList.contains(userId)) {
-			errorMessageList.add("・他のユーザーが登録しているユーザーIDです。別のユーザーIDを登録してください。");
+			errorMessage = "・他のユーザーが登録しているユーザーIDです。別のユーザーIDを登録してください。";
 			log.warning("", "ユーザーIDの重複の検証", "他のユーザーが登録しているユーザーIDです。別のユーザーIDを登録してください。");
 		}
-		return errorMessageList;
+		return errorMessage;
 	}
 
 	// 登録データ表示画面で、表示ボタンを押下して動作するメソッド

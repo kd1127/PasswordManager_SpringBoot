@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import com.example.pm.PmCommon.CustomerDisplay;
 import com.example.pm.PmLogOutput;
+import com.example.pm.dto.CustomerDto;
 import com.example.pm.entity.UserInfoEditEntity;
 import com.example.pm.entity.UserInfoEntity;
 import com.example.pm.service.ApplicationService;
@@ -23,9 +24,10 @@ public class CustomerController {
 
 	private UserInfoEntity userInfoEntity;
 	private UserInfoEditEntity userInfoEditEntity;
-	private HttpSession session;
 	private CustomerService customerService;
 	private ApplicationService applicationService;
+	@Autowired
+	private CustomerDto customerDto;
 	@Autowired
 	private PmLogOutput log;
 	//	SpringBoot Profiles
@@ -48,7 +50,6 @@ public class CustomerController {
 		if(customerService == null) {
 			throw new NullPointerException("何らかの理由によりエラーが発生しました。");
 		}
-		this.session = session;
 		this.userInfoEntity = userInfoEntity;
 		this.customerService = customerService;
 		this.userInfoEditEntity = userInfoEditEntity;
@@ -57,29 +58,37 @@ public class CustomerController {
 
 	@GetMapping("/inputMailAddress")
 	public String inputMailAddress(Model model) {
-		model.addAttribute("userInfoEntity", userInfoEntity);
+		model.addAttribute("customerDto", customerDto);
 		log.info(CustomerDisplay.InputMailAddress);
 		return "customer/inputMailAddress";
 	}
 
 	@GetMapping("/mailSend")
-	public String mailSend(@ModelAttribute UserInfoEntity userInfoEntity, Model model) {
+	public String mailSend(@ModelAttribute CustomerDto customerDto, Model model) {
 		log.info(CustomerDisplay.MailSend);
-		log.info("", "customerService.mailAddressFormatCheck処理 ---> 開始");
-		String errorMessage = customerService.mailAddressFormatCheck(userInfoEntity.getUserId());
-		log.info("", "customerService.mailAddressFormatCheck処理 ---> 正常終了");
-
-		if(!StringUtils.equals(errorMessage, "")) {
-			model.addAttribute("errorMessage", errorMessage);
+		log.info("", "applicationService.userIdDuplicateCheck処理 ---> 開始");
+		String userIdCheck = applicationService.userIdDuplicateCheck(customerDto.getUserId());
+		log.info("", "applicationService.userIdDuplicateCheck処理 ---> 終了");
+		if(userIdCheck == null || userIdCheck.equals("")) {
+			userIdCheck = "登録されていないユーザーIDです。";
+			model.addAttribute("userIdCheck", userIdCheck);
 			return "customer/inputMailAddress";
 		}
+		else {
+			log.info("", "customerService.mailAddressFormatCheck処理 ---> 開始");
+			String errorMessage = customerService.mailAddressFormatCheck(customerDto.getMailAddress());
+			log.info("", "customerService.mailAddressFormatCheck処理 ---> 正常終了");
+			
+			if(!StringUtils.equals(errorMessage, "")) {
+				model.addAttribute("errorMessage", errorMessage);
+				return "customer/inputMailAddress";
+			}
+		}
 		transitionFromFlag = true;
-		this.userInfoEntity = userInfoEntity;
 		log.info("", "customerService.mailSend処理 ---> 開始");
-		String message = customerService.mailSend(userInfoEntity.getUserId());
+		String message = customerService.mailSend(customerDto.getMailAddress());
 		log.info("処理結果: " + message, "customerService.mailSend処理 ---> 正常終了");
 		model.addAttribute("message", message);
-		session.removeAttribute("userInfoEntity");
 		return "customer/mailSend";
 	}
 

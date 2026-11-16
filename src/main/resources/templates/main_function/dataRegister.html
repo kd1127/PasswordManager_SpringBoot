@@ -25,15 +25,17 @@
 	    </div>
 	
 		<h1 class="title">データ登録</h1>
-		<p>以下データで登録しました。</p>
+		<p class="explanation">以下データで登録しました。</p>
 		
 		<form th:action="@{/topPage}" method="post" th:object="${aiEntity}">
-			<label>パスワード:</label>
-			<span th:text="*{passWd}">パスワード</span><br>
-			<label>ユーザーID:</label>
-			<span th:text="*{userId}">ユーザーID</span><br>
-			<label>サイト名:</label>
-			<span th:text="*{siteName}">サイト名</span><br>
+			<div class="dataRegister">
+				<label>パスワード:</label>
+				<span th:text="*{passWd}">パスワード</span><br>
+				<label>ユーザーID:</label>
+				<span th:text="*{userId}">ユーザーID</span><br>
+				<label>サイト名:</label>
+				<span th:text="*{siteName}">サイト名</span><br>
+			</div>
 			
 			<input type="submit" value="トップページへ" class="toTopPage"/>
 		</form>

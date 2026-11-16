@@ -51,6 +51,14 @@ body{
 	 margin-left: 500px;
 }
 
+.explanation{
+	margin-left: 150px;
+}
+
+.dataRegister{
+	margin-left: 150px;
+}
+
 .toTopPage{
 	display: block;
     width: 15%;
@@ -62,6 +70,6 @@ body{
     font-weight: bold;
     cursor: pointer;
     border-radius: 5px;
-    margin-left: 80px;
+    margin-left: 190px;
     margin-top: 50px;
 }

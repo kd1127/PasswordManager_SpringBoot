@@ -21,8 +21,22 @@ body{
 	text-align: center;
 }
 
+.label-user-id{
+	font-weight: bold;
+	margin-left: 300px;
+}
+
+.input-user-id{
+	margin-left: 132px;
+}
+
+.label-mail-address{
+	font-weight: bold;
+	margin-left: 300px;
+}
+
 .input-mail-address{
-	margin-left: 400px;
+	margin-left: 100px;
 }
 
 .toMailSend{

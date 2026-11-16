@@ -17,10 +17,10 @@
 		
 		<p class="explanation"> ※メールアドレスは、ユーザーIDがメールアドレス形式でも入力必須</p>
 		<form th:action="@{/mailSend}" method="get" th:object="${customerDto}">
-			<label>ユーザーID</label>
-			<input type="text" th:field="*{userId}" class="input-mail-address"/><br>
-			<label>メールアドレス</label>
-			<input type="text" th:field="*{mailAddress}"/>
+			<label class="label-user-id">ユーザーID</label>
+			<input type="text" th:field="*{userId}" class="input-user-id"/><br>
+			<label class="label-mail-address">メールアドレス</label>
+			<input type="text" th:field="*{mailAddress}"  class="input-mail-address"/>
 			<input type="submit" value="メール送信画面へ" class="toMailSend"/>
 			<input type="submit" value="ログインへ" formaction="/login" class="toLogin"/>
 		</form>
